@@ -2056,8 +2056,8 @@ while not done:
                         erase_count_2P += 1
                         attack_line_2P += 1
                         k = j
-                        combo_value_2P += 1  # 콤보 버그 수정. 가로줄 꽉 찼는지 확일할 때마다 2P의 combo count를 늘린다.
-                        combo_count_2P += 1
+                        combo_value_2P += 1  
+                        combo_count_2P += 1 # 콤보 버그 수정. 가로줄 꽉 찼는지 확일할 때마다 2P의 combo count를 늘린다.
                         while k > 0:  #y좌표가 matrix 안에 있는 동안
                             for i in range(board_x): #해당 줄의 x좌표들 모두
                                 matrix_2P[i][k] = matrix_2P[i][k - 1] #한줄씩 밑으로 내림
