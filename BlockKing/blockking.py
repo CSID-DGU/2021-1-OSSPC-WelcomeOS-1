@@ -31,6 +31,7 @@ min_height = 225
 mid_width = 1200
 
 total_time = 60 # 타임 어택 시간
+waiting_time= 1 # 블록이 바닥에 닿은 후 다음 블록 생성까지 기다리는 시간
 
 # 기본 볼륨
 music_volume = 5
@@ -1504,7 +1505,7 @@ while not done:
 
                 # Create new mino: 중력 모드
                 elif gravity_mode:
-                    if hard_drop or bottom_count == 6:
+                    if hard_drop or bottom_count == waiting_time:
                         if gravity(dx, dy, mino, rotation, matrix):
                             erase_mino(dx, dy, mino, rotation, matrix)
                         hard_drop = False
@@ -1533,7 +1534,7 @@ while not done:
 
                 # Create new mino: 일반 모드
                 else:
-                    if hard_drop or bottom_count == 6:
+                    if hard_drop or bottom_count == waiting_time:
                         hard_drop = False
                         bottom_count = 0
                         score += 10 * level
@@ -1573,6 +1574,8 @@ while not done:
                         erase_count += 1
                         k = j
                         combo_value += 1
+                        combo_count += 1 # 콤보 버그 수정. 가로줄 꽉 찼는지 확일할 때마다 combo count를 늘린다.
+                        total_time += 5 # 콤보 시 시간 5초 연장. 여러줄 콤보시 1콤보당 5초가 늘어나도록 가로줄 꽉 찼는지 확일할 때마다 제한 시간을 늘린다.
 
                         #rainbow보너스 점수
                         rainbow = [1,2,3,4,5,6,7] #각 mino에 해당하는 숫자
@@ -1595,7 +1598,7 @@ while not done:
                         pygame.time.delay(400) #0.4초
 
                     previous_time = current_time
-                    combo_count += 1
+                    
                     #점수 계산
                     if erase_count == 1:
                         ui_variables.break_sound.play()
@@ -1620,7 +1623,6 @@ while not done:
                         ui_variables.tetris_sound.play()
                         score += 1000 * level * erase_count + 4 * combo_count
                         screen.blit(ui_variables.combo_4ring, (250, 160)) #blit(이미지, 위치)
-                    total_time += 5 # 콤보 시 시간 5초 연장
 
                     for i in range(1, 11):
                         if combo_count == i:  # 1 ~ 10 콤보 이미지
@@ -1943,7 +1945,7 @@ while not done:
 
                 # Create new mino
                 else:
-                    if hard_drop or bottom_count == 6:
+                    if hard_drop or bottom_count == waiting_time:
                         hard_drop = False
                         bottom_count = 0
                         draw_mino(dx, dy, mino, rotation, matrix)
@@ -1986,7 +1988,7 @@ while not done:
 
                 # Create new mino
                 else:
-                    if hard_drop_2P or bottom_count_2P == 6:
+                    if hard_drop_2P or bottom_count_2P == waiting_time:
                         hard_drop_2P = False
                         bottom_count_2P = 0
                         draw_mino(dx_2P, dy_2P, mino_2P, rotation_2P, matrix_2P)
@@ -2040,6 +2042,7 @@ while not done:
                         attack_line += 1
                         k = j
                         combo_value += 1
+                        combo_count += 1  # 콤보 버그 수정. 가로줄 꽉 찼는지 확일할 때마다 1P의 combo count를 늘린다.
                         while k > 0: #y좌표가 matrix 안에 있는 동안
                             for i in range(board_x): #해당 줄의 x좌표들 모두
                                 matrix[i][k] = matrix[i][k - 1] #한줄씩 밑으로 내림
@@ -2054,7 +2057,8 @@ while not done:
                         erase_count_2P += 1
                         attack_line_2P += 1
                         k = j
-                        combo_value_2P += 1
+                        combo_value_2P += 1  
+                        combo_count_2P += 1 # 콤보 버그 수정. 가로줄 꽉 찼는지 확일할 때마다 2P의 combo count를 늘린다.
                         while k > 0:  #y좌표가 matrix 안에 있는 동안
                             for i in range(board_x): #해당 줄의 x좌표들 모두
                                 matrix_2P[i][k] = matrix_2P[i][k - 1] #한줄씩 밑으로 내림
@@ -2077,7 +2081,6 @@ while not done:
 
                 #1P
                 if erase_count >= 1:
-                    combo_count += 1
                     if erase_count == 1:
                         ui_variables.break_sound.play()
                         ui_variables.single_sound.play()
@@ -2129,7 +2132,6 @@ while not done:
                     set_music_playing_speed(CHANNELS, swidth, Change_RATE)
                 #2P
                 if erase_count_2P >= 1:
-                    combo_count_2P += 1
                     if erase_count_2P == 1:
                         ui_variables.break_sound.play()
                         ui_variables.single_sound.play()
