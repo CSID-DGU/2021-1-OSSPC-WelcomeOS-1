@@ -572,7 +572,7 @@ def draw_2Pboard(next, hold, score, level, goal):
         score = 999999 #최대 점수가 999999가 넘지 못하도록 설정#
 
     #render("텍스트이름", 안티에일리어싱 적용, 색깔), 즉 아래 코드의 숫자 1=안티에일리어싱 적용에 대한 코드
-    if textsize==False:
+    if textsize==False: # 창모드일 때 
         text_hold = ui_variables.h5.render("HOLD", 1, ui_variables.real_white)
         text_next = ui_variables.h5.render("NEXT", 1, ui_variables.real_white)
         text_score = ui_variables.h5.render("SCORE", 1, ui_variables.real_white)
@@ -580,8 +580,8 @@ def draw_2Pboard(next, hold, score, level, goal):
         text_level = ui_variables.h5.render("LEVEL", 1, ui_variables.real_white)
         level_value = ui_variables.h4.render(str(level), 1, ui_variables.real_white)
         text_combo = ui_variables.h5.render("COMBO", 1, ui_variables.real_white)
-        combo_value = ui_variables.h4.render(str(combo_count_2P), 1, ui_variables.real_white)
-    if textsize==True:
+        combo_value = ui_variables.h4.render(str(combo_count_2P), 1, ui_variables.real_white) # 2P의 combo count를 문자열로 바꾸어 화면에 띄운다.
+    if textsize==True: # 전체화면일 때
         text_hold = ui_variables.h4.render("HOLD", 1, ui_variables.real_white)
         text_next = ui_variables.h4.render("NEXT", 1, ui_variables.real_white)
         text_score = ui_variables.h4.render("SCORE", 1, ui_variables.real_white)
@@ -589,7 +589,7 @@ def draw_2Pboard(next, hold, score, level, goal):
         text_level = ui_variables.h4.render("LEVEL", 1, ui_variables.real_white)
         level_value = ui_variables.h3.render(str(level), 1, ui_variables.real_white)
         text_combo = ui_variables.h4.render("COMBO", 1, ui_variables.real_white)
-        combo_value = ui_variables.h3.render(str(combo_count_2P), 1, ui_variables.real_white)
+        combo_value = ui_variables.h3.render(str(combo_count_2P), 1, ui_variables.real_white) # 2P의 combo count를 문자열로 바꾸어 화면에 띄운다.
     if debug:
         speed_value = ui_variables.h5.render("SPEED : "+str(framerate_2P), 1, ui_variables.real_white) #speed를 알려주는 framerate(기본값 30. 빨라질 수록 숫자 작아짐)
         screen.blit(speed_value, (int(board_width * 0.045) + sidebar_width, int(board_height * 0.015))) #각각 전체 board의 가로길이, 세로길이에 대해 원하는 비율을 곱해줌
