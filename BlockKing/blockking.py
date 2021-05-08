@@ -2389,8 +2389,7 @@ while not done:
                 
                 # Set speed pvp모드(2P)
                 elif event.key == K_DOWN:
-                    if not is_bottom(dx_2P, dy_2P, mino_2P, rotation_2P, matrix_2P):
-                        pygame.time.set_timer(pygame.KEYUP, framerate)
+                    if not is_bottom(dx_2P, dy_2P, mino_2P, rotation_2P, matrix_2P):                        
                         dy_2P=dy_2P+1
                     draw_mino(dx_2P, dy_2P, mino_2P, rotation_2P, matrix_2P)
                     draw_mino(dx, dy, mino, rotation, matrix)
