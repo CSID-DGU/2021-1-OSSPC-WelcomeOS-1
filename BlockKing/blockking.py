@@ -1522,7 +1522,7 @@ while not done:
                             start = False
                             game_status = 'start'
                             game_over = True
-                            gravity_mode = False
+                            gravity_mode = True
                             pygame.time.set_timer(pygame.USEREVENT, 1) #0.001초
                     else:
                         bottom_count += 1
@@ -1914,7 +1914,7 @@ while not done:
             start = False
             game_status = 'start'
             game_over = True
-            time_attack = False
+            time_attack = True
             pygame.time.set_timer(pygame.USEREVENT, 1)
 
         pygame.display.update()
@@ -2600,17 +2600,23 @@ while not done:
                     game_over = False
 
                 if restart_button.isOver_2(pos):
-                    if game_status == 'start':
+                    if gravity_mode:
+                        set_initial_values()
                         start = True
-                        pygame.mixer.music.play(-1) #play(-1) = 노래 반복재생
-                    if game_status == 'pvp':
-                        pvp = True
-                        pygame.mixer.music.play(-1)
-                    if game_status == 'gravity_mode':
                         gravity_mode = True
-                        pygame.mixer.music.play(-1)
-                    if game_status == 'time_attack':
+                        pygame.mixer.music.play(-1)  # play(-1) = 노래 반복재생
+                    if time_attack:
+                        set_initial_values()
+                        start = True
                         time_attack = True
+                        pygame.mixer.music.play(-1)
+                    if game_status == 'start':
+                        set_initial_values()
+                        start = True
+                        pygame.mixer.music.play(-1)
+                    if game_status == 'pvp':
+                        set_initial_values()
+                        pvp = True
                         pygame.mixer.music.play(-1)
                     ui_variables.click_sound.play()
                     game_over = False
