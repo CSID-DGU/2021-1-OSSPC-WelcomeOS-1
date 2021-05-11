@@ -573,7 +573,7 @@ def draw_2Pboard(next, hold, score, level, goal):
         score = 999999 #최대 점수가 999999가 넘지 못하도록 설정#
 
     #render("텍스트이름", 안티에일리어싱 적용, 색깔), 즉 아래 코드의 숫자 1=안티에일리어싱 적용에 대한 코드
-    if textsize==False:
+    if textsize==False: # 창모드일 때 
         text_hold = ui_variables.h5.render("HOLD", 1, ui_variables.real_white)
         text_next = ui_variables.h5.render("NEXT", 1, ui_variables.real_white)
         text_score = ui_variables.h5.render("SCORE", 1, ui_variables.real_white)
@@ -581,8 +581,8 @@ def draw_2Pboard(next, hold, score, level, goal):
         text_level = ui_variables.h5.render("LEVEL", 1, ui_variables.real_white)
         level_value = ui_variables.h4.render(str(level), 1, ui_variables.real_white)
         text_combo = ui_variables.h5.render("COMBO", 1, ui_variables.real_white)
-        combo_value = ui_variables.h4.render(str(combo_count), 1, ui_variables.real_white)
-    if textsize==True:
+        combo_value = ui_variables.h4.render(str(combo_count_2P), 1, ui_variables.real_white) # 2P의 combo count를 문자열로 바꾸어 화면에 띄운다.
+    if textsize==True: # 전체화면일 때
         text_hold = ui_variables.h4.render("HOLD", 1, ui_variables.real_white)
         text_next = ui_variables.h4.render("NEXT", 1, ui_variables.real_white)
         text_score = ui_variables.h4.render("SCORE", 1, ui_variables.real_white)
@@ -590,7 +590,7 @@ def draw_2Pboard(next, hold, score, level, goal):
         text_level = ui_variables.h4.render("LEVEL", 1, ui_variables.real_white)
         level_value = ui_variables.h3.render(str(level), 1, ui_variables.real_white)
         text_combo = ui_variables.h4.render("COMBO", 1, ui_variables.real_white)
-        combo_value = ui_variables.h3.render(str(combo_count), 1, ui_variables.real_white)
+        combo_value = ui_variables.h3.render(str(combo_count_2P), 1, ui_variables.real_white) # 2P의 combo count를 문자열로 바꾸어 화면에 띄운다.
     if debug:
         speed_value = ui_variables.h5.render("SPEED : "+str(framerate_2P), 1, ui_variables.real_white) #speed를 알려주는 framerate(기본값 30. 빨라질 수록 숫자 작아짐)
         screen.blit(speed_value, (int(board_width * 0.045) + sidebar_width, int(board_height * 0.015))) #각각 전체 board의 가로길이, 세로길이에 대해 원하는 비율을 곱해줌
@@ -779,7 +779,7 @@ def set_music_playing_speed(CHANNELS, swidth, Change_RATE):
     pygame.mixer.music.play(-1) #위 노래를 반복재생하기 위해 play(-1)로 설정
 
 def set_initial_values():
-    global combo_count, combo_count_2P, score, level, goal, score_2P, level_2P, goal_2P, bottom_count, bottom_count_2P, hard_drop, hard_drop_2P, attack_point, attack_point_2P, dx, dy, dx_2P, dy_2P, rotation, rotation_2P, mino, mino_2P, next_mino1, next_mino2, next_mino1_2P, hold, hold_2P, hold_mino, hold_mino_2P, framerate, framerate_2P, matrix, matrix_2P, Change_RATE, blink, start, pause, done, game_over, leader_board, setting, volume_setting, screen_setting, pvp, help, gravity_mode, debug, d, e, b, u, g, time_attack, start_ticks, textsize, CHANNELS, swidth, name_location, name, previous_time, current_time, pause_time, lines, leaders, volume, game_status, framerate_blockmove, framerate_2P_blockmove, game_speed, game_speed_2P
+    global combo_count, combo_count_2P, score, level, goal, score_2P, level_2P, goal_2P, bottom_count, bottom_count_2P, hard_drop, hard_drop_2P, attack_point, attack_point_2P, dx, dy, dx_2P, dy_2P, rotation, rotation_2P, mino, mino_2P, next_mino1, next_mino2, next_mino1_2P, hold, hold_2P, hold_mino, hold_mino_2P, framerate, framerate_2P, matrix, matrix_2P, Change_RATE, blink, start, pause, done, game_over, leader_board, setting, volume_setting, screen_setting, pvp, help, gravity_mode, debug, d, e, b, u, g, time_attack, start_ticks, textsize, CHANNELS, swidth, name_location, name, previous_time, current_time, previous_time_2P, current_time_2P,pause_time, lines, leaders, volume, game_status, framerate_blockmove, framerate_2P_blockmove, game_speed, game_speed_2P
     framerate = 30 # Bigger -> Slower  기본 블록 하강 속도, 2도 할만 함, 0 또는 음수 이상이어야 함
     framerate_blockmove = framerate * 3 # 블록 이동 시 속도
     game_speed = framerate * 20 # 게임 기본 속도
@@ -850,6 +850,8 @@ def set_initial_values():
 
     previous_time = pygame.time.get_ticks()
     current_time = pygame.time.get_ticks()
+    previous_time_2P = pygame.time.get_ticks()
+    current_time_2P = pygame.time.get_ticks()
     pause_time = pygame.time.get_ticks()
 
     with open('leaderboard.txt') as f:
@@ -1934,6 +1936,9 @@ while not done:
                 draw_mino(dx_2P, dy_2P, mino_2P, rotation_2P, matrix_2P)
                 draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, score_2P, level, level_2P, goal, goal_2P)
 
+                current_time = pygame.time.get_ticks()
+                current_time_2P = pygame.time.get_ticks() # 2P 블록이 생성될 때 현재 시간 
+
                 # Erase a mino
                 if not game_over:
                     erase_mino(dx, dy, mino, rotation, matrix)
@@ -2079,8 +2084,10 @@ while not done:
                     attack_line_2P -= 1
                     attack_point_2P += 1
 
+                
                 #1P
                 if erase_count >= 1:
+                    previous_time = current_time # 1P가 줄을 지우면 예전 시간을 현재 시간으로 바꾼다.
                     if erase_count == 1:
                         ui_variables.break_sound.play()
                         ui_variables.single_sound.play()
@@ -2112,13 +2119,22 @@ while not done:
 
                     for i in range(1, 11):
                         if combo_count == i:  # 1 ~ 10 콤보 이미지
-                            screen.blit(ui_variables.large_combos[i - 1], (124, 190))  # blits the combo number
+                            screen.blit(ui_variables.large_combos[i - 1], (board_width * 0.07, board_height * 0.35)) # single combo image 코드에서 이미지의 x축 위치만 바꿈
+                            pygame.display.update()
+                            pygame.time.delay(500)
                         elif combo_count > 10:  # 11 이상 콤보 이미지
-                            screen.blit(tetris4, (100, 190))  # blits the combo number
-
-                    for i in range(1, 10):
+                            pygame.display.update()
+                            pygame.time.delay(300)
+    
+                    
+                    for i in range(1, 9): # 1~8의 콤보 사운드
                         if combo_count == i + 2:  # 3 ~ 11 콤보 사운드
                             ui_variables.combos_sound[i - 1].play()
+                        if combo_count > 11:
+                            ui_variables.combos_sound[8].play()
+                if current_time - previous_time > 10000: #10초가 지나면
+                    previous_time = current_time #현재 시간을 과거시간으로 하고
+                    combo_count = 0 #콤보 수 초기화
 
                 # Increase level
                 goal -= erase_count
@@ -2130,8 +2146,11 @@ while not done:
                 if level > level_2P and Change_RATE < level + 1:
                     Change_RATE += 1
                     set_music_playing_speed(CHANNELS, swidth, Change_RATE)
+                
+                
                 #2P
                 if erase_count_2P >= 1:
+                    previous_time_2P = current_time_2P # 2P가 줄을 지우면 예전 시간을 현재 시간으로 바꾼다.
                     if erase_count_2P == 1:
                         ui_variables.break_sound.play()
                         ui_variables.single_sound.play()
@@ -2162,13 +2181,21 @@ while not done:
 
                     for i in range(1, 11):
                         if combo_count_2P == i:  # 1 ~ 10 콤보 이미지
-                            screen.blit(ui_variables.large_combos[i - 1], (124, 190)) #blit(이미지, 위치)
+                            screen.blit(ui_variables.large_combos[i - 1], (board_width * 0.55, board_height * 0.35)) # single combo image 코드에서 이미지의 x축 위치만 바꿈
+                            pygame.display.update()
+                            pygame.time.delay(500)
                         elif combo_count_2P > 10:  # 11 이상 콤보 이미지
-                            screen.blit(tetris4, (100, 190)) #blit(이미지, 위치)
+                            pygame.display.update()
+                            pygame.time.delay(300)
 
-                    for i in range(1, 10):
+                    for i in range(1, 9): # 1~8의 콤보 사운드
                         if combo_count_2P == i + 2:  # 3 ~ 11 콤보 사운드
                             ui_variables.combos_sound[i - 1].play()
+                        if combo_count_2P > 11:
+                            ui_variables.combos_sound[8].play()
+                if current_time_2P - previous_time_2P > 10000: #10초가 지나면
+                    previous_time_2P = current_time_2P #현재 시간을 과거시간으로 하고
+                    combo_count_2P = 0 #콤보 수 초기화
 
                 # Increase level
                 goal_2P -= erase_count_2P
@@ -2382,6 +2409,25 @@ while not done:
                         rotation_2P = 3
                     draw_mino(dx_2P, dy_2P, mino_2P, rotation_2P, matrix_2P)
                     draw_mino(dx, dy, mino, rotation, matrix)
+<<<<<<< HEAD
+=======
+                    draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, score_2P, level, level_2P, goal, goal_2P)  
+
+                # Set speed pvp모드(1p)
+                elif event.key == K_s:
+                    if not is_bottom(dx, dy, mino, rotation, matrix):
+                        dy=dy+1
+                    draw_mino(dx, dy, mino, rotation, matrix)
+                    draw_mino(dx_2P, dy_2P, mino_2P, rotation_2P, matrix_2P)
+                    draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, score_2P, level, level_2P, goal, goal_2P)
+                
+                # Set speed pvp모드(2P)
+                elif event.key == K_DOWN:
+                    if not is_bottom(dx_2P, dy_2P, mino_2P, rotation_2P, matrix_2P):                        
+                        dy_2P=dy_2P+1
+                    draw_mino(dx_2P, dy_2P, mino_2P, rotation_2P, matrix_2P)
+                    draw_mino(dx, dy, mino, rotation, matrix)
+>>>>>>> 0d0334b14d5ee65a1154b58f16624f5364319747
                     draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, score_2P, level, level_2P, goal, goal_2P)
 
                 # Move left
