@@ -24,7 +24,7 @@ block_size = int(board_height * 0.045)
 mino_matrix_x = 4 #mino는 4*4 배열이어서 이를 for문에 사용
 mino_matrix_y = 4 #mino는 4*4 배열이어서 이를 for문에 사용
 
-speed_change = 2 # 레벨별 블록 하강 속도 상승 정도
+speed_change = 10 # 레벨별 블록 하강 속도 상승 정도
 
 min_width = 400
 min_height = 225
@@ -622,7 +622,7 @@ def draw_mino(x, y, mino, r, matrix): #mino는 모양, r은 회전된 모양 중
     # Draw ghost
     for i in range(mino_matrix_y):
         for j in range(mino_matrix_x):
-            if grid[i][j] != 0: #테트리스 블록에서 해당 행렬위치에 블록 존재하면              
+            if grid[i][j] != 0: #테트리스 블록에서 해당 행렬위치에 블록 존재하면
                 matrix[tx + j][ty + i] = 8 #테트리스가 쌓일 위치에 8 이라는 ghost 만듦
 
     # Draw mino
@@ -1479,6 +1479,13 @@ while not done:
             if event.type == QUIT:
                 done = True
             elif event.type == USEREVENT:
+                # Set speed
+                if not game_over:
+                    keys_pressed = pygame.key.get_pressed()
+                    if keys_pressed[K_DOWN]:
+                        pygame.time.set_timer(pygame.USEREVENT, framerate) #프레임 시간만큼 빠르게 소프트드롭
+                    else:
+                        pygame.time.set_timer(pygame.USEREVENT, game_speed)
 
                 # Draw a mino
                 draw_mino(dx, dy, mino, rotation, matrix)
@@ -1642,7 +1649,7 @@ while not done:
                     level += 1
                     ui_variables.LevelUp_sound.play()
                     goal += level * 5
-                    framerate = int(framerate-speed_change)
+                    game_speed = int(game_speed-speed_change)
                     Change_RATE += 1
                     set_music_playing_speed(CHANNELS, swidth, Change_RATE)
 
@@ -1658,7 +1665,7 @@ while not done:
                     while not is_bottom(dx, dy, mino, rotation, matrix):
                         dy += 1
                     hard_drop = True
-                    pygame.time.set_timer(pygame.USEREVENT, game_speed)
+                    pygame.time.set_timer(pygame.USEREVENT, framerate)
                     draw_mino(dx, dy, mino, rotation, matrix)
                     screen.fill(ui_variables.real_white)
                     draw_image(screen, gamebackground_image , board_width * 0.5, board_height * 0.5, board_width, board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
@@ -1759,16 +1766,6 @@ while not done:
                     screen.fill(ui_variables.real_white)
                     draw_image(screen, gamebackground_image , board_width * 0.5, board_height * 0.5, board_width, board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                     draw_board(next_mino1, next_mino2, hold_mino, score, level, goal)
-                
-                # Set speed 기본값
-                elif event.key == K_DOWN:
-                    if not is_bottom(dx, dy, mino, rotation, matrix):
-                        dy=dy+1
-                    draw_mino(dx, dy, mino, rotation, matrix)
-                    screen.fill(ui_variables.real_white)
-                    draw_image(screen, gamebackground_image , board_width * 0.5, board_height * 0.5, board_width, board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
-                    draw_board(next_mino1, next_mino2, hold_mino, score, level, goal)
-                    pygame.display.update()
 
                 # Move left
                 elif event.key == K_LEFT:
@@ -1921,6 +1918,16 @@ while not done:
             if event.type == QUIT:
                 done = True
             elif event.type == USEREVENT:
+                # Set speed
+                if not game_over:
+                    keys_pressed = pygame.key.get_pressed()
+                    if keys_pressed[K_s]: #프레임만큼의 시간으로 소프트드롭 되도록 함
+                        pygame.time.set_timer(pygame.USEREVENT, framerate)
+                    elif keys_pressed[K_DOWN] :  #프레임만큼의 시간으로 소프트드롭 되도록 함
+                        pygame.time.set_timer(pygame.USEREVENT, framerate_2P)
+                    else :
+                        pygame.time.set_timer(pygame.USEREVENT, game_speed)  #기본 게임속도
+                        pygame.time.set_timer(pygame.USEREVENT, game_speed_2P)
 
                 # Draw a mino
                 draw_mino(dx, dy, mino, rotation, matrix)
@@ -2190,8 +2197,7 @@ while not done:
                     while not is_bottom(dx, dy, mino, rotation, matrix):
                         dy += 1
                     hard_drop = True
-                    pygame.time.set_timer(pygame.USEREVENT, game_speed)
-                    #pygame.time.set_timer(pygame.USEREVENT, framerate) 이거 때문에 속도 빨라지는 것같아서 수정
+                    pygame.time.set_timer(pygame.USEREVENT, framerate)
                     draw_mino(dx, dy, mino, rotation, matrix)
                     draw_mino(dx_2P, dy_2P, mino_2P, rotation_2P, matrix_2P)
                     draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, score_2P, level, level_2P, goal, goal_2P)
@@ -2201,8 +2207,7 @@ while not done:
                     while not is_bottom(dx_2P, dy_2P, mino_2P, rotation_2P, matrix_2P):
                         dy_2P += 1
                     hard_drop_2P = True
-                    pygame.time.set_timer(pygame.USEREVENT, game_speed)
-                    #pygame.time.set_timer(pygame.USEREVENT, framerate_2P) 이거 때문에 속도 빨라지는 것같아서 수정
+                    pygame.time.set_timer(pygame.USEREVENT, framerate_2P)
                     draw_mino(dx_2P, dy_2P, mino_2P, rotation_2P, matrix_2P)
                     draw_mino(dx, dy, mino, rotation, matrix)
                     draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, score_2P, level, level_2P, goal, goal_2P)
@@ -2377,25 +2382,8 @@ while not done:
                         rotation_2P = 3
                     draw_mino(dx_2P, dy_2P, mino_2P, rotation_2P, matrix_2P)
                     draw_mino(dx, dy, mino, rotation, matrix)
-                    draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, score_2P, level, level_2P, goal, goal_2P)  
+                    draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, score_2P, level, level_2P, goal, goal_2P)
 
-                # Set speed pvp모드(1p)
-                elif event.key == K_s:
-                    if not is_bottom(dx, dy, mino, rotation, matrix):
-                        dy=dy+1
-                    draw_mino(dx, dy, mino, rotation, matrix)
-                    draw_mino(dx_2P, dy_2P, mino_2P, rotation_2P, matrix_2P)
-                    draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, score_2P, level, level_2P, goal, goal_2P)
-                
-                # Set speed pvp모드(2P)
-                elif event.key == K_DOWN:
-                    if not is_bottom(dx_2P, dy_2P, mino_2P, rotation_2P, matrix_2P):
-                        pygame.time.set_timer(pygame.KEYUP, framerate)
-                        dy_2P=dy_2P+1
-                    draw_mino(dx_2P, dy_2P, mino_2P, rotation_2P, matrix_2P)
-                    draw_mino(dx, dy, mino, rotation, matrix)
-                    draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, score_2P, level, level_2P, goal, goal_2P)
-                     
                 # Move left
                 elif event.key == K_a:  # key = pygame.key.get_pressed()
                     if not is_leftedge(dx, dy, mino, rotation, matrix):
@@ -2801,4 +2789,3 @@ while not done:
             pygame.display.update()
 
 pygame.quit()
-
