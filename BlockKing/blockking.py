@@ -24,7 +24,7 @@ block_size = int(board_height * 0.045)
 mino_matrix_x = 4 #mino는 4*4 배열이어서 이를 for문에 사용
 mino_matrix_y = 4 #mino는 4*4 배열이어서 이를 for문에 사용
 
-speed_change = 2 # 레벨별 블록 하강 속도 상승 정도
+speed_change = 10 # 레벨별 블록 하강 속도 상승 정도
 
 min_width = 400
 min_height = 225
@@ -43,7 +43,7 @@ pygame.init()
 
 clock = pygame.time.Clock() #창, 화면을 초당 몇번 출력하는가(FPS) clock.tick 높을수록 cpu많이 사용
 screen = pygame.display.set_mode((board_width, board_height), pygame.RESIZABLE) #GUI창 설정하는 변수
-pygame.display.set_caption("TETRIS KINGDOM") #GUI 창의 이름
+pygame.display.set_caption("BLOCK KING") #GUI 창의 이름
 
 class ui_variables:
     font_path = "./assets/fonts/OpenSans-Light.ttf"
@@ -1481,6 +1481,7 @@ while not done:
             if event.type == QUIT:
                 done = True
             elif event.type == USEREVENT:
+                pygame.time.set_timer(pygame.USEREVENT, game_speed)
 
                 # Draw a mino
                 draw_mino(dx, dy, mino, rotation, matrix)
@@ -1644,7 +1645,8 @@ while not done:
                     level += 1
                     ui_variables.LevelUp_sound.play()
                     goal += level * 5
-                    framerate = int(framerate-speed_change)
+                    game_speed = int(game_speed-speed_change)
+                    pygame.time.set_timer(pygame.USEREVENT, game_speed)
                     Change_RATE += 1
                     set_music_playing_speed(CHANNELS, swidth, Change_RATE)
 
@@ -1660,7 +1662,7 @@ while not done:
                     while not is_bottom(dx, dy, mino, rotation, matrix):
                         dy += 1
                     hard_drop = True
-                    pygame.time.set_timer(pygame.USEREVENT, game_speed)
+                    #pygame.time.set_timer(pygame.USEREVENT, game_speed)
                     draw_mino(dx, dy, mino, rotation, matrix)
                     screen.fill(ui_variables.real_white)
                     draw_image(screen, gamebackground_image , board_width * 0.5, board_height * 0.5, board_width, board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
@@ -1923,6 +1925,7 @@ while not done:
             if event.type == QUIT:
                 done = True
             elif event.type == USEREVENT:
+                pygame.time.set_timer(pygame.USEREVENT, game_speed)
 
                 # Draw a mino
                 draw_mino(dx, dy, mino, rotation, matrix)
@@ -2135,7 +2138,7 @@ while not done:
                     level += 1
                     ui_variables.LevelUp_sound.play()
                     goal += level * 5
-                    framerate = int(framerate - speed_change)
+                    game_speed = int(game_speed - speed_change)
                 if level > level_2P and Change_RATE < level + 1:
                     Change_RATE += 1
                     set_music_playing_speed(CHANNELS, swidth, Change_RATE)
@@ -2196,7 +2199,7 @@ while not done:
                     level_2P += 1
                     ui_variables.LevelUp_sound.play()
                     goal_2P += level_2P * 5
-                    framerate_2P = int(framerate_2P - speed_change)
+                    game_speed_2P = int(game_speed_2P - speed_change)
                 if level < level_2P and Change_RATE < level_2P + 1:
                     Change_RATE += 1
                     set_music_playing_speed(CHANNELS, swidth, Change_RATE)
@@ -2217,8 +2220,7 @@ while not done:
                     while not is_bottom(dx, dy, mino, rotation, matrix):
                         dy += 1
                     hard_drop = True
-                    pygame.time.set_timer(pygame.USEREVENT, game_speed)
-                    #pygame.time.set_timer(pygame.USEREVENT, framerate) 이거 때문에 속도 빨라지는 것같아서 수정
+                    #pygame.time.set_timer(pygame.USEREVENT, game_speed)
                     draw_mino(dx, dy, mino, rotation, matrix)
                     draw_mino(dx_2P, dy_2P, mino_2P, rotation_2P, matrix_2P)
                     draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, score_2P, level, level_2P, goal, goal_2P)
@@ -2228,8 +2230,7 @@ while not done:
                     while not is_bottom(dx_2P, dy_2P, mino_2P, rotation_2P, matrix_2P):
                         dy_2P += 1
                     hard_drop_2P = True
-                    pygame.time.set_timer(pygame.USEREVENT, game_speed)
-                    #pygame.time.set_timer(pygame.USEREVENT, framerate_2P) 이거 때문에 속도 빨라지는 것같아서 수정
+                    #pygame.time.set_timer(pygame.USEREVENT, game_speed_2P)
                     draw_mino(dx_2P, dy_2P, mino_2P, rotation_2P, matrix_2P)
                     draw_mino(dx, dy, mino, rotation, matrix)
                     draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, score_2P, level, level_2P, goal, goal_2P)
