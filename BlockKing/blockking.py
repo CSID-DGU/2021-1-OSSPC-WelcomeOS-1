@@ -779,7 +779,7 @@ def set_music_playing_speed(CHANNELS, swidth, Change_RATE):
     pygame.mixer.music.play(-1) #위 노래를 반복재생하기 위해 play(-1)로 설정
 
 def set_initial_values():
-    global combo_count, combo_count_2P, score, level, goal, score_2P, level_2P, goal_2P, bottom_count, bottom_count_2P, hard_drop, hard_drop_2P, attack_point, attack_point_2P, dx, dy, dx_2P, dy_2P, rotation, rotation_2P, mino, mino_2P, next_mino1, next_mino2, next_mino1_2P, hold, hold_2P, hold_mino, hold_mino_2P, framerate, framerate_2P, matrix, matrix_2P, Change_RATE, blink, start, pause, done, game_over, leader_board, setting, volume_setting, screen_setting, pvp, help, gravity_mode, debug, d, e, b, u, g, time_attack, start_ticks, textsize, CHANNELS, swidth, name_location, name, previous_time, current_time, previous_time_2P, current_time_2P,pause_time, lines, leaders, volume, game_status, framerate_blockmove, framerate_2P_blockmove, game_speed, game_speed_2P
+    global combo_count, combo_count_2P, score, level, goal, score_2P, level_2P, goal_2P, bottom_count, bottom_count_2P, hard_drop, hard_drop_2P, attack_point, attack_point_2P, dx, dy, dx_2P, dy_2P, rotation, rotation_2P, mino, mino_2P, next_mino1, next_mino2, next_mino1_2P, hold, hold_2P, hold_mino, hold_mino_2P, framerate, framerate_2P, matrix, matrix_2P, Change_RATE, blink, start, pause, done, game_over, leader_board, setting, volume_setting, screen_setting, pvp, help, gravity_mode, debug, d, e, b, u, g, time_attack, time_attack_time_setting, textsize, CHANNELS, swidth, name_location, name, previous_time, current_time, previous_time_2P, current_time_2P,pause_time, lines, leaders, volume, game_status, framerate_blockmove, framerate_2P_blockmove, game_speed, game_speed_2P
     framerate = 30 # Bigger -> Slower  기본 블록 하강 속도, 2도 할만 함, 0 또는 음수 이상이어야 함
     framerate_blockmove = framerate * 3 # 블록 이동 시 속도
     game_speed = framerate * 20 # 게임 기본 속도
@@ -807,7 +807,7 @@ def set_initial_values():
     u = False
     g = False
     time_attack = False
-    start_ticks = pygame.time.get_ticks()
+    time_attack_time_setting = False # 타임어택 모드를 시작하였을 때 타임 세팅을 시작하여 경과 시간을 계산하기 위해 추가한 변수
     textsize = False
 
     # 게임 음악 속도 조절 관련 변수
@@ -1475,6 +1475,10 @@ while not done:
             speed_plus_button.draw(screen, (0, 0, 0))
             speed_minus_button.draw(screen, (0, 0, 0))
         if time_attack:
+            if time_attack_time_setting == False: # 타임어택 모드일 때 타임 세팅이 안 되어 있으면
+                start_ticks = pygame.time.get_ticks() # 현재 시간을 타임어택 모드 시작 시간이라고 설정하고
+                time_attack_time_setting = True # 타임 세팅이 완료되었다고 바꾼다.
+
             elapsed_time = (pygame.time.get_ticks() - start_ticks) / 1000 # 경과 시간 계산
         for event in pygame.event.get():
             pos = pygame.mouse.get_pos()
@@ -1523,7 +1527,7 @@ while not done:
                             start = False
                             game_status = 'start'
                             game_over = True
-                            gravity_mode = True
+                            gravity_mode = False
                             pygame.time.set_timer(pygame.USEREVENT, 1) #0.001초
                     else:
                         bottom_count += 1
@@ -1916,7 +1920,7 @@ while not done:
             start = False
             game_status = 'start'
             game_over = True
-            time_attack = True
+            time_attack = False
             pygame.time.set_timer(pygame.USEREVENT, 1)
 
         pygame.display.update()
@@ -2601,23 +2605,17 @@ while not done:
                     game_over = False
 
                 if restart_button.isOver_2(pos):
-                    if gravity_mode:
-                        set_initial_values()
-                        start = True
-                        gravity_mode = True
-                        pygame.mixer.music.play(-1)  # play(-1) = 노래 반복재생
-                    if time_attack:
-                        set_initial_values()
-                        start = True
-                        time_attack = True
-                        pygame.mixer.music.play(-1)
                     if game_status == 'start':
-                        set_initial_values()
                         start = True
-                        pygame.mixer.music.play(-1)
+                        pygame.mixer.music.play(-1) #play(-1) = 노래 반복재생
                     if game_status == 'pvp':
-                        set_initial_values()
                         pvp = True
+                        pygame.mixer.music.play(-1)
+                    if game_status == 'gravity_mode':
+                        gravity_mode = True
+                        pygame.mixer.music.play(-1)
+                    if game_status == 'time_attack':
+                        time_attack = True
                         pygame.mixer.music.play(-1)
                     ui_variables.click_sound.play()
                     game_over = False
