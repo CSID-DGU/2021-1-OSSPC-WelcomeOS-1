@@ -8,8 +8,14 @@ from mino import *
 from random import *
 from pygame.locals import *
 import os
+from ai import Ai
 
 # Unchanged values Define 변하지 않는 변수 선언
+computed = 5 # 5 이하 이면 자동으로 블록 쌓아줌 
+hint_item_num = 0 #자동 추천 기능 쓸 수 있는 횟수 
+weights = [0.39357083734159515, -1.8961941343266449, -5.107694873375318, -3.6314963941589093, -2.9262681134021786, -2.146136640641482, -7.204192964669836, -3.476853402227247, -6.813002842291903, 4.152001386170861, -21.131715861293525, -10.181622180279133, -5.351108175564556, -2.6888972099986956, -2.684925769670947, -4.504495386829769, -7.4527302422826, -6.3489634714511505, -4.701455626343827, -10.502314845278828, 0.6969259450910086, -4.483319180395864, -2.471375907554622, -6.245643268054767, -1.899364785170105, -5.3416512085013395, -4.072687054171711, -5.936652569831475, -2.3140398163110643, -4.842883337741306, 17.677262456993276, -4.42668539845469, -6.8954976464473585, 4.481308299774875] 
+
+
 
 block_size = 17  # Height, width of single block
 width = 10
@@ -24,7 +30,7 @@ block_size = int(board_height * 0.045)
 mino_matrix_x = 4 #mino는 4*4 배열이어서 이를 for문에 사용
 mino_matrix_y = 4 #mino는 4*4 배열이어서 이를 for문에 사용
 
-speed_change = 10 # 레벨별 블록 하강 속도 상승 정도
+speed_change = 50 # 레벨별 블록 하강 속도 상승 정도
 
 min_width = 400
 min_height = 225
@@ -415,6 +421,8 @@ def draw_board(next1, next2, hold, score, level, goal):
         level_value = ui_variables.h4.render(str(level), 1, ui_variables.real_white)
         text_combo = ui_variables.h5.render("COMBO", 1, ui_variables.real_white)
         combo_value = ui_variables.h4.render(str(combo_count), 1, ui_variables.real_white)
+        text_hint = ui_variables.h5.render("HINT", 1, ui_variables.real_white)
+        hint_value = ui_variables.h4.render(str(hint_item_num), 1, ui_variables.real_white)
         if debug:
             speed_value = ui_variables.h5.render("SPEED : "+str(framerate), 1, ui_variables.real_white) #speed를 알려주는 framerate(기본값 30. 빨라질 수록 숫자 작아짐)
         if time_attack:
@@ -431,6 +439,8 @@ def draw_board(next1, next2, hold, score, level, goal):
         level_value = ui_variables.h2.render(str(level), 1, ui_variables.real_white)
         text_combo = ui_variables.h3.render("COMBO", 1, ui_variables.real_white)
         combo_value = ui_variables.h2.render(str(combo_count), 1, ui_variables.real_white)
+        text_hint = ui_variables.h3.render("HINT", 1, ui_variables.real_white)
+        hint_value = ui_variables.h2.render(str(hint_item_num), 1, ui_variables.real_white)
         if debug:
             speed_value = ui_variables.h3.render("SPEED : "+str(framerate), 1, ui_variables.real_white) #speed를 알려주는 framerate(기본값 30. 빨라질 수록 숫자 작아짐)
         if time_attack:
@@ -445,12 +455,14 @@ def draw_board(next1, next2, hold, score, level, goal):
     # Place texts. 위치 비율 고정, 각각 전체 board 가로길이, 세로길이에 대한 원하는 비율을 곱해줌#
     screen.blit(text_hold, (int(board_width * 0.045) + sidebar_width, int(board_height * 0.0374)))
     screen.blit(text_next, (int(board_width * 0.045) + sidebar_width, int(board_height * 0.2780)))
-    screen.blit(text_score, (int(board_width * 0.045) + sidebar_width, int(board_height * 0.5187)))
+    screen.blit(text_score, (int(board_width * 0.045) + sidebar_width, int(board_height * 0.5187)))#
     screen.blit(score_value, (int(board_width * 0.055) + sidebar_width, int(board_height * 0.5614)))
-    screen.blit(text_level, (int(board_width * 0.045) + sidebar_width, int(board_height * 0.6791)))
+    screen.blit(text_level, (int(board_width * 0.045) + sidebar_width, int(board_height * 0.6791)))#
     screen.blit(level_value, (int(board_width * 0.055) + sidebar_width, int(board_height * 0.7219)))
-    screen.blit(text_combo, (int(board_width * 0.045) + sidebar_width, int(board_height * 0.8395)))
+    screen.blit(text_combo, (int(board_width * 0.045) + sidebar_width, int(board_height * 0.8395)))#
     screen.blit(combo_value, (int(board_width * 0.055) + sidebar_width, int(board_height * 0.8823)))
+    screen.blit(text_hint, (int(board_width * 0.045) + sidebar_width * 1.2, int(board_height * 0.8395)))
+    screen.blit(hint_value, (int(board_width * 0.055) + sidebar_width * 1.2, int(board_height * 0.8823)))
     if debug:
         screen.blit(speed_value, (int(board_width * 0.065), int(board_height * 0.1)))
 
@@ -508,6 +520,7 @@ def draw_1Pboard(next, hold, score, level, goal):
         level_value = ui_variables.h4.render(str(level), 1, ui_variables.real_white)
         text_combo = ui_variables.h5.render("COMBO", 1, ui_variables.real_white)
         combo_value = ui_variables.h4.render(str(combo_count), 1, ui_variables.real_white)
+        
     if textsize==True:
         text_hold = ui_variables.h3.render("HOLD", 1, ui_variables.real_white)
         text_next = ui_variables.h3.render("NEXT", 1, ui_variables.real_white)
@@ -517,6 +530,7 @@ def draw_1Pboard(next, hold, score, level, goal):
         level_value = ui_variables.h2.render(str(level), 1, ui_variables.real_white)
         text_combo = ui_variables.h3.render("COMBO", 1, ui_variables.real_white)
         combo_value = ui_variables.h2.render(str(combo_count), 1, ui_variables.real_white)
+        
     if debug:
         speed_value = ui_variables.h5.render("SPEED : "+str(framerate), 1, ui_variables.real_white) #speed를 알려주는 framerate(기본값 30. 빨라질 수록 숫자 작아짐)
         screen.blit(speed_value, (int(board_width * 0.045) + sidebar_width, int(board_height * 0.015))) #각각 전체 board 가로길이, 세로길이에 원하는 비율을 곱해줌
@@ -528,6 +542,7 @@ def draw_1Pboard(next, hold, score, level, goal):
     screen.blit(level_value, (int(board_width*0.055) + sidebar_width , int(board_height*0.7219)))
     screen.blit(text_combo, (int(board_width*0.045) + sidebar_width , int(board_height*0.8395)))
     screen.blit(combo_value, (int(board_width*0.055) + sidebar_width, int(board_height*0.8823)))
+    
 
     # Draw board
     for x in range(width):
@@ -800,7 +815,7 @@ def set_initial_values():
     pvp = False
     help = False
     gravity_mode = False #이 코드가 없으면 중력모드 게임을 했다가 Restart해서 일반모드로 갈때 중력모드로 게임이 진행됨#
-    debug = False
+    debug = True #False
     d = False
     e = False
     b = False
@@ -875,6 +890,42 @@ def set_initial_values():
     game_status = ''
     pygame.mixer.music.load("assets/sounds/SFX_BattleMusic.wav")
 
+
+def matrix_changer(matrix):
+    ai_matrix = []
+    for j in range(len(matrix[0])):#20
+        ai_matrix.append([])
+        for i in range(len(matrix)): #10
+            ai_matrix[j].append(matrix[i][j])
+    del ai_matrix[0]
+    return ai_matrix
+
+def mino_converter(next,type): #블록 모양 변환 type==0: 현재 블록 반환 type=1:다음블록 반환
+    if type==0:
+        grid_n1 = tetrimino.mino_map[next - 1][0] #(배열이라-1) 현재 블록의 원래 모양
+    elif type==1:
+        grid_n1 = tetrimino.mino_map[next - 1][0] #(배열이라-1) 다음 블록의 원래 모양
+
+    if grid_n1==tetrimino.mino_map[0][0] :
+        return  [[0, 0, 0, 0], [6, 6, 6, 6]]
+    if grid_n1==tetrimino.mino_map[1][0] :
+        return [[4, 0, 0, 0], [4, 4, 4, 0]]
+    if grid_n1==tetrimino.mino_map[2][0] :
+        return [[0, 0, 5, 0], [5, 5, 5, 0]]
+    if grid_n1==tetrimino.mino_map[3][0] :
+        return [[0, 7, 7, 0], [0, 7, 7, 0]]
+    if grid_n1==tetrimino.mino_map[4][0] :
+        return [[0, 2, 2, 0], [2, 2, 0, 0]]
+    if grid_n1==tetrimino.mino_map[5][0] :
+        return [[0, 1, 0, 0], [1, 1, 1, 0]]
+    if grid_n1==tetrimino.mino_map[6][0] :
+        return [[3, 3, 0, 0], [0, 3, 3, 0]]
+    
+def stone_x(next):
+    stone = tetrimino.mino_map[next-1][0] #(배열이라-1) 다음 블록의 원래 모양
+    stone_x = int(10 / 2 - len(stone[0])/2)
+    return stone_x
+ 
 set_initial_values()
 pygame.time.set_timer(pygame.USEREVENT, 10)
 
@@ -1482,7 +1533,7 @@ while not done:
                 done = True
             elif event.type == USEREVENT:
                 pygame.time.set_timer(pygame.USEREVENT, game_speed)
-
+                
                 # Draw a mino
                 draw_mino(dx, dy, mino, rotation, matrix)
                 screen.fill(ui_variables.real_white)
@@ -1498,6 +1549,7 @@ while not done:
                 # Move mino down
                 if not is_bottom(dx, dy, mino, rotation, matrix):
                     dy += 1
+
 
                 # Create new mino: 중력 모드
                 elif gravity_mode:
@@ -1530,7 +1582,8 @@ while not done:
 
                 # Create new mino: 일반 모드
                 else:
-                    if hard_drop or bottom_count == waiting_time:
+                    if hard_drop or bottom_count == waiting_time:                        
+                        computed += 1
                         hard_drop = False
                         bottom_count = 0
                         score += 10 * level
@@ -1539,6 +1592,7 @@ while not done:
                         draw_image(screen, gamebackground_image , board_width * 0.5, board_height * 0.5, board_width, board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                         draw_board(next_mino1, next_mino2, hold_mino, score, level, goal)
                         pygame.display.update()
+                      
                         if is_stackable(next_mino1, matrix):
                             mino = next_mino1
                             next_mino1 = next_mino2
@@ -1555,6 +1609,30 @@ while not done:
                     else:
                         bottom_count += 1
 
+                        
+                if computed < 4: #h버튼 누르는 순간의 블록부터 자동으로 쌓아줘서 4미만으로 해야 5블록 쌓아줌
+                    moves_list = []                                  
+                    moves_list = Ai.choose(matrix_changer(matrix), mino_converter(mino,0), mino_converter(next_mino1,1), stone_x(mino), weights) 
+                    for i in range(len(moves_list)):
+                        if moves_list[i] == 'UP':
+                            if rotation != 3:
+                                rotation += 1
+                            else:
+                                rotation = 0                                                                    
+                        elif moves_list[i] == 'LEFT': 
+                            if not is_leftedge(dx, dy, mino, rotation, matrix):
+                                ui_variables.move_sound.play()
+                                dx -= 1                                               
+                        elif moves_list[i ]== 'RIGHT':
+                            if not is_rightedge(dx, dy, mino, rotation, matrix):
+                                ui_variables.move_sound.play()
+                                dx += 1
+                    ui_variables.fall_sound.play()
+                    ui_variables.drop_sound.play()
+                    while not is_bottom(dx, dy, mino, rotation, matrix):
+                        dy += 1
+                    hard_drop = True
+                    
                 # Erase line
                 erase_count = 0
                 rainbow_count = 0
@@ -1571,6 +1649,8 @@ while not done:
                         k = j
                         combo_value += 1
                         combo_count += 1 # 콤보 버그 수정. 가로줄 꽉 찼는지 확일할 때마다 combo count를 늘린다.
+                        if combo_count % 3 == 0:
+                            hint_item_num += 1
                         total_time += 5 # 콤보 시 시간 5초 연장. 여러줄 콤보시 1콤보당 5초가 늘어나도록 가로줄 꽉 찼는지 확일할 때마다 제한 시간을 늘린다.
 
                         #rainbow보너스 점수
@@ -1774,6 +1854,12 @@ while not done:
                     draw_board(next_mino1, next_mino2, hold_mino, score, level, goal)
                     pygame.display.update()
 
+                #자동 추천 기능 아이템 시작
+                elif event.key == K_h:
+                    if hint_item_num > 0:
+                        computed = 0
+                        hint_item_num -= 1
+
                 # Move left
                 elif event.key == K_LEFT:
                     if not is_leftedge(dx, dy, mino, rotation, matrix):
@@ -1948,6 +2034,7 @@ while not done:
                 else:
                     if hard_drop or bottom_count == waiting_time:
                         hard_drop = False
+                        
                         bottom_count = 0
                         draw_mino(dx, dy, mino, rotation, matrix)
 
