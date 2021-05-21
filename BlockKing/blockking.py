@@ -891,11 +891,11 @@ def set_initial_values():
     pygame.mixer.music.load("assets/sounds/SFX_BattleMusic.wav")
 
 
-def matrix_changer(matrix):
+def matrix_changer(matrix): #블록킹이랑 기존 ai 테트리스의 map 행렬이 달라서 변환해주는 함수
     ai_matrix = []
-    for j in range(len(matrix[0])):#20
+    for j in range(len(matrix[0])):#20 : 행 수
         ai_matrix.append([])
-        for i in range(len(matrix)): #10
+        for i in range(len(matrix)): #10 : 열 수 
             ai_matrix[j].append(matrix[i][j])
     del ai_matrix[0]
     return ai_matrix
@@ -906,7 +906,7 @@ def mino_converter(next,type): #블록 모양 변환 type==0: 현재 블록 반�
     elif type==1:
         grid_n1 = tetrimino.mino_map[next - 1][0] #(배열이라-1) 다음 블록의 원래 모양
 
-    if grid_n1==tetrimino.mino_map[0][0] :
+    if grid_n1==tetrimino.mino_map[0][0] : #블록킹이랑 AI 테트리스 븝록 정의가 달라서 변환해줌
         return  [[0, 0, 0, 0], [6, 6, 6, 6]]
     if grid_n1==tetrimino.mino_map[1][0] :
         return [[4, 0, 0, 0], [4, 4, 4, 0]]
@@ -921,8 +921,8 @@ def mino_converter(next,type): #블록 모양 변환 type==0: 현재 블록 반�
     if grid_n1==tetrimino.mino_map[6][0] :
         return [[3, 3, 0, 0], [0, 3, 3, 0]]
     
-def stone_x(next):
-    stone = tetrimino.mino_map[next-1][0] #(배열이라-1) 다음 블록의 원래 모양
+def stone_x(next): #AI의 choose함수 파라미터 넣어줄 OFFSET 계산 함수
+    stone = tetrimino.mino_map[next-1][0] #(배열이라-1) 현재 블록의 원래 모양
     stone_x = int(10 / 2 - len(stone[0])/2)
     return stone_x
  
@@ -1583,7 +1583,7 @@ while not done:
                 # Create new mino: 일반 모드
                 else:
                     if hard_drop or bottom_count == waiting_time:                        
-                        computed += 1
+                        computed += 1 #블록을 하나 자동으로 쌓아줬다
                         hard_drop = False
                         bottom_count = 0
                         score += 10 * level
@@ -1611,19 +1611,19 @@ while not done:
 
                         
                 if computed < 4: #h버튼 누르는 순간의 블록부터 자동으로 쌓아줘서 4미만으로 해야 5블록 쌓아줌
-                    moves_list = []                                  
+                    moves_list = []  #최적의 움직임을 저장하는 리스트                                
                     moves_list = Ai.choose(matrix_changer(matrix), mino_converter(mino,0), mino_converter(next_mino1,1), stone_x(mino), weights) 
                     for i in range(len(moves_list)):
-                        if moves_list[i] == 'UP':
+                        if moves_list[i] == 'UP': #회전하도록
                             if rotation != 3:
                                 rotation += 1
                             else:
                                 rotation = 0                                                                    
-                        elif moves_list[i] == 'LEFT': 
+                        elif moves_list[i] == 'LEFT': #왼쪽으로 한칸
                             if not is_leftedge(dx, dy, mino, rotation, matrix):
                                 ui_variables.move_sound.play()
                                 dx -= 1                                               
-                        elif moves_list[i ]== 'RIGHT':
+                        elif moves_list[i ]== 'RIGHT': #오른쪽으로 한칸
                             if not is_rightedge(dx, dy, mino, rotation, matrix):
                                 ui_variables.move_sound.play()
                                 dx += 1
@@ -1631,7 +1631,7 @@ while not done:
                     ui_variables.drop_sound.play()
                     while not is_bottom(dx, dy, mino, rotation, matrix):
                         dy += 1
-                    hard_drop = True
+                    hard_drop = True #hard drop 형식으로 블록 떨어짐게 구현함
                     
                 # Erase line
                 erase_count = 0
@@ -1649,7 +1649,7 @@ while not done:
                         k = j
                         combo_value += 1
                         combo_count += 1 # 콤보 버그 수정. 가로줄 꽉 찼는지 확일할 때마다 combo count를 늘린다.
-                        if combo_count % 3 == 0:
+                        if combo_count % 3 == 0: #콤보 수가 3의 배수일 때, 힌트를 하나씩 준다
                             hint_item_num += 1
                         total_time += 5 # 콤보 시 시간 5초 연장. 여러줄 콤보시 1콤보당 5초가 늘어나도록 가로줄 꽉 찼는지 확일할 때마다 제한 시간을 늘린다.
 
@@ -1855,10 +1855,10 @@ while not done:
                     pygame.display.update()
 
                 #자동 추천 기능 아이템 시작
-                elif event.key == K_h:
+                elif event.key == K_h: #h키 누르면 아이템 발동
                     if hint_item_num > 0:
                         computed = 0
-                        hint_item_num -= 1
+                        hint_item_num -= 1 #아이템 갯수 하나 줄여줌
 
                 # Move left
                 elif event.key == K_LEFT:
