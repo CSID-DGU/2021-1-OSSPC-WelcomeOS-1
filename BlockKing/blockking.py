@@ -2007,7 +2007,7 @@ while not done:
                             score_2P += 10 * level_2P
                         else:  # 더이상 쌓을 수 없으면 게임오버
                             pvp = True
-                            gagame_status = 'pvp'
+                            game_status = 'pvp'
                             if score <= score_2P :
                                 draw_image(screen, gameover_image,board_width * 0.6, board_height * 0.5, int(board_width * 0.25), int(board_height * 0.45)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                             else :
