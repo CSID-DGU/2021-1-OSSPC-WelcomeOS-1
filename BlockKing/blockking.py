@@ -1554,6 +1554,7 @@ while not done:
                 # Create new mino: 중력 모드
                 elif gravity_mode:
                     if hard_drop or bottom_count == waiting_time:
+                        computed += 1
                         if gravity(dx, dy, mino, rotation, matrix):
                             erase_mino(dx, dy, mino, rotation, matrix)
                         hard_drop = False
