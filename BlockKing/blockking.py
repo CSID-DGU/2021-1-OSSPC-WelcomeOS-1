@@ -1527,7 +1527,7 @@ while not done:
                             start = False
                             game_status = 'start'
                             game_over = True
-                            gravity_mode = False
+                            gravity_mode = True
                             pygame.time.set_timer(pygame.USEREVENT, 1) #0.001초
                     else:
                         bottom_count += 1
@@ -1920,7 +1920,7 @@ while not done:
             start = False
             game_status = 'start'
             game_over = True
-            time_attack = False
+            time_attack = True
             pygame.time.set_timer(pygame.USEREVENT, 1)
 
         pygame.display.update()
@@ -2007,7 +2007,7 @@ while not done:
                             score_2P += 10 * level_2P
                         else:  # 더이상 쌓을 수 없으면 게임오버
                             pvp = True
-                            gagame_status = 'pvp'
+                            game_status = 'pvp'
                             if score <= score_2P :
                                 draw_image(screen, gameover_image,board_width * 0.6, board_height * 0.5, int(board_width * 0.25), int(board_height * 0.45)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                             else :
@@ -2605,17 +2605,23 @@ while not done:
                     game_over = False
 
                 if restart_button.isOver_2(pos):
-                    if game_status == 'start':
+                    if gravity_mode:
+                        set_initial_values()
                         start = True
-                        pygame.mixer.music.play(-1) #play(-1) = 노래 반복재생
-                    if game_status == 'pvp':
-                        pvp = True
-                        pygame.mixer.music.play(-1)
-                    if game_status == 'gravity_mode':
                         gravity_mode = True
-                        pygame.mixer.music.play(-1)
-                    if game_status == 'time_attack':
+                        pygame.mixer.music.play(-1)  # play(-1) = 노래 반복재생
+                    if time_attack:
+                        set_initial_values()
+                        start = True
                         time_attack = True
+                        pygame.mixer.music.play(-1)
+                    if game_status == 'start':
+                        set_initial_values()
+                        start = True
+                        pygame.mixer.music.play(-1)
+                    if game_status == 'pvp':
+                        set_initial_values()
+                        pvp = True
                         pygame.mixer.music.play(-1)
                     ui_variables.click_sound.play()
                     game_over = False
