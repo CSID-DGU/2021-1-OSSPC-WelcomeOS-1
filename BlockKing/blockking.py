@@ -1585,22 +1585,22 @@ while not done:
                             rainbow_count += 1
 
                         for i in range(board_x):
-                            if matrix[i][j] == 10 : # 가로줄 삭제 아이템이면
+                            if matrix[i][j] == 10 : # 세로줄 삭제 아이템이면
                                 for j in range(board_y+1):
                                     matrix[i][j] = 0
-                        screen.blit(ui_variables.vertical_item, (board_width * 0.3, board_height * 0.3)) #blit(이미지, 위치)
-                        pygame.display.update()
-                        pygame.time.delay(200) #0.4초
+                                screen.blit(ui_variables.vertical_item, (board_width * 0.3, board_height * 0.3)) #blit(이미지, 위치)
+                                pygame.display.update()
+                        pygame.time.delay(300) #0.3초
                         screen.fill(ui_variables.real_white)
                         draw_image(screen, gamebackground_image , board_width * 0.5, board_height * 0.5, board_width, board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                         draw_board(next_mino1, next_mino2, hold_mino, score, level, goal)
                         pygame.display.update()
 
-
                         while k > 0:
                             for i in range(board_x):
                                 matrix[i][k] = matrix[i][k - 1]  # 남아있는 블록 한 줄씩 내리기(덮어쓰기)
                             k -= 1
+
                 if erase_count >= 1:
                     if rainbow_count >= 1:
                         score += 500 * rainbow_count #임의로 rainbow는 한 줄당 500점으로 잡음
