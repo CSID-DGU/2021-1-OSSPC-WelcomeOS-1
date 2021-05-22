@@ -128,8 +128,9 @@ class ui_variables:
     ghost_image = 'assets/block_images/ghost.png'
     table_image = 'assets/block_images/background.png'
     linessent_image = 'assets/block_images/linessent.png'
+    delete_vertical_image = 'assets/block_images/delete_vertical.png'
     t_block = [table_image, cyan_image, blue_image, orange_image, yellow_image, green_image, pink_image, red_image,
-               ghost_image, linessent_image]
+               ghost_image, linessent_image, delete_vertical_image]
 
 #각 이미지 주소
 background_image = 'assets/vector/kingdom.jpg' #홈 배경화면
@@ -834,11 +835,11 @@ def set_initial_values():
     dx_2P, dy_2P = 3, 0
     rotation = 0  # Minos rotation status
     rotation_2P = 0
-    mino = randint(1, 7)  # Current mino #테트리스 블록 7가지 중 하나
-    mino_2P = randint(1, 7)
-    next_mino1 = randint(1, 7)  # Next mino1 # 다음 테트리스 블록 7가지 중 하나
-    next_mino2 = randint(1, 7)  # Next mino2 # 다음 테트리스 블록 7가지 중 하나
-    next_mino1_2P = randint(1, 7)
+    mino = randint(1, 8)  # Current mino #테트리스 블록 7가지 중 하나
+    mino_2P = randint(1, 8)
+    next_mino1 = randint(1, 8)  # Next mino1 # 다음 테트리스 블록 7가지 중 하나
+    next_mino2 = randint(1, 8)  # Next mino2 # 다음 테트리스 블록 7가지 중 하나
+    next_mino1_2P = randint(1, 8)
     hold = False  # Hold status
     hold_2P = False
     hold_mino = -1  # Holded mino #현재 hold하는 것 없는 상태
@@ -1513,7 +1514,7 @@ while not done:
                         if is_stackable(next_mino1, matrix):
                             mino = next_mino1
                             next_mino1 = next_mino2
-                            next_mino2 = randint(1, 7)
+                            next_mino2 = randint(1, 8)
                             dx, dy = 3, 0
                             rotation = 0
                             hold = False
@@ -1541,7 +1542,7 @@ while not done:
                         if is_stackable(next_mino1, matrix):
                             mino = next_mino1
                             next_mino1 = next_mino2
-                            next_mino2 = randint(1, 7)
+                            next_mino2 = randint(1, 8)
                             dx, dy = 3, 0
                             rotation = 0
                             hold = False
@@ -1579,6 +1580,11 @@ while not done:
                         rainbow_check = list(set(matrix_contents).intersection(rainbow)) #현재 클리어된 줄에 있는 mino와 mino의 종류중 겹치는 것 저장
                         if rainbow == rainbow_check: #현재 클리어된 줄에 모든 종류 mino 있다면
                             rainbow_count += 1
+
+                        for j in range(board_y+1):
+                            for i in range(board_x):
+                                if matrix[i][j] == 10 : # 가로줄 삭제 아이템이면
+                                    matrix[i][j] = 0
 
                         while k > 0:
                             for i in range(board_x):
@@ -1678,7 +1684,7 @@ while not done:
                             hold_mino = mino
                             mino = next_mino1
                             next_mino1 = next_mino2
-                            next_mino2 = randint(1, 7)
+                            next_mino2 = randint(1, 8)
                         else:
                             hold_mino, mino = mino, hold_mino
                         dx, dy = 3, 0
@@ -1951,7 +1957,7 @@ while not done:
                         if is_stackable(next_mino1, matrix):
                             mino = next_mino1
                             # next_mino1 = next_mino2
-                            next_mino1 = randint(1, 7)
+                            next_mino1 = randint(1, 8)
                             dx, dy = 3, 0
                             rotation = 0
                             hold = False
@@ -1993,7 +1999,7 @@ while not done:
 
                         if is_stackable(next_mino1_2P, matrix_2P):
                             mino_2P = next_mino1_2P
-                            next_mino1_2P = randint(1, 7)
+                            next_mino1_2P = randint(1, 8)
                             dx_2P, dy_2P = 3, 0
                             rotation_2P = 0
                             hold_2P = False
@@ -2241,7 +2247,7 @@ while not done:
                         if hold_mino == -1:
                             hold_mino = mino
                             mino = next_mino1
-                            next_mino1 = randint(1, 7)
+                            next_mino1 = randint(1, 8)
                         else:
                             hold_mino, mino = mino, hold_mino
                         dx, dy = 3, 0
@@ -2256,7 +2262,7 @@ while not done:
                         if hold_mino_2P == -1:
                             hold_mino_2P = mino_2P
                             mino_2P = next_mino1_2P
-                            next_mino1_2P = randint(1, 7)
+                            next_mino1_2P = randint(1, 8)
                         else:
                             hold_mino_2P, mino_2P = mino_2P, hold_mino_2P
                         dx_2P, dy_2P = 3, 0
