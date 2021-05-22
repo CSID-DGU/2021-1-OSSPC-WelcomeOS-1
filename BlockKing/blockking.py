@@ -1545,7 +1545,7 @@ while not done:
                         if is_stackable(next_mino1, matrix):
                             mino = next_mino1
                             next_mino1 = next_mino2
-                            next_mino2 = randint(1, 2)
+                            next_mino2 = randint(1, 8)
                             dx, dy = 3, 0
                             rotation = 0
                             hold = False
