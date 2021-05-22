@@ -96,6 +96,9 @@ class ui_variables:
     #rainbow 보너스점수 graphic
     rainbow_vector = pygame.image.load('assets/vector/rainbow.png')
 
+    # 가로줄 삭제 아이템 graphic
+    vertical_item = pygame.image.load('assets/item_images/vertical_item.png')
+
     # Background colors. RGB 값에 해당함
     black = (10, 10, 10)  # rgb(10, 10, 10)
     black_pause = (0, 0, 0, 127)
@@ -1585,6 +1588,14 @@ while not done:
                             if matrix[i][j] == 10 : # 가로줄 삭제 아이템이면
                                 for j in range(board_y+1):
                                     matrix[i][j] = 0
+                        screen.blit(ui_variables.vertical_item, (board_width * 0.3, board_height * 0.3)) #blit(이미지, 위치)
+                        pygame.display.update()
+                        pygame.time.delay(200) #0.4초
+                        screen.fill(ui_variables.real_white)
+                        draw_image(screen, gamebackground_image , board_width * 0.5, board_height * 0.5, board_width, board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
+                        draw_board(next_mino1, next_mino2, hold_mino, score, level, goal)
+                        pygame.display.update()
+
 
                         while k > 0:
                             for i in range(board_x):
