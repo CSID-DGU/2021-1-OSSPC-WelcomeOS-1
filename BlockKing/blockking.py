@@ -1542,7 +1542,7 @@ while not done:
                         if is_stackable(next_mino1, matrix):
                             mino = next_mino1
                             next_mino1 = next_mino2
-                            next_mino2 = randint(1, 8)
+                            next_mino2 = randint(1, 2)
                             dx, dy = 3, 0
                             rotation = 0
                             hold = False
@@ -1581,9 +1581,9 @@ while not done:
                         if rainbow == rainbow_check: #현재 클리어된 줄에 모든 종류 mino 있다면
                             rainbow_count += 1
 
-                        for j in range(board_y+1):
-                            for i in range(board_x):
-                                if matrix[i][j] == 10 : # 가로줄 삭제 아이템이면
+                        for i in range(board_x):
+                            if matrix[i][j] == 10 : # 가로줄 삭제 아이템이면
+                                for j in range(board_y+1):
                                     matrix[i][j] = 0
 
                         while k > 0:
