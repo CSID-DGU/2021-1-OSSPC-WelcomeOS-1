@@ -131,9 +131,10 @@ class ui_variables:
     ghost_image = 'assets/block_images/ghost.png'
     table_image = 'assets/block_images/background.png'
     linessent_image = 'assets/block_images/linessent.png'
-    delete_vertical_image = 'assets/block_images/delete_vertical.png'
+    delete_vertical_image = 'assets/block_images/delete_vertical.png' # 10
+    delete_horizontal_image = 'assets/block_images/delete_horizontal.png' # 11
     t_block = [table_image, cyan_image, blue_image, orange_image, yellow_image, green_image, pink_image, red_image,
-               ghost_image, linessent_image, delete_vertical_image]
+               ghost_image, linessent_image, delete_vertical_image, delete_horizontal_image]
 
 #각 이미지 주소
 background_image = 'assets/vector/kingdom.jpg' #홈 배경화면
