@@ -96,8 +96,9 @@ class ui_variables:
     #rainbow 보너스점수 graphic
     rainbow_vector = pygame.image.load('assets/vector/rainbow.png')
 
-    # 가로줄 삭제 아이템 graphic
+    # 아이템 graphic
     vertical_item = pygame.image.load('assets/item_images/vertical_item.png')
+    horizontal_item = pygame.image.load('assets/item_images/horizontal_item.png')
 
     # Background colors. RGB 값에 해당함
     black = (10, 10, 10)  # rgb(10, 10, 10)
@@ -839,11 +840,11 @@ def set_initial_values():
     dx_2P, dy_2P = 3, 0
     rotation = 0  # Minos rotation status
     rotation_2P = 0
-    mino = randint(1, 8)  # Current mino #테트리스 블록 7가지 중 하나
-    mino_2P = randint(1, 8)
-    next_mino1 = randint(1, 8)  # Next mino1 # 다음 테트리스 블록 7가지 중 하나
-    next_mino2 = randint(1, 8)  # Next mino2 # 다음 테트리스 블록 7가지 중 하나
-    next_mino1_2P = randint(1, 8)
+    mino = randint(1, 9)  # Current mino #테트리스 블록 7가지 중 하나
+    mino_2P = randint(1, 9)
+    next_mino1 = randint(1, 9)  # Next mino1 # 다음 테트리스 블록 7가지 중 하나
+    next_mino2 = randint(1, 9)  # Next mino2 # 다음 테트리스 블록 7가지 중 하나
+    next_mino1_2P = randint(1, 9)
     hold = False  # Hold status
     hold_2P = False
     hold_mino = -1  # Holded mino #현재 hold하는 것 없는 상태
@@ -1518,7 +1519,7 @@ while not done:
                         if is_stackable(next_mino1, matrix):
                             mino = next_mino1
                             next_mino1 = next_mino2
-                            next_mino2 = randint(1, 8)
+                            next_mino2 = randint(1, 9)
                             dx, dy = 3, 0
                             rotation = 0
                             hold = False
@@ -1546,7 +1547,7 @@ while not done:
                         if is_stackable(next_mino1, matrix):
                             mino = next_mino1
                             next_mino1 = next_mino2
-                            next_mino2 = randint(1, 8)
+                            next_mino2 = randint(1, 9)
                             dx, dy = 3, 0
                             rotation = 0
                             hold = False
@@ -1587,15 +1588,29 @@ while not done:
 
                         for i in range(board_x):
                             if matrix[i][j] == 10 : # 세로줄 삭제 아이템이면
-                                for j in range(board_y+1):
-                                    matrix[i][j] = 0
                                 screen.blit(ui_variables.vertical_item, (board_width * 0.3, board_height * 0.3)) #blit(이미지, 위치)
                                 pygame.display.update()
-                        pygame.time.delay(300) #0.3초
-                        screen.fill(ui_variables.real_white)
-                        draw_image(screen, gamebackground_image , board_width * 0.5, board_height * 0.5, board_width, board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
-                        draw_board(next_mino1, next_mino2, hold_mino, score, level, goal)
-                        pygame.display.update()
+                                pygame.time.delay(400) #0.4초
+                                screen.fill(ui_variables.real_white)
+                                draw_image(screen, gamebackground_image , board_width * 0.5, board_height * 0.5, board_width, board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
+                                draw_board(next_mino1, next_mino2, hold_mino, score, level, goal)
+                                pygame.display.update()
+                                for j in range(board_y+1):
+                                    matrix[i][j] = 0
+
+                            if matrix[i][j] == 11 : # 가로줄 삭제 아이템이면
+                                screen.blit(ui_variables.horizontal_item, (board_width * 0.3, board_height * 0.3)) #blit(이미지, 위치)
+                                pygame.display.update()
+                                pygame.time.delay(400) #0.4초
+                                screen.fill(ui_variables.real_white)
+                                draw_image(screen, gamebackground_image , board_width * 0.5, board_height * 0.5, board_width, board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
+                                draw_board(next_mino1, next_mino2, hold_mino, score, level, goal)
+                                pygame.display.update()
+                                k=20 # 맨 아랫줄 부터
+                                while k > 0:
+                                    for i in range(board_x):
+                                        matrix[i][k] = matrix[i][k - 1]  # 남아있는 블록 한 줄씩 내리기(덮어쓰기)
+                                    k -= 1
 
                         while k > 0:
                             for i in range(board_x):
@@ -1696,7 +1711,7 @@ while not done:
                             hold_mino = mino
                             mino = next_mino1
                             next_mino1 = next_mino2
-                            next_mino2 = randint(1, 8)
+                            next_mino2 = randint(1, 9)
                         else:
                             hold_mino, mino = mino, hold_mino
                         dx, dy = 3, 0
@@ -1969,7 +1984,7 @@ while not done:
                         if is_stackable(next_mino1, matrix):
                             mino = next_mino1
                             # next_mino1 = next_mino2
-                            next_mino1 = randint(1, 8)
+                            next_mino1 = randint(1, 9)
                             dx, dy = 3, 0
                             rotation = 0
                             hold = False
@@ -2011,7 +2026,7 @@ while not done:
 
                         if is_stackable(next_mino1_2P, matrix_2P):
                             mino_2P = next_mino1_2P
-                            next_mino1_2P = randint(1, 8)
+                            next_mino1_2P = randint(1, 9)
                             dx_2P, dy_2P = 3, 0
                             rotation_2P = 0
                             hold_2P = False
@@ -2259,7 +2274,7 @@ while not done:
                         if hold_mino == -1:
                             hold_mino = mino
                             mino = next_mino1
-                            next_mino1 = randint(1, 8)
+                            next_mino1 = randint(1, 9)
                         else:
                             hold_mino, mino = mino, hold_mino
                         dx, dy = 3, 0
@@ -2274,7 +2289,7 @@ while not done:
                         if hold_mino_2P == -1:
                             hold_mino_2P = mino_2P
                             mino_2P = next_mino1_2P
-                            next_mino1_2P = randint(1, 8)
+                            next_mino1_2P = randint(1, 9)
                         else:
                             hold_mino_2P, mino_2P = mino_2P, hold_mino_2P
                         dx_2P, dy_2P = 3, 0
