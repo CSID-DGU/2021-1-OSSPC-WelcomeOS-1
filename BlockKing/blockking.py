@@ -900,14 +900,11 @@ def matrix_changer(matrix): #블록킹이랑 기존 ai 테트리스의 map 행�
     del ai_matrix[0]
     return ai_matrix
 
-def mino_converter(next,type): #블록 모양 변환 type==0: 현재 블록 반환 type=1:다음블록 반환
-    if type==0:
-        grid_n1 = tetrimino.mino_map[next - 1][0] #(배열이라-1) 현재 블록의 원래 모양
-    elif type==1:
-        grid_n1 = tetrimino.mino_map[next - 1][0] #(배열이라-1) 다음 블록의 원래 모양
+def mino_converter(next): #블록 모양 변환   
+    grid_n1 = tetrimino.mino_map[next - 1][0] #(배열이라-1) 현재 또는 다음 블록의 원래 모양
 
     if grid_n1==tetrimino.mino_map[0][0] : #블록킹이랑 AI 테트리스 븝록 정의가 달라서 변환해줌
-        return  [[0, 0, 0, 0], [6, 6, 6, 6]]
+        return  [[6, 6, 6, 6]]
     if grid_n1==tetrimino.mino_map[1][0] :
         return [[4, 0, 0, 0], [4, 4, 4, 0]]
     if grid_n1==tetrimino.mino_map[2][0] :
@@ -1554,7 +1551,7 @@ while not done:
                 # Create new mino: 중력 모드
                 elif gravity_mode:
                     if hard_drop or bottom_count == waiting_time:
-                        computed += 1
+                        computed += 1 #블록을 하나 자동으로 쌓아줬다
                         if gravity(dx, dy, mino, rotation, matrix):
                             erase_mino(dx, dy, mino, rotation, matrix)
                         hard_drop = False
@@ -1611,20 +1608,26 @@ while not done:
                         bottom_count += 1
 
                         
-                if computed < 4: #h버튼 누르는 순간의 블록부터 자동으로 쌓아줘서 4미만으로 해야 5블록 쌓아줌
+                if computed < 5: #h버튼 누르는 순간의 블록부터 자동으로 쌓아줘서 5미만으로 해야 5블록 쌓아줌
                     moves_list = []  #최적의 움직임을 저장하는 리스트                                
-                    moves_list = Ai.choose(matrix_changer(matrix), mino_converter(mino,0), mino_converter(next_mino1,1), stone_x(mino), weights) 
-                    for i in range(len(moves_list)):
+                    moves_list = Ai.choose(matrix_changer(matrix), mino_converter(mino), mino_converter(next_mino1), stone_x(mino), weights) 
+                    for_onetime = 0 #일자 블록 위치 맞춰주는 변수, 한번만 왼쪽으로 이동 해주기 위함
+                    for i in range(len(moves_list)):                        
                         if moves_list[i] == 'UP': #회전하도록
+                            if mino_converter(mino)==[[ 6, 6, 6, 6]]: #블록 모양 정의가 달라서 위치 맞춰주는 것
+                                if for_onetime == 0:
+                                    dx -= 1
+                                    for_onetime = 1
+                                    
                             if rotation != 3:
                                 rotation += 1
                             else:
                                 rotation = 0                                                                    
-                        elif moves_list[i] == 'LEFT': #왼쪽으로 한칸
+                        elif moves_list[i] == 'LEFT': #왼쪽으로 한칸                            
                             if not is_leftedge(dx, dy, mino, rotation, matrix):
                                 ui_variables.move_sound.play()
                                 dx -= 1                                               
-                        elif moves_list[i ]== 'RIGHT': #오른쪽으로 한칸
+                        elif moves_list[i ]== 'RIGHT': #오른쪽으로 한칸                            
                             if not is_rightedge(dx, dy, mino, rotation, matrix):
                                 ui_variables.move_sound.play()
                                 dx += 1
