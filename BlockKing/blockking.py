@@ -785,7 +785,7 @@ def set_music_playing_speed(CHANNELS, swidth, Change_RATE):
     pygame.mixer.music.play(-1) #위 노래를 반복재생하기 위해 play(-1)로 설정
 
 def set_initial_values():
-    global v_item, combo_count, combo_count_2P, score, level, goal, score_2P, level_2P, goal_2P, bottom_count, bottom_count_2P, hard_drop, hard_drop_2P, attack_point, attack_point_2P, dx, dy, dx_2P, dy_2P, rotation, rotation_2P, mino, mino_2P, next_mino1, next_mino2, next_mino1_2P, hold, hold_2P, hold_mino, hold_mino_2P, framerate, framerate_2P, matrix, matrix_2P, Change_RATE, blink, start, pause, done, game_over, leader_board, setting, volume_setting, screen_setting, pvp, help, gravity_mode, debug, d, e, b, u, g, time_attack, start_ticks, textsize, CHANNELS, swidth, name_location, name, previous_time, current_time, previous_time_2P, current_time_2P,pause_time, lines, leaders, volume, game_status, framerate_blockmove, framerate_2P_blockmove, game_speed, game_speed_2P
+    global h_item, v_item, combo_count, combo_count_2P, score, level, goal, score_2P, level_2P, goal_2P, bottom_count, bottom_count_2P, hard_drop, hard_drop_2P, attack_point, attack_point_2P, dx, dy, dx_2P, dy_2P, rotation, rotation_2P, mino, mino_2P, next_mino1, next_mino2, next_mino1_2P, hold, hold_2P, hold_mino, hold_mino_2P, framerate, framerate_2P, matrix, matrix_2P, Change_RATE, blink, start, pause, done, game_over, leader_board, setting, volume_setting, screen_setting, pvp, help, gravity_mode, debug, d, e, b, u, g, time_attack, start_ticks, textsize, CHANNELS, swidth, name_location, name, previous_time, current_time, previous_time_2P, current_time_2P,pause_time, lines, leaders, volume, game_status, framerate_blockmove, framerate_2P_blockmove, game_speed, game_speed_2P
     framerate = 30 # Bigger -> Slower  기본 블록 하강 속도, 2도 할만 함, 0 또는 음수 이상이어야 함
     framerate_blockmove = framerate * 3 # 블록 이동 시 속도
     game_speed = framerate * 20 # 게임 기본 속도
@@ -861,8 +861,9 @@ def set_initial_values():
     pause_time = pygame.time.get_ticks()
 
     # item
-    v_item=[]
-    
+    v_item = []
+    h_item = 0
+
     with open('leaderboard.txt') as f:
         lines = f.readlines()
     lines = [line.rstrip('\n') for line in open('leaderboard.txt')]  #leaderboard.txt 한줄씩 읽어옴
@@ -1592,8 +1593,16 @@ while not done:
                         for i in range(board_x):
                             if matrix[i][j] == 10 : # 세로줄 삭제 아이템이면
                                 v_item.append(i)    
+                                screen.blit(ui_variables.vertical_item, (board_width * 0.3, board_height * 0.3)) #blit(이미지, 위치)
+                                pygame.display.update()
+                                pygame.time.delay(400) #0.4초
+                                screen.fill(ui_variables.real_white)
+                                draw_image(screen, gamebackground_image , board_width * 0.5, board_height * 0.5, board_width, board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
+                                draw_board(next_mino1, next_mino2, hold_mino, score, level, goal)
+                                pygame.display.update()
 
                             if matrix[i][j] == 11 : # 가로줄 삭제 아이템이면
+                                h_item += 1
                                 screen.blit(ui_variables.horizontal_item, (board_width * 0.3, board_height * 0.3)) #blit(이미지, 위치)
                                 pygame.display.update()
                                 pygame.time.delay(400) #0.4초
@@ -1601,23 +1610,22 @@ while not done:
                                 draw_image(screen, gamebackground_image , board_width * 0.5, board_height * 0.5, board_width, board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_board(next_mino1, next_mino2, hold_mino, score, level, goal)
                                 pygame.display.update()
+
+                        if len(v_item) != 0:
+                            for i in range(len(v_item)):
+                                for j in range(board_y+1):
+                                    matrix[v_item[i]][j] = 0
+                            v_item.clear()
+
+                        if h_item != 0:
+                            for i in range(h_item+1):
                                 k=20 # 맨 아랫줄 부터
                                 while k > 0:
                                     for i in range(board_x):
                                         matrix[i][k] = matrix[i][k - 1]  # 남아있는 블록 한 줄씩 내리기(덮어쓰기)
                                     k -= 1
-                        if len(v_item) != 0:
-                            screen.blit(ui_variables.vertical_item, (board_width * 0.3, board_height * 0.3)) #blit(이미지, 위치)
-                            pygame.display.update()
-                            pygame.time.delay(400) #0.4초
-                            screen.fill(ui_variables.real_white)
-                            draw_image(screen, gamebackground_image , board_width * 0.5, board_height * 0.5, board_width, board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
-                            draw_board(next_mino1, next_mino2, hold_mino, score, level, goal)
-                            pygame.display.update()
-                            for i in range(len(v_item)):
-                                for j in range(board_y+1):
-                                    matrix[v_item[i]][j] = 0
-                            v_item.clear()                                
+                            h_item = 0
+
                         while k > 0:
                             for i in range(board_x):
                                 matrix[i][k] = matrix[i][k - 1]  # 남아있는 블록 한 줄씩 내리기(덮어쓰기)
