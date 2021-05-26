@@ -1981,8 +1981,28 @@ while not done:
                             pvp = True
                             game_status = 'pvp'
 
-                            if score >= score_2P :
+                            if (score >= score_2P) and (stack_2P==True):
                                 draw_image(screen, gameover_image,board_width * 0.15, board_height * 0.5, int(board_width * 0.25), int(board_height * 0.45)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
+                            elif (score >= score_2P) and (stack_2P == False):
+                                ui_variables.GameOver_sound.play()
+                                draw_image(screen, pvp_win_image, board_width * 0.15, board_height * 0.5,
+                                           int(board_width * 0.25),
+                                           int(board_height * 0.55))  # (window, 이미지주소, x좌표, y좌표, 너비, 높이)
+                                draw_image(screen, pvp_lose_image, board_width * 0.6, board_height * 0.5,
+                                           int(board_width * 0.25),
+                                           int(board_height * 0.6))  # (window, 이미지주소, x좌표, y좌표, 너비, 높이)
+                                pvp = False
+                                pygame.mixer.music.stop()
+                                if game_status == 'start':
+                                    start = True
+                                    pygame.mixer.music.play(-1)
+                                if game_status == 'pvp':
+                                    pvp = True
+                                    pygame.mixer.music.play(-1)
+                                ui_variables.click_sound.play()
+                                pvp = False
+                                game_over = True
+                                pause = False
                             else :
                                 ui_variables.GameOver_sound.play()
                                 draw_image(screen,pvp_lose_image,board_width * 0.15, board_height * 0.5, int(board_width * 0.25), int(board_height * 0.6)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
@@ -2024,8 +2044,28 @@ while not done:
                             stack_2P = False
                             pvp = True
                             game_status = 'pvp'
-                            if score <= score_2P :
+                            if (score <= score_2P) and (stack==True) :
                                 draw_image(screen, gameover_image,board_width * 0.6, board_height * 0.5, int(board_width * 0.25), int(board_height * 0.45)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
+                            elif (score <= score_2P) and (stack==False) :
+                                ui_variables.GameOver_sound.play()
+                                draw_image(screen, pvp_lose_image, board_width * 0.15, board_height * 0.5,
+                                           int(board_width * 0.25),
+                                           int(board_height * 0.6))  # (window, 이미지주소, x좌표, y좌표, 너비, 높이)
+                                draw_image(screen, pvp_win_image, board_width * 0.6, board_height * 0.5,
+                                           int(board_width * 0.25),
+                                           int(board_height * 0.55))  # (window, 이미지주소, x좌표, y좌표, 너비, 높이)
+                                pvp = False
+                                pygame.mixer.music.stop()
+                                if game_status == 'start':
+                                    start = True
+                                    pygame.mixer.music.play(-1)
+                                if game_status == 'pvp':
+                                    pvp = True
+                                    pygame.mixer.music.play(-1)
+                                ui_variables.click_sound.play()
+                                pvp = False
+                                game_over = True
+                                pause = False
                             else:
                                 ui_variables.GameOver_sound.play()
                                 draw_image(screen,pvp_win_image,board_width * 0.15, board_height * 0.5, int(board_width * 0.25), int(board_height * 0.55)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
@@ -2519,38 +2559,43 @@ while not done:
                 pygame.mixer.music.stop()
                 pygame.time.set_timer(pygame.USEREVENT, 300) #0.3초
 
-                draw_image(screen, gameover_board_image, board_width * 0.5, board_height * 0.5, int(board_height * 0.7428), board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
-                menu_button.draw(screen, (0, 0, 0)) #rgb(0,0,0) = 검정색
-                restart_button.draw(screen, (0, 0, 0))
-                ok_button.draw(screen, (0, 0, 0))
+                if game_status != 'pvp':
+                    draw_image(screen, gameover_board_image, board_width * 0.5, board_height * 0.5, int(board_height * 0.7428), board_height)  # (window, 이미지주소, x좌표, y좌표, 너비, 높이)
+                    menu_button.draw(screen, (0, 0, 0))  # rgb(0,0,0) = 검정색
+                    restart_button.draw(screen, (0, 0, 0))
+                    ok_button.draw(screen, (0, 0, 0))
 
-                #render("텍스트이름", 안티에일리어싱 적용, 색깔), 즉 아래의 코드에서 숫자 1=안티에일리어싱 적용에 관한 코드
-                name_1 = ui_variables.h1_b.render(chr(name[0]), 1, ui_variables.pinkpurple)
-                name_2 = ui_variables.h1_b.render(chr(name[1]), 1, ui_variables.pinkpurple)
-                name_3 = ui_variables.h1_b.render(chr(name[2]), 1, ui_variables.pinkpurple)
+                    #render("텍스트이름", 안티에일리어싱 적용, 색깔), 즉 아래의 코드에서 숫자 1=안티에일리어싱 적용에 관한 코드
+                    name_1 = ui_variables.h1_b.render(chr(name[0]), 1, ui_variables.pinkpurple)
+                    name_2 = ui_variables.h1_b.render(chr(name[1]), 1, ui_variables.pinkpurple)
+                    name_3 = ui_variables.h1_b.render(chr(name[2]), 1, ui_variables.pinkpurple)
 
-                underbar_1 = ui_variables.h1_b.render("_", 1, ui_variables.pinkpurple)
-                underbar_2 = ui_variables.h1_b.render("_", 1, ui_variables.pinkpurple)
-                underbar_3 = ui_variables.h1_b.render("_", 1, ui_variables.pinkpurple)
+                    underbar_1 = ui_variables.h1_b.render("_", 1, ui_variables.pinkpurple)
+                    underbar_2 = ui_variables.h1_b.render("_", 1, ui_variables.pinkpurple)
+                    underbar_3 = ui_variables.h1_b.render("_", 1, ui_variables.pinkpurple)
 
-                screen.blit(name_1, (int(board_width * 0.434), int(board_height * 0.55))) #blit(요소, 위치), 각각 전체 board의 가로길이, 세로길이에다가 원하는 비율을 곱해줌
-                screen.blit(name_2, (int(board_width * 0.494), int(board_height * 0.55))) #blit(요소, 위치)
-                screen.blit(name_3, (int(board_width * 0.545), int(board_height * 0.55))) #blit(요소, 위치)
+                    screen.blit(name_1, (int(board_width * 0.434), int(board_height * 0.55))) #blit(요소, 위치), 각각 전체 board의 가로길이, 세로길이에다가 원하는 비율을 곱해줌
+                    screen.blit(name_2, (int(board_width * 0.494), int(board_height * 0.55))) #blit(요소, 위치)
+                    screen.blit(name_3, (int(board_width * 0.545), int(board_height * 0.55))) #blit(요소, 위치)
 
-                if blink:
-                    blink = False
+                    if blink:
+                        blink = False
+                    else:
+                        if name_location == 0:
+                            screen.blit(underbar_1, ((int(board_width * 0.437), int(board_height * 0.56)))) #위치 비율 고정
+                        elif name_location == 1:
+                            screen.blit(underbar_2, ((int(board_width * 0.497), int(board_height * 0.56)))) #위치 비율 고정
+                        elif name_location == 2:
+                            screen.blit(underbar_3, ((int(board_width * 0.557), int(board_height * 0.56)))) #위치 비율 고정
+                        blink = True
+
+                    pygame.display.update()
                 else:
-                    if name_location == 0:
-                        screen.blit(underbar_1, ((int(board_width * 0.437), int(board_height * 0.56)))) #위치 비율 고정
-                    elif name_location == 1:
-                        screen.blit(underbar_2, ((int(board_width * 0.497), int(board_height * 0.56)))) #위치 비율 고정
-                    elif name_location == 2:
-                        screen.blit(underbar_3, ((int(board_width * 0.557), int(board_height * 0.56)))) #위치 비율 고정
-                    blink = True
+                    draw_image(screen, gameover_board_image, board_width * 0.5, board_height * 0.3,int(board_height * 0.7428), int(board_height * 0.6))  # (window, 이미지주소, x좌표, y좌표, 너비, 높이)
+                    menu_button.draw(screen, (0, 0, 0))  # rgb(0,0,0) = 검정색
+                    restart_button.draw(screen, (0, 0, 0))
 
-                pygame.display.update()
-
-            elif event.type == KEYDOWN:
+            elif (event.type == KEYDOWN) and game_status!='pvp':
                 if event.key == K_RETURN:
                     ui_variables.click_sound.play()
 
