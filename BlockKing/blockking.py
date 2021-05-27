@@ -99,6 +99,8 @@ class ui_variables:
     # 아이템 graphic
     vertical_item = pygame.image.load('assets/item_images/vertical_item.png')
     horizontal_item = pygame.image.load('assets/item_images/horizontal_item.png')
+    fast_item = pygame.image.load('assets/item_images/fast_item.png')
+    slow_item = pygame.image.load('assets/item_images/slow_item.png')
 
     # Background colors. RGB 값에 해당함
     black = (10, 10, 10)  # rgb(10, 10, 10)
@@ -134,8 +136,10 @@ class ui_variables:
     linessent_image = 'assets/block_images/linessent.png'
     delete_vertical_image = 'assets/block_images/delete_vertical.png' # 10
     delete_horizontal_image = 'assets/block_images/delete_horizontal.png' # 11
+    fast_image = 'assets/block_images/fast.png' # 12    
+    slow_image = 'assets/block_images/slow.png' # 13
     t_block = [table_image, cyan_image, blue_image, orange_image, yellow_image, green_image, pink_image, red_image,
-               ghost_image, linessent_image, delete_vertical_image, delete_horizontal_image]
+               ghost_image, linessent_image, delete_vertical_image, delete_horizontal_image, fast_image, slow_image]
 
 #각 이미지 주소
 background_image = 'assets/vector/kingdom.jpg' #홈 배경화면
@@ -785,7 +789,7 @@ def set_music_playing_speed(CHANNELS, swidth, Change_RATE):
     pygame.mixer.music.play(-1) #위 노래를 반복재생하기 위해 play(-1)로 설정
 
 def set_initial_values():
-    global h_item_2P, v_item_2P, h_item, v_item, combo_count, combo_count_2P, score, level, goal, score_2P, level_2P, goal_2P, bottom_count, bottom_count_2P, hard_drop, hard_drop_2P, attack_point, attack_point_2P, dx, dy, dx_2P, dy_2P, rotation, rotation_2P, mino, mino_2P, next_mino1, next_mino2, next_mino1_2P, hold, hold_2P, hold_mino, hold_mino_2P, framerate, framerate_2P, matrix, matrix_2P, Change_RATE, blink, start, pause, done, game_over, leader_board, setting, volume_setting, screen_setting, pvp, help, gravity_mode, debug, d, e, b, u, g, time_attack, start_ticks, textsize, CHANNELS, swidth, name_location, name, previous_time, current_time, previous_time_2P, current_time_2P,pause_time, lines, leaders, volume, game_status, framerate_blockmove, framerate_2P_blockmove, game_speed, game_speed_2P
+    global s_item, f_item, h_item_2P, v_item_2P, h_item, v_item, combo_count, combo_count_2P, score, level, goal, score_2P, level_2P, goal_2P, bottom_count, bottom_count_2P, hard_drop, hard_drop_2P, attack_point, attack_point_2P, dx, dy, dx_2P, dy_2P, rotation, rotation_2P, mino, mino_2P, next_mino1, next_mino2, next_mino1_2P, hold, hold_2P, hold_mino, hold_mino_2P, framerate, framerate_2P, matrix, matrix_2P, Change_RATE, blink, start, pause, done, game_over, leader_board, setting, volume_setting, screen_setting, pvp, help, gravity_mode, debug, d, e, b, u, g, time_attack, start_ticks, textsize, CHANNELS, swidth, name_location, name, previous_time, current_time, previous_time_2P, current_time_2P,pause_time, lines, leaders, volume, game_status, framerate_blockmove, framerate_2P_blockmove, game_speed, game_speed_2P
 
     framerate = 30 # Bigger -> Slower  기본 블록 하강 속도, 2도 할만 함, 0 또는 음수 이상이어야 함
     framerate_blockmove = framerate * 3 # 블록 이동 시 속도
@@ -866,6 +870,8 @@ def set_initial_values():
     h_item = 0
     v_item_2P = []
     h_item_2P = 0
+    f_item = 0
+    s_item = 0
 
     with open('leaderboard.txt') as f:
         lines = f.readlines()
@@ -1619,6 +1625,25 @@ while not done:
                                 draw_board(next_mino1, next_mino2, hold_mino, score, level, goal)
                                 pygame.display.update()
 
+                            if matrix[i][j] == 12 : # 속도 증가 아이템이면
+                                f_item += 1
+                                screen.blit(ui_variables.fast_item, (board_width * 0.3, board_height * 0.3)) #blit(이미지, 위치)
+                                pygame.display.update()
+                                pygame.time.delay(400) #0.4초
+                                screen.fill(ui_variables.real_white)
+                                draw_image(screen, gamebackground_image , board_width * 0.5, board_height * 0.5, board_width, board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
+                                draw_board(next_mino1, next_mino2, hold_mino, score, level, goal)
+                                pygame.display.update()
+
+                            if matrix[i][j] == 13 : # 속도 감소 아이템이면
+                                s_item += 1
+                                screen.blit(ui_variables.fast_item, (board_width * 0.3, board_height * 0.3)) #blit(이미지, 위치)
+                                pygame.display.update()
+                                pygame.time.delay(400) #0.4초
+                                screen.fill(ui_variables.real_white)
+                                draw_image(screen, gamebackground_image , board_width * 0.5, board_height * 0.5, board_width, board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
+                                draw_board(next_mino1, next_mino2, hold_mino, score, level, goal)
+                                pygame.display.update()
                         if len(v_item) != 0:
                             for i in range(len(v_item)):
                                 for j in range(board_y+1):
@@ -1634,6 +1659,18 @@ while not done:
                                     k -= 1
                             h_item = 0
 
+                        if f_item != 0:
+                            for i in range(f_item+1):
+                                game_speed=int(game_speed-speed_change)
+                                # pygame.time.set_timer(USEREVENT, game_speed)
+                            f_item = 0
+
+                        if s_item != 0:
+                            for i in range(s_item+1):
+                                game_speed=int(game_speed+speed_change)
+                                # pygame.time.set_timer(USEREVENT, game_speed)
+                            f_item = 0
+                            
                         while k > 0:
                             for i in range(board_x):
                                 matrix[i][k] = matrix[i][k - 1]  # 남아있는 블록 한 줄씩 내리기(덮어쓰기)
