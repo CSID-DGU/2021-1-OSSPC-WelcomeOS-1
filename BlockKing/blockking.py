@@ -24,7 +24,7 @@ block_size = int(board_height * 0.045)
 mino_matrix_x = 4 #mino는 4*4 배열이어서 이를 for문에 사용
 mino_matrix_y = 4 #mino는 4*4 배열이어서 이를 for문에 사용
 
-speed_change = 50 # 레벨별 블록 하강 속도 상승 정도
+speed_change = 10 # 레벨별 블록 하강 속도 상승 정도
 
 min_width = 400
 min_height = 225
@@ -806,7 +806,7 @@ def draw_item_pvp():
 
 
 def set_initial_values():
-    global s_item, f_item, h_item_2P, v_item_2P, h_item, v_item, time_attack_time_setting, combo_count, combo_count_2P, score, level, goal, score_2P, level_2P, goal_2P, bottom_count, bottom_count_2P, hard_drop, hard_drop_2P, attack_point, attack_point_2P, dx, dy, dx_2P, dy_2P, rotation, rotation_2P, mino, mino_2P, next_mino1, next_mino2, next_mino1_2P, hold, hold_2P, hold_mino, hold_mino_2P, framerate, framerate_2P, matrix, matrix_2P, Change_RATE, blink, start, pause, done, game_over, leader_board, setting, volume_setting, screen_setting, pvp, help, gravity_mode, debug, d, e, b, u, g, time_attack, start_ticks, textsize, CHANNELS, swidth, name_location, name, previous_time, current_time, previous_time_2P, current_time_2P,pause_time, lines, leaders, volume, game_status, framerate_blockmove, framerate_2P_blockmove, game_speed, game_speed_2P
+    global f_item_2P, s_item_2P, s_item, f_item, h_item_2P, v_item_2P, h_item, v_item, time_attack_time_setting, combo_count, combo_count_2P, score, level, goal, score_2P, level_2P, goal_2P, bottom_count, bottom_count_2P, hard_drop, hard_drop_2P, attack_point, attack_point_2P, dx, dy, dx_2P, dy_2P, rotation, rotation_2P, mino, mino_2P, next_mino1, next_mino2, next_mino1_2P, hold, hold_2P, hold_mino, hold_mino_2P, framerate, framerate_2P, matrix, matrix_2P, Change_RATE, blink, start, pause, done, game_over, leader_board, setting, volume_setting, screen_setting, pvp, help, gravity_mode, debug, d, e, b, u, g, time_attack, start_ticks, textsize, CHANNELS, swidth, name_location, name, previous_time, current_time, previous_time_2P, current_time_2P,pause_time, lines, leaders, volume, game_status, framerate_blockmove, framerate_2P_blockmove, game_speed, game_speed_2P
 
     framerate = 30 # Bigger -> Slower  기본 블록 하강 속도, 2도 할만 함, 0 또는 음수 이상이어야 함
     framerate_blockmove = framerate * 3 # 블록 이동 시 속도
@@ -889,6 +889,8 @@ def set_initial_values():
     h_item_2P = 0
     f_item = 0
     s_item = 0
+    f_item_2P = 0
+    s_item_2P = 0
 
     with open('leaderboard.txt') as f:
         lines = f.readlines()
@@ -1657,8 +1659,9 @@ while not done:
                             h_item = 0
 
                         if f_item != 0:
-                            for i in range(s_item+1):
-                                if game_speed == 100: # max speed
+                            for i in range(f_item+1):
+                                if game_speed >= 100: # max speed
+                                    game_speed = 100
                                     pygame.time.set_timer(USEREVENT, game_speed)
                                 else:
                                     game_speed=int(game_speed-speed_change)
@@ -2149,6 +2152,15 @@ while not done:
                                 screen.blit(ui_variables.horizontal_item, (board_width * 0.05, board_height * 0.45)) #blit(이미지, 위치)
                                 draw_item_pvp()
 
+                            if matrix[i][j] == 12 : # 속도 증가 아이템이면
+                                f_item += 1
+                                screen.blit(ui_variables.fast_item, (board_width * 0.10, board_height * 0.35)) #blit(이미지, 위치)
+                                draw_item_pvp()
+                                
+                            if matrix[i][j] == 13 : # 속도 감소 아이템이면
+                                s_item += 1
+                                screen.blit(ui_variables.fast_item, (board_width * 0.10, board_height * 0.35)) #blit(이미지, 위치)
+                                draw_item_pvp()
                         if len(v_item) != 0:
                             for i in range(len(v_item)):
                                 for j in range(board_y+1):
@@ -2163,6 +2175,25 @@ while not done:
                                         matrix[i][k] = matrix[i][k - 1]  # 남아있는 블록 한 줄씩 내리기(덮어쓰기)
                                     k -= 1
                             h_item = 0
+
+                        if f_item != 0:
+                            for i in range(f_item+1):
+                                if game_speed >= 100: # max speed
+                                    game_speed = 100
+                                    pygame.time.set_timer(USEREVENT, game_speed)
+                                else:
+                                    game_speed=int(game_speed-speed_change)
+                                    pygame.time.set_timer(USEREVENT, game_speed)
+                            f_item = 0
+
+                        if s_item != 0:
+                            for i in range(s_item+1):
+                                if game_speed == 300: # minimun speed
+                                    pygame.time.set_timer(USEREVENT, game_speed)
+                                else:
+                                    game_speed=int(game_speed+speed_change)
+                                    pygame.time.set_timer(USEREVENT, game_speed)
+                            s_item = 0
 
                         while k > 0: #y좌표가 matrix 안에 있는 동안
                             for i in range(board_x): #해당 줄의 x좌표들 모두
@@ -2190,6 +2221,15 @@ while not done:
                                 screen.blit(ui_variables.horizontal_item, (board_width * 0.55, board_height * 0.45)) #blit(이미지, 위치)
                                 draw_item_pvp()
 
+                            if matrix_2P[i][j] == 12 : # 속도 증가 아이템이면
+                                f_item += 1
+                                screen.blit(ui_variables.fast_item, (board_width * 0.60, board_height * 0.35)) #blit(이미지, 위치)
+                                draw_item_pvp()
+                                
+                            if matrix_2P[i][j] == 13 : # 속도 감소 아이템이면
+                                s_item += 1
+                                screen.blit(ui_variables.fast_item, (board_width * 0.60, board_height * 0.35)) #blit(이미지, 위치)
+                                draw_item_pvp()
                         if len(v_item_2P) != 0:
                             for i in range(len(v_item_2P)):
                                 for j in range(board_y+1):
@@ -2205,6 +2245,24 @@ while not done:
                                     k -= 1
                             h_item_2P = 0
 
+                        if f_item_2P != 0:
+                            for i in range(f_item+1):
+                                if game_speed_2P >= 100: # max speed
+                                    game_speed_2P = 100
+                                    pygame.time.set_timer(USEREVENT, game_speed_2P)
+                                else:
+                                    game_speed_2P=int(game_speed-speed_change)
+                                    pygame.time.set_timer(USEREVENT, game_speed_2P)
+                            f_item_2P = 0
+
+                        if s_item_2P != 0:
+                            for i in range(s_item+1):
+                                if game_speed_2P == 300: # minimun speed
+                                    pygame.time.set_timer(USEREVENT, game_speed_2P)
+                                else:
+                                    game_speed_2P=int(game_speed+speed_change)
+                                    pygame.time.set_timer(USEREVENT, game_speed_2P)
+                            s_item_2P = 0
                         while k > 0:  #y좌표가 matrix 안에 있는 동안
                             for i in range(board_x): #해당 줄의 x좌표들 모두
                                 matrix_2P[i][k] = matrix_2P[i][k - 1] #한줄씩 밑으로 내림
