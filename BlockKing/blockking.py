@@ -24,7 +24,7 @@ block_size = int(board_height * 0.045)
 mino_matrix_x = 4 #mino는 4*4 배열이어서 이를 for문에 사용
 mino_matrix_y = 4 #mino는 4*4 배열이어서 이를 for문에 사용
 
-speed_change = 2 # 레벨별 블록 하강 속도 상승 정도
+speed_change = 10 # 레벨별 블록 하강 속도 상승 정도
 
 min_width = 400
 min_height = 225
@@ -43,7 +43,7 @@ pygame.init()
 
 clock = pygame.time.Clock() #창, 화면을 초당 몇번 출력하는가(FPS) clock.tick 높을수록 cpu많이 사용
 screen = pygame.display.set_mode((board_width, board_height), pygame.RESIZABLE) #GUI창 설정하는 변수
-pygame.display.set_caption("TETRIS KINGDOM") #GUI 창의 이름
+pygame.display.set_caption("BLOCK KING") #GUI 창의 이름
 
 class ui_variables:
     font_path = "./assets/fonts/OpenSans-Light.ttf"
@@ -813,7 +813,7 @@ def set_initial_values():
     u = False
     g = False
     time_attack = False
-    start_ticks = pygame.time.get_ticks()
+    time_attack_time_setting = False # 타임어택 모드를 시작하였을 때 타임 세팅을 시작하여 경과 시간을 계산하기 위해 추가한 변수
     textsize = False
 
     # 게임 음악 속도 조절 관련 변수
@@ -1485,12 +1485,17 @@ while not done:
             speed_plus_button.draw(screen, (0, 0, 0))
             speed_minus_button.draw(screen, (0, 0, 0))
         if time_attack:
+            if time_attack_time_setting == False: # 타임어택 모드일 때 타임 세팅이 안 되어 있으면
+                start_ticks = pygame.time.get_ticks() # 현재 시간을 타임어택 모드 시작 시간이라고 설정하고
+                time_attack_time_setting = True # 타임 세팅이 완료되었다고 바꾼다.
+
             elapsed_time = (pygame.time.get_ticks() - start_ticks) / 1000 # 경과 시간 계산
         for event in pygame.event.get():
             pos = pygame.mouse.get_pos()
             if event.type == QUIT:
                 done = True
             elif event.type == USEREVENT:
+                pygame.time.set_timer(pygame.USEREVENT, game_speed)
 
                 # Draw a mino
                 draw_mino(dx, dy, mino, rotation, matrix)
@@ -1532,7 +1537,7 @@ while not done:
                             start = False
                             game_status = 'start'
                             game_over = True
-                            gravity_mode = False
+                            gravity_mode = True
                             pygame.time.set_timer(pygame.USEREVENT, 1) #0.001초
                     else:
                         bottom_count += 1
@@ -1691,7 +1696,8 @@ while not done:
                     level += 1
                     ui_variables.LevelUp_sound.play()
                     goal += level * 5
-                    framerate = int(framerate-speed_change)
+                    game_speed = int(game_speed-speed_change)
+                    pygame.time.set_timer(pygame.USEREVENT, game_speed)
                     Change_RATE += 1
                     set_music_playing_speed(CHANNELS, swidth, Change_RATE)
 
@@ -1707,7 +1713,7 @@ while not done:
                     while not is_bottom(dx, dy, mino, rotation, matrix):
                         dy += 1
                     hard_drop = True
-                    pygame.time.set_timer(pygame.USEREVENT, game_speed)
+                    #pygame.time.set_timer(pygame.USEREVENT, game_speed)
                     draw_mino(dx, dy, mino, rotation, matrix)
                     screen.fill(ui_variables.real_white)
                     draw_image(screen, gamebackground_image , board_width * 0.5, board_height * 0.5, board_width, board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
@@ -1961,7 +1967,7 @@ while not done:
             start = False
             game_status = 'start'
             game_over = True
-            time_attack = False
+            time_attack = True
             pygame.time.set_timer(pygame.USEREVENT, 1)
 
         pygame.display.update()
@@ -1970,6 +1976,7 @@ while not done:
             if event.type == QUIT:
                 done = True
             elif event.type == USEREVENT:
+                pygame.time.set_timer(pygame.USEREVENT, game_speed)
 
                 # Draw a mino
                 draw_mino(dx, dy, mino, rotation, matrix)
@@ -2047,7 +2054,7 @@ while not done:
                             score_2P += 10 * level_2P
                         else:  # 더이상 쌓을 수 없으면 게임오버
                             pvp = True
-                            gagame_status = 'pvp'
+                            game_status = 'pvp'
                             if score <= score_2P :
                                 draw_image(screen, gameover_image,board_width * 0.6, board_height * 0.5, int(board_width * 0.25), int(board_height * 0.45)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                             else :
@@ -2182,7 +2189,7 @@ while not done:
                     level += 1
                     ui_variables.LevelUp_sound.play()
                     goal += level * 5
-                    framerate = int(framerate - speed_change)
+                    game_speed = int(game_speed - speed_change)
                 if level > level_2P and Change_RATE < level + 1:
                     Change_RATE += 1
                     set_music_playing_speed(CHANNELS, swidth, Change_RATE)
@@ -2243,7 +2250,7 @@ while not done:
                     level_2P += 1
                     ui_variables.LevelUp_sound.play()
                     goal_2P += level_2P * 5
-                    framerate_2P = int(framerate_2P - speed_change)
+                    game_speed_2P = int(game_speed_2P - speed_change)
                 if level < level_2P and Change_RATE < level_2P + 1:
                     Change_RATE += 1
                     set_music_playing_speed(CHANNELS, swidth, Change_RATE)
@@ -2264,8 +2271,7 @@ while not done:
                     while not is_bottom(dx, dy, mino, rotation, matrix):
                         dy += 1
                     hard_drop = True
-                    pygame.time.set_timer(pygame.USEREVENT, game_speed)
-                    #pygame.time.set_timer(pygame.USEREVENT, framerate) 이거 때문에 속도 빨라지는 것같아서 수정
+                    #pygame.time.set_timer(pygame.USEREVENT, game_speed)
                     draw_mino(dx, dy, mino, rotation, matrix)
                     draw_mino(dx_2P, dy_2P, mino_2P, rotation_2P, matrix_2P)
                     draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, score_2P, level, level_2P, goal, goal_2P)
@@ -2275,8 +2281,7 @@ while not done:
                     while not is_bottom(dx_2P, dy_2P, mino_2P, rotation_2P, matrix_2P):
                         dy_2P += 1
                     hard_drop_2P = True
-                    pygame.time.set_timer(pygame.USEREVENT, game_speed)
-                    #pygame.time.set_timer(pygame.USEREVENT, framerate_2P) 이거 때문에 속도 빨라지는 것같아서 수정
+                    #pygame.time.set_timer(pygame.USEREVENT, game_speed_2P)
                     draw_mino(dx_2P, dy_2P, mino_2P, rotation_2P, matrix_2P)
                     draw_mino(dx, dy, mino, rotation, matrix)
                     draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, score_2P, level, level_2P, goal, goal_2P)
@@ -2647,17 +2652,23 @@ while not done:
                     game_over = False
 
                 if restart_button.isOver_2(pos):
-                    if game_status == 'start':
+                    if gravity_mode:
+                        set_initial_values()
                         start = True
-                        pygame.mixer.music.play(-1) #play(-1) = 노래 반복재생
-                    if game_status == 'pvp':
-                        pvp = True
-                        pygame.mixer.music.play(-1)
-                    if game_status == 'gravity_mode':
                         gravity_mode = True
-                        pygame.mixer.music.play(-1)
-                    if game_status == 'time_attack':
+                        pygame.mixer.music.play(-1)  # play(-1) = 노래 반복재생
+                    if time_attack:
+                        set_initial_values()
+                        start = True
                         time_attack = True
+                        pygame.mixer.music.play(-1)
+                    if game_status == 'start':
+                        set_initial_values()
+                        start = True
+                        pygame.mixer.music.play(-1)
+                    if game_status == 'pvp':
+                        set_initial_values()
+                        pvp = True
                         pygame.mixer.music.play(-1)
                     ui_variables.click_sound.play()
                     game_over = False
