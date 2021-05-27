@@ -1660,7 +1660,7 @@ while not done:
 
                         if f_item != 0:
                             for i in range(f_item+1):
-                                if game_speed >= 100: # max speed
+                                if game_speed <= 100: # max speed
                                     game_speed = 100
                                     pygame.time.set_timer(USEREVENT, game_speed)
                                 else:
@@ -1670,7 +1670,7 @@ while not done:
 
                         if s_item != 0:
                             for i in range(s_item+1):
-                                if game_speed == 300: # minimun speed
+                                if game_speed >= 300: # minimun speed
                                     pygame.time.set_timer(USEREVENT, game_speed)
                                 else:
                                     game_speed=int(game_speed+speed_change)
@@ -2178,7 +2178,7 @@ while not done:
 
                         if f_item != 0:
                             for i in range(f_item+1):
-                                if game_speed >= 100: # max speed
+                                if game_speed <= 100: # max speed
                                     game_speed = 100
                                     pygame.time.set_timer(USEREVENT, game_speed)
                                 else:
@@ -2188,7 +2188,7 @@ while not done:
 
                         if s_item != 0:
                             for i in range(s_item+1):
-                                if game_speed == 300: # minimun speed
+                                if game_speed >= 300: # minimun speed
                                     pygame.time.set_timer(USEREVENT, game_speed)
                                 else:
                                     game_speed=int(game_speed+speed_change)
@@ -2223,12 +2223,12 @@ while not done:
 
                             if matrix_2P[i][j] == 12 : # 속도 증가 아이템이면
                                 f_item += 1
-                                screen.blit(ui_variables.fast_item, (board_width * 0.60, board_height * 0.35)) #blit(이미지, 위치)
+                                screen.blit(ui_variables.fast_item, (board_width * 0.55, board_height * 0.35)) #blit(이미지, 위치)
                                 draw_item_pvp()
                                 
                             if matrix_2P[i][j] == 13 : # 속도 감소 아이템이면
                                 s_item += 1
-                                screen.blit(ui_variables.fast_item, (board_width * 0.60, board_height * 0.35)) #blit(이미지, 위치)
+                                screen.blit(ui_variables.fast_item, (board_width * 0.55, board_height * 0.35)) #blit(이미지, 위치)
                                 draw_item_pvp()
                         if len(v_item_2P) != 0:
                             for i in range(len(v_item_2P)):
@@ -2247,7 +2247,7 @@ while not done:
 
                         if f_item_2P != 0:
                             for i in range(f_item+1):
-                                if game_speed_2P >= 100: # max speed
+                                if game_speed_2P <= 100: # max speed
                                     game_speed_2P = 100
                                     pygame.time.set_timer(USEREVENT, game_speed_2P)
                                 else:
@@ -2257,7 +2257,7 @@ while not done:
 
                         if s_item_2P != 0:
                             for i in range(s_item+1):
-                                if game_speed_2P == 300: # minimun speed
+                                if game_speed_2P >= 300: # minimun speed
                                     pygame.time.set_timer(USEREVENT, game_speed_2P)
                                 else:
                                     game_speed_2P=int(game_speed+speed_change)
