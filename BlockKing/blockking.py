@@ -1651,7 +1651,7 @@ while not done:
 
                         if h_item != 0:
                             for i in range(h_item+1):
-                                k=20 # 맨 아랫줄 부터
+                                k= board_y # 맨 아랫줄 부터(20)
                                 while k > 0:
                                     for i in range(board_x):
                                         matrix[i][k] = matrix[i][k - 1]  # 남아있는 블록 한 줄씩 내리기(덮어쓰기)
@@ -2149,7 +2149,7 @@ while not done:
 
                             if matrix[i][j] == 11 : # 가로줄 삭제 아이템이면
                                 h_item += 1
-                                screen.blit(ui_variables.horizontal_item, (board_width * 0.05, board_height * 0.45)) #blit(이미지, 위치)
+                                screen.blit(ui_variables.horizontal_item, (board_width * 0.10, board_height * 0.35)) #blit(이미지, 위치)
                                 draw_item_pvp()
 
                             if matrix[i][j] == 12 : # 속도 증가 아이템이면
@@ -2169,7 +2169,7 @@ while not done:
 
                         if h_item != 0:
                             for i in range(h_item+1):
-                                k=20 # 맨 아랫줄 부터
+                                k = board_y # 맨 아랫줄 부터
                                 while k > 0:
                                     for i in range(board_x):
                                         matrix[i][k] = matrix[i][k - 1]  # 남아있는 블록 한 줄씩 내리기(덮어쓰기)
@@ -2238,7 +2238,7 @@ while not done:
 
                         if h_item_2P != 0:
                             for i in range(h_item_2P+1):
-                                k=20 # 맨 아랫줄 부터
+                                k = board_y # 맨 아랫줄 부터(20)
                                 while k > 0:
                                     for i in range(board_x):
                                         matrix_2P[i][k] = matrix_2P[i][k - 1]  # 남아있는 블록 한 줄씩 내리기(덮어쓰기)
