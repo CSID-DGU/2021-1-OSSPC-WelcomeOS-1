@@ -785,7 +785,7 @@ def set_music_playing_speed(CHANNELS, swidth, Change_RATE):
     pygame.mixer.music.play(-1) #위 노래를 반복재생하기 위해 play(-1)로 설정
 
 def set_initial_values():
-    global h_item, v_item, combo_count, combo_count_2P, score, level, goal, score_2P, level_2P, goal_2P, bottom_count, bottom_count_2P, hard_drop, hard_drop_2P, attack_point, attack_point_2P, dx, dy, dx_2P, dy_2P, rotation, rotation_2P, mino, mino_2P, next_mino1, next_mino2, next_mino1_2P, hold, hold_2P, hold_mino, hold_mino_2P, framerate, framerate_2P, matrix, matrix_2P, Change_RATE, blink, start, pause, done, game_over, leader_board, setting, volume_setting, screen_setting, pvp, help, gravity_mode, debug, d, e, b, u, g, time_attack, start_ticks, textsize, CHANNELS, swidth, name_location, name, previous_time, current_time, previous_time_2P, current_time_2P,pause_time, lines, leaders, volume, game_status, framerate_blockmove, framerate_2P_blockmove, game_speed, game_speed_2P
+    global h_item_2P, v_item_2P, h_item, v_item, combo_count, combo_count_2P, score, level, goal, score_2P, level_2P, goal_2P, bottom_count, bottom_count_2P, hard_drop, hard_drop_2P, attack_point, attack_point_2P, dx, dy, dx_2P, dy_2P, rotation, rotation_2P, mino, mino_2P, next_mino1, next_mino2, next_mino1_2P, hold, hold_2P, hold_mino, hold_mino_2P, framerate, framerate_2P, matrix, matrix_2P, Change_RATE, blink, start, pause, done, game_over, leader_board, setting, volume_setting, screen_setting, pvp, help, gravity_mode, debug, d, e, b, u, g, time_attack, start_ticks, textsize, CHANNELS, swidth, name_location, name, previous_time, current_time, previous_time_2P, current_time_2P,pause_time, lines, leaders, volume, game_status, framerate_blockmove, framerate_2P_blockmove, game_speed, game_speed_2P
 
     framerate = 30 # Bigger -> Slower  기본 블록 하강 속도, 2도 할만 함, 0 또는 음수 이상이어야 함
     framerate_blockmove = framerate * 3 # 블록 이동 시 속도
@@ -864,6 +864,8 @@ def set_initial_values():
     # item
     v_item = []
     h_item = 0
+    v_item_2P = []
+    h_item_2P = 0
 
     with open('leaderboard.txt') as f:
         lines = f.readlines()
@@ -2096,6 +2098,40 @@ while not done:
                         k = j
                         combo_value += 1
                         combo_count += 1  # 콤보 버그 수정. 가로줄 꽉 찼는지 확일할 때마다 1P의 combo count를 늘린다.
+                        for i in range(board_x):
+                            if matrix[i][j] == 10 : # 세로줄 삭제 아이템이면
+                                v_item.append(i)    
+                                screen.blit(ui_variables.vertical_item, (board_width * 0.10, board_height * 0.35)) #blit(이미지, 위치)
+                                pygame.display.update()
+                                pygame.time.delay(400) #0.4초
+                                screen.fill(ui_variables.real_white)
+                                draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, score_2P, level, level_2P, goal, goal_2P)
+                                pygame.display.update()
+
+                            if matrix[i][j] == 11 : # 가로줄 삭제 아이템이면
+                                h_item += 1
+                                screen.blit(ui_variables.horizontal_item, (board_width * 0.05, board_height * 0.45)) #blit(이미지, 위치)
+                                pygame.display.update()
+                                pygame.time.delay(400) #0.4초
+                                screen.fill(ui_variables.real_white)
+                                draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, score_2P, level, level_2P, goal, goal_2P)
+                                pygame.display.update()
+
+                        if len(v_item) != 0:
+                            for i in range(len(v_item)):
+                                for j in range(board_y+1):
+                                    matrix[v_item[i]][j] = 0
+                            v_item.clear()
+
+                        if h_item != 0:
+                            for i in range(h_item+1):
+                                k=20 # 맨 아랫줄 부터
+                                while k > 0:
+                                    for i in range(board_x):
+                                        matrix[i][k] = matrix[i][k - 1]  # 남아있는 블록 한 줄씩 내리기(덮어쓰기)
+                                    k -= 1
+                            h_item = 0
+
                         while k > 0: #y좌표가 matrix 안에 있는 동안
                             for i in range(board_x): #해당 줄의 x좌표들 모두
                                 matrix[i][k] = matrix[i][k - 1] #한줄씩 밑으로 내림
@@ -2112,6 +2148,40 @@ while not done:
                         k = j
                         combo_value_2P += 1  
                         combo_count_2P += 1 # 콤보 버그 수정. 가로줄 꽉 찼는지 확일할 때마다 2P의 combo count를 늘린다.
+                        for i in range(board_x):
+                            if matrix_2P[i][j] == 10 : # 세로줄 삭제 아이템이면
+                                v_item_2P.append(i)    
+                                screen.blit(ui_variables.vertical_item, (board_width * 0.60, board_height * 0.35)) #blit(이미지, 위치)
+                                pygame.display.update()
+                                pygame.time.delay(400) #0.4초
+                                screen.fill(ui_variables.real_white)
+                                draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, score_2P, level, level_2P, goal, goal_2P)
+                                pygame.display.update()
+
+                            if matrix_2P[i][j] == 11 : # 가로줄 삭제 아이템이면
+                                h_item_2P += 1
+                                screen.blit(ui_variables.horizontal_item, (board_width * 0.55, board_height * 0.45)) #blit(이미지, 위치)
+                                pygame.display.update()
+                                pygame.time.delay(400) #0.4초
+                                screen.fill(ui_variables.real_white)
+                                draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, score_2P, level, level_2P, goal, goal_2P)
+                                pygame.display.update()
+
+                        if len(v_item_2P) != 0:
+                            for i in range(len(v_item_2P)):
+                                for j in range(board_y+1):
+                                    matrix_2P[v_item_2P[i]][j] = 0
+                            v_item_2P.clear()
+
+                        if h_item_2P != 0:
+                            for i in range(h_item_2P+1):
+                                k=20 # 맨 아랫줄 부터
+                                while k > 0:
+                                    for i in range(board_x):
+                                        matrix_2P[i][k] = matrix_2P[i][k - 1]  # 남아있는 블록 한 줄씩 내리기(덮어쓰기)
+                                    k -= 1
+                            h_item_2P = 0
+
                         while k > 0:  #y좌표가 matrix 안에 있는 동안
                             for i in range(board_x): #해당 줄의 x좌표들 모두
                                 matrix_2P[i][k] = matrix_2P[i][k - 1] #한줄씩 밑으로 내림
