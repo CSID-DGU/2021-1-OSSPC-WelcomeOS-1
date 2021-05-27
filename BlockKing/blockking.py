@@ -862,11 +862,11 @@ def set_initial_values():
     dx_2P, dy_2P = 3, 0
     rotation = 0  # Minos rotation status
     rotation_2P = 0
-    mino = randint(1, 9)  # Current mino #테트리스 블록 7가지 중 하나
-    mino_2P = randint(1, 9)
-    next_mino1 = randint(1, 9)  # Next mino1 # 다음 테트리스 블록 7가지 중 하나
-    next_mino2 = randint(1, 9)  # Next mino2 # 다음 테트리스 블록 7가지 중 하나
-    next_mino1_2P = randint(1, 9)
+    mino = randint(1, 11)  # Current mino #테트리스 블록 7가지 중 하나
+    mino_2P = randint(1, 11)
+    next_mino1 = randint(1, 11)  # Next mino1 # 다음 테트리스 블록 7가지 중 하나
+    next_mino2 = randint(1,11)  # Next mino2 # 다음 테트리스 블록 7가지 중 하나
+    next_mino1_2P = randint(1, 11)
     hold = False  # Hold status
     hold_2P = False
     hold_mino = -1  # Holded mino #현재 hold하는 것 없는 상태
@@ -1556,7 +1556,7 @@ while not done:
                         if is_stackable(next_mino1, matrix):
                             mino = next_mino1
                             next_mino1 = next_mino2
-                            next_mino2 = randint(1, 9)
+                            next_mino2 = randint(1, 11)
                             dx, dy = 3, 0
                             rotation = 0
                             hold = False
@@ -1584,7 +1584,7 @@ while not done:
                         if is_stackable(next_mino1, matrix):
                             mino = next_mino1
                             next_mino1 = next_mino2
-                            next_mino2 = randint(1, 2)
+                            next_mino2 = randint(1, 11)
                             dx, dy = 3, 0
                             rotation = 0
                             hold = False
@@ -1777,7 +1777,7 @@ while not done:
                             hold_mino = mino
                             mino = next_mino1
                             next_mino1 = next_mino2
-                            next_mino2 = randint(1, 9)
+                            next_mino2 = randint(1, 11)
                         else:
                             hold_mino, mino = mino, hold_mino
                         dx, dy = 3, 0
@@ -2051,7 +2051,7 @@ while not done:
                         if is_stackable(next_mino1, matrix):
                             mino = next_mino1
                             # next_mino1 = next_mino2
-                            next_mino1 = randint(1, 9)
+                            next_mino1 = randint(1, 11)
                             dx, dy = 3, 0
                             rotation = 0
                             hold = False
@@ -2093,7 +2093,7 @@ while not done:
 
                         if is_stackable(next_mino1_2P, matrix_2P):
                             mino_2P = next_mino1_2P
-                            next_mino1_2P = randint(1, 9)
+                            next_mino1_2P = randint(1, 11)
                             dx_2P, dy_2P = 3, 0
                             rotation_2P = 0
                             hold_2P = False
@@ -2445,7 +2445,7 @@ while not done:
                         if hold_mino == -1:
                             hold_mino = mino
                             mino = next_mino1
-                            next_mino1 = randint(1, 9)
+                            next_mino1 = randint(1, 11)
                         else:
                             hold_mino, mino = mino, hold_mino
                         dx, dy = 3, 0
@@ -2460,7 +2460,7 @@ while not done:
                         if hold_mino_2P == -1:
                             hold_mino_2P = mino_2P
                             mino_2P = next_mino1_2P
-                            next_mino1_2P = randint(1, 9)
+                            next_mino1_2P = randint(1, 11)
                         else:
                             hold_mino_2P, mino_2P = mino_2P, hold_mino_2P
                         dx_2P, dy_2P = 3, 0
