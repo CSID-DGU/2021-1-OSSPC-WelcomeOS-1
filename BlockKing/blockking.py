@@ -796,6 +796,14 @@ def draw_item():
     draw_board(next_mino1, next_mino2, hold_mino, score, level, goal)
     pygame.display.update()
 
+def draw_item_pvp():
+    pygame.display.update()
+    pygame.time.delay(400) #0.4초
+    screen.fill(ui_variables.real_white)
+    draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, score_2P, level, level_2P, goal, goal_2P)
+    pygame.display.update()
+
+
 
 def set_initial_values():
     global s_item, f_item, h_item_2P, v_item_2P, h_item, v_item, combo_count, combo_count_2P, score, level, goal, score_2P, level_2P, goal_2P, bottom_count, bottom_count_2P, hard_drop, hard_drop_2P, attack_point, attack_point_2P, dx, dy, dx_2P, dy_2P, rotation, rotation_2P, mino, mino_2P, next_mino1, next_mino2, next_mino1_2P, hold, hold_2P, hold_mino, hold_mino_2P, framerate, framerate_2P, matrix, matrix_2P, Change_RATE, blink, start, pause, done, game_over, leader_board, setting, volume_setting, screen_setting, pvp, help, gravity_mode, debug, d, e, b, u, g, time_attack, start_ticks, textsize, CHANNELS, swidth, name_location, name, previous_time, current_time, previous_time_2P, current_time_2P,pause_time, lines, leaders, volume, game_status, framerate_blockmove, framerate_2P_blockmove, game_speed, game_speed_2P
@@ -2128,20 +2136,12 @@ while not done:
                             if matrix[i][j] == 10 : # 세로줄 삭제 아이템이면
                                 v_item.append(i)    
                                 screen.blit(ui_variables.vertical_item, (board_width * 0.10, board_height * 0.35)) #blit(이미지, 위치)
-                                pygame.display.update()
-                                pygame.time.delay(400) #0.4초
-                                screen.fill(ui_variables.real_white)
-                                draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, score_2P, level, level_2P, goal, goal_2P)
-                                pygame.display.update()
+                                draw_item_pvp()
 
                             if matrix[i][j] == 11 : # 가로줄 삭제 아이템이면
                                 h_item += 1
                                 screen.blit(ui_variables.horizontal_item, (board_width * 0.05, board_height * 0.45)) #blit(이미지, 위치)
-                                pygame.display.update()
-                                pygame.time.delay(400) #0.4초
-                                screen.fill(ui_variables.real_white)
-                                draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, score_2P, level, level_2P, goal, goal_2P)
-                                pygame.display.update()
+                                draw_item_pvp()
 
                         if len(v_item) != 0:
                             for i in range(len(v_item)):
@@ -2178,20 +2178,11 @@ while not done:
                             if matrix_2P[i][j] == 10 : # 세로줄 삭제 아이템이면
                                 v_item_2P.append(i)    
                                 screen.blit(ui_variables.vertical_item, (board_width * 0.60, board_height * 0.35)) #blit(이미지, 위치)
-                                pygame.display.update()
-                                pygame.time.delay(400) #0.4초
-                                screen.fill(ui_variables.real_white)
-                                draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, score_2P, level, level_2P, goal, goal_2P)
-                                pygame.display.update()
-
+                                draw_item_pvp()
                             if matrix_2P[i][j] == 11 : # 가로줄 삭제 아이템이면
                                 h_item_2P += 1
                                 screen.blit(ui_variables.horizontal_item, (board_width * 0.55, board_height * 0.45)) #blit(이미지, 위치)
-                                pygame.display.update()
-                                pygame.time.delay(400) #0.4초
-                                screen.fill(ui_variables.real_white)
-                                draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, score_2P, level, level_2P, goal, goal_2P)
-                                pygame.display.update()
+                                draw_item_pvp()
 
                         if len(v_item_2P) != 0:
                             for i in range(len(v_item_2P)):
