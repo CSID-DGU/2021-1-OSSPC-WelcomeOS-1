@@ -788,6 +788,15 @@ def set_music_playing_speed(CHANNELS, swidth, Change_RATE):
     pygame.mixer.music.load('assets/sounds/SFX_BattleMusic_Changed.wav')
     pygame.mixer.music.play(-1) #위 노래를 반복재생하기 위해 play(-1)로 설정
 
+def draw_item():
+    pygame.display.update()
+    pygame.time.delay(400) #0.4초
+    screen.fill(ui_variables.real_white)
+    draw_image(screen, gamebackground_image , board_width * 0.5, board_height * 0.5, board_width, board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
+    draw_board(next_mino1, next_mino2, hold_mino, score, level, goal)
+    pygame.display.update()
+
+
 def set_initial_values():
     global s_item, f_item, h_item_2P, v_item_2P, h_item, v_item, combo_count, combo_count_2P, score, level, goal, score_2P, level_2P, goal_2P, bottom_count, bottom_count_2P, hard_drop, hard_drop_2P, attack_point, attack_point_2P, dx, dy, dx_2P, dy_2P, rotation, rotation_2P, mino, mino_2P, next_mino1, next_mino2, next_mino1_2P, hold, hold_2P, hold_mino, hold_mino_2P, framerate, framerate_2P, matrix, matrix_2P, Change_RATE, blink, start, pause, done, game_over, leader_board, setting, volume_setting, screen_setting, pvp, help, gravity_mode, debug, d, e, b, u, g, time_attack, start_ticks, textsize, CHANNELS, swidth, name_location, name, previous_time, current_time, previous_time_2P, current_time_2P,pause_time, lines, leaders, volume, game_status, framerate_blockmove, framerate_2P_blockmove, game_speed, game_speed_2P
 
@@ -1608,42 +1617,22 @@ while not done:
                             if matrix[i][j] == 10 : # 세로줄 삭제 아이템이면
                                 v_item.append(i)    
                                 screen.blit(ui_variables.vertical_item, (board_width * 0.3, board_height * 0.3)) #blit(이미지, 위치)
-                                pygame.display.update()
-                                pygame.time.delay(400) #0.4초
-                                screen.fill(ui_variables.real_white)
-                                draw_image(screen, gamebackground_image , board_width * 0.5, board_height * 0.5, board_width, board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
-                                draw_board(next_mino1, next_mino2, hold_mino, score, level, goal)
-                                pygame.display.update()
+                                draw_item()
 
                             if matrix[i][j] == 11 : # 가로줄 삭제 아이템이면
                                 h_item += 1
                                 screen.blit(ui_variables.horizontal_item, (board_width * 0.3, board_height * 0.3)) #blit(이미지, 위치)
-                                pygame.display.update()
-                                pygame.time.delay(400) #0.4초
-                                screen.fill(ui_variables.real_white)
-                                draw_image(screen, gamebackground_image , board_width * 0.5, board_height * 0.5, board_width, board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
-                                draw_board(next_mino1, next_mino2, hold_mino, score, level, goal)
-                                pygame.display.update()
+                                draw_item()
 
                             if matrix[i][j] == 12 : # 속도 증가 아이템이면
                                 f_item += 1
                                 screen.blit(ui_variables.fast_item, (board_width * 0.3, board_height * 0.3)) #blit(이미지, 위치)
-                                pygame.display.update()
-                                pygame.time.delay(400) #0.4초
-                                screen.fill(ui_variables.real_white)
-                                draw_image(screen, gamebackground_image , board_width * 0.5, board_height * 0.5, board_width, board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
-                                draw_board(next_mino1, next_mino2, hold_mino, score, level, goal)
-                                pygame.display.update()
-
+                                draw_item()
+                                
                             if matrix[i][j] == 13 : # 속도 감소 아이템이면
                                 s_item += 1
                                 screen.blit(ui_variables.fast_item, (board_width * 0.3, board_height * 0.3)) #blit(이미지, 위치)
-                                pygame.display.update()
-                                pygame.time.delay(400) #0.4초
-                                screen.fill(ui_variables.real_white)
-                                draw_image(screen, gamebackground_image , board_width * 0.5, board_height * 0.5, board_width, board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
-                                draw_board(next_mino1, next_mino2, hold_mino, score, level, goal)
-                                pygame.display.update()
+                                draw_item()
                         if len(v_item) != 0:
                             for i in range(len(v_item)):
                                 for j in range(board_y+1):
