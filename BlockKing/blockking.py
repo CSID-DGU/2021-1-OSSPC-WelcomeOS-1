@@ -806,7 +806,7 @@ def draw_item_pvp():
 
 
 def set_initial_values():
-    global f_item_2P, s_item_2P, s_item, f_item, h_item_2P, v_item_2P, h_item, v_item, time_attack_time_setting, combo_count, combo_count_2P, score, level, goal, score_2P, level_2P, goal_2P, bottom_count, bottom_count_2P, hard_drop, hard_drop_2P, attack_point, attack_point_2P, dx, dy, dx_2P, dy_2P, rotation, rotation_2P, mino, mino_2P, next_mino1, next_mino2, next_mino1_2P, hold, hold_2P, hold_mino, hold_mino_2P, framerate, framerate_2P, matrix, matrix_2P, Change_RATE, blink, start, pause, done, game_over, leader_board, setting, volume_setting, screen_setting, pvp, help, gravity_mode, debug, d, e, b, u, g, time_attack, start_ticks, textsize, CHANNELS, swidth, name_location, name, previous_time, current_time, previous_time_2P, current_time_2P,pause_time, lines, leaders, volume, game_status, framerate_blockmove, framerate_2P_blockmove, game_speed, game_speed_2P
+    global max_speed, min_speed, f_item_2P, s_item_2P, s_item, f_item, h_item_2P, v_item_2P, h_item, v_item, time_attack_time_setting, combo_count, combo_count_2P, score, level, goal, score_2P, level_2P, goal_2P, bottom_count, bottom_count_2P, hard_drop, hard_drop_2P, attack_point, attack_point_2P, dx, dy, dx_2P, dy_2P, rotation, rotation_2P, mino, mino_2P, next_mino1, next_mino2, next_mino1_2P, hold, hold_2P, hold_mino, hold_mino_2P, framerate, framerate_2P, matrix, matrix_2P, Change_RATE, blink, start, pause, done, game_over, leader_board, setting, volume_setting, screen_setting, pvp, help, gravity_mode, debug, d, e, b, u, g, time_attack, start_ticks, textsize, CHANNELS, swidth, name_location, name, previous_time, current_time, previous_time_2P, current_time_2P,pause_time, lines, leaders, volume, game_status, framerate_blockmove, framerate_2P_blockmove, game_speed, game_speed_2P
 
     framerate = 30 # Bigger -> Slower  기본 블록 하강 속도, 2도 할만 함, 0 또는 음수 이상이어야 함
     framerate_blockmove = framerate * 3 # 블록 이동 시 속도
@@ -891,6 +891,8 @@ def set_initial_values():
     s_item = 0
     f_item_2P = 0
     s_item_2P = 0
+    max_speed = 100
+    min_speed = 300
 
     with open('leaderboard.txt') as f:
         lines = f.readlines()
@@ -1660,8 +1662,8 @@ while not done:
 
                         if f_item != 0:
                             for i in range(f_item+1):
-                                if game_speed <= 100: # max speed
-                                    game_speed = 100
+                                if game_speed <= max_speed: # max speed
+                                    game_speed = max_speed
                                     pygame.time.set_timer(USEREVENT, game_speed)
                                 else:
                                     game_speed=int(game_speed-speed_change)
@@ -1670,7 +1672,8 @@ while not done:
 
                         if s_item != 0:
                             for i in range(s_item+1):
-                                if game_speed >= 300: # minimun speed
+                                if game_speed >= min_speed: # minimun speed
+                                    game_speed = min_speed
                                     pygame.time.set_timer(USEREVENT, game_speed)
                                 else:
                                     game_speed=int(game_speed+speed_change)
@@ -2178,8 +2181,8 @@ while not done:
 
                         if f_item != 0:
                             for i in range(f_item+1):
-                                if game_speed <= 100: # max speed
-                                    game_speed = 100
+                                if game_speed <= max_speed: # max speed
+                                    game_speed = max_speed
                                     pygame.time.set_timer(USEREVENT, game_speed)
                                 else:
                                     game_speed=int(game_speed-speed_change)
@@ -2188,7 +2191,8 @@ while not done:
 
                         if s_item != 0:
                             for i in range(s_item+1):
-                                if game_speed >= 300: # minimun speed
+                                if game_speed >= min_speed: # minimun speed
+                                    game_speed = min_speed
                                     pygame.time.set_timer(USEREVENT, game_speed)
                                 else:
                                     game_speed=int(game_speed+speed_change)
@@ -2247,8 +2251,8 @@ while not done:
 
                         if f_item_2P != 0:
                             for i in range(f_item+1):
-                                if game_speed_2P <= 100: # max speed
-                                    game_speed_2P = 100
+                                if game_speed_2P <= max_speed: # max speed
+                                    game_speed_2P = max_speed
                                     pygame.time.set_timer(USEREVENT, game_speed_2P)
                                 else:
                                     game_speed_2P=int(game_speed-speed_change)
@@ -2257,7 +2261,7 @@ while not done:
 
                         if s_item_2P != 0:
                             for i in range(s_item+1):
-                                if game_speed_2P >= 300: # minimun speed
+                                if game_speed_2P >= min_speed: # minimun speed
                                     pygame.time.set_timer(USEREVENT, game_speed_2P)
                                 else:
                                     game_speed_2P=int(game_speed+speed_change)
