@@ -1645,20 +1645,20 @@ while not done:
                                 s_item += 1
                                 screen.blit(ui_variables.fast_item, (board_width * 0.30, board_height * 0.35)) #blit(이미지, 위치)
                                 draw_item()
-                        if len(v_item) != 0:
+                        if len(v_item) != 0: # 세로줄 삭제 아이템이 있다면
                             for i in range(len(v_item)):
                                 for j in range(board_y+1):
-                                    matrix[v_item[i]][j] = 0
-                            v_item.clear()
+                                    matrix[v_item[i]][j] = 0 # 배열에 담긴 x좌표의 모든 블록을 지운다.
+                            v_item.clear() # 지우고나면 초기화
 
-                        if h_item != 0:
+                        if h_item != 0: # 가로줄 삭제 아이템이 있다면
                             for i in range(h_item+1):
                                 k= board_y # 맨 아랫줄 부터(20)
                                 while k > 0:
                                     for i in range(board_x):
                                         matrix[i][k] = matrix[i][k - 1]  # 남아있는 블록 한 줄씩 내리기(덮어쓰기)
                                     k -= 1
-                            h_item = 0
+                            h_item = 0 # 지우고나면 초기화
 
                         if f_item != 0:
                             for i in range(f_item+1):
