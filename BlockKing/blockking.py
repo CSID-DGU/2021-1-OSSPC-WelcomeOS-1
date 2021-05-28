@@ -893,8 +893,8 @@ def set_initial_values():
     s_item = 0
     f_item_2P = 0
     s_item_2P = 0
-    max_speed = 100
-    min_speed = 300
+    max_speed = 300
+    min_speed = 900
 
     with open('leaderboard.txt') as f:
         lines = f.readlines()
@@ -1599,7 +1599,7 @@ while not done:
                         if is_stackable(next_mino1, matrix):
                             mino = next_mino1
                             next_mino1 = next_mino2
-                            next_mino2 = randint(1, 11)
+                            next_mino2 = randint(1, 2)
                             dx, dy = 3, 0
                             rotation = 0
                             hold = False
@@ -1646,7 +1646,7 @@ while not done:
 
                             if matrix[i][j] == 11 : # 가로줄 삭제 아이템이면
                                 h_item += 1
-                                screen.blit(ui_variables.horizontal_item, (board_width * 0.30, board_height * 0.35)) #blit(이미지, 위치)
+                                screen.blit(ui_variables.horizontal_item, (board_width * 0.25, board_height * 0.35)) #blit(이미지, 위치)
                                 draw_item()
 
                             if matrix[i][j] == 12 : # 속도 증가 아이템이면
@@ -1656,7 +1656,7 @@ while not done:
                                 
                             if matrix[i][j] == 13 : # 속도 감소 아이템이면
                                 s_item += 1
-                                screen.blit(ui_variables.fast_item, (board_width * 0.30, board_height * 0.35)) #blit(이미지, 위치)
+                                screen.blit(ui_variables.slow_item, (board_width * 0.30, board_height * 0.35)) #blit(이미지, 위치)
                                 draw_item()
                         if len(v_item) != 0:
                             for i in range(len(v_item)):
@@ -1677,20 +1677,20 @@ while not done:
                             for i in range(f_item+1):
                                 if game_speed <= max_speed: # max speed
                                     game_speed = max_speed
-                                    pygame.time.set_timer(USEREVENT, game_speed)
+                                    pygame.time.set_timer(pygame.USEREVENT, game_speed)
                                 else:
                                     game_speed=int(game_speed-speed_change)
-                                    pygame.time.set_timer(USEREVENT, game_speed)
+                                    pygame.time.set_timer(pygame.USEREVENT, game_speed)
                             f_item = 0
 
                         if s_item != 0:
                             for i in range(s_item+1):
                                 if game_speed >= min_speed: # minimun speed
                                     game_speed = min_speed
-                                    pygame.time.set_timer(USEREVENT, game_speed)
+                                    pygame.time.set_timer(pygame.USEREVENT, game_speed)
                                 else:
                                     game_speed=int(game_speed+speed_change)
-                                    pygame.time.set_timer(USEREVENT, game_speed)
+                                    pygame.time.set_timer(pygame.USEREVENT, game_speed)
                             s_item = 0
                             
                         while k > 0:
