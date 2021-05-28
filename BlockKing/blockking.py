@@ -25,6 +25,7 @@ mino_matrix_x = 4 #mino는 4*4 배열이어서 이를 for문에 사용
 mino_matrix_y = 4 #mino는 4*4 배열이어서 이를 for문에 사용
 
 speed_change = 10 # 레벨별 블록 하강 속도 상승 정도
+item_speed = 100
 
 min_width = 400
 min_height = 225
@@ -1679,7 +1680,7 @@ while not done:
                                     game_speed = max_speed
                                     pygame.time.set_timer(pygame.USEREVENT, game_speed)
                                 else:
-                                    game_speed=int(game_speed-speed_change)
+                                    game_speed=int(game_speed-item_speed)
                                     pygame.time.set_timer(pygame.USEREVENT, game_speed)
                             f_item = 0
 
@@ -1689,7 +1690,7 @@ while not done:
                                     game_speed = min_speed
                                     pygame.time.set_timer(pygame.USEREVENT, game_speed)
                                 else:
-                                    game_speed=int(game_speed+speed_change)
+                                    game_speed=int(game_speed+item_speed)
                                     pygame.time.set_timer(pygame.USEREVENT, game_speed)
                             s_item = 0
                             
