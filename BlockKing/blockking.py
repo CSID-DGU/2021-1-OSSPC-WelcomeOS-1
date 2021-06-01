@@ -8,6 +8,7 @@ from mino import *
 from random import *
 from pygame.locals import *
 import os
+import random
 
 # Unchanged values Define 변하지 않는 변수 선언
 
@@ -31,8 +32,11 @@ min_width = 400
 min_height = 225
 mid_width = 1200
 
-
 waiting_time= 1 # 블록이 바닥에 닿은 후 다음 블록 생성까지 기다리는 시간
+
+single_mino = [1,2,3,4,5,6,7,8,9,10,11] # 싱글모드에서는 시간증가 아이템 블록을 제외
+timeattack_mino = [1,2,3,4,5,6,7,8,9,10,11,12]
+pvp_mino = [1,2,3,4,5,6,7,8,9,10,11]
 
 # block
 time_block = 14
@@ -872,11 +876,11 @@ def set_initial_values():
     dx_2P, dy_2P = 3, 0
     rotation = 0  # Minos rotation status
     rotation_2P = 0
-    mino = randint(1, 12)  # Current mino #테트리스 블록 7가지 중 하나
-    mino_2P = randint(1, 12)
-    next_mino1 = randint(1, 12)  # Next mino1 # 다음 테트리스 블록 7가지 중 하나
-    next_mino2 = randint(1,12)  # Next mino2 # 다음 테트리스 블록 7가지 중 하나
-    next_mino1_2P = randint(1, 12)
+    mino = randint(1, 7)  # Current mino #테트리스 블록 7가지 중 하나
+    mino_2P = randint(1, 7)
+    next_mino1 = randint(1, 7)  # Next mino1 # 다음 테트리스 블록 7가지 중 하나
+    next_mino2 = randint(1,7)  # Next mino2 # 다음 테트리스 블록 7가지 중 하나
+    next_mino1_2P = randint(1, 7)
     hold = False  # Hold status
     hold_2P = False
     hold_mino = -1  # Holded mino #현재 hold하는 것 없는 상태
@@ -1579,7 +1583,7 @@ while not done:
                         if is_stackable(next_mino1, matrix):
                             mino = next_mino1
                             next_mino1 = next_mino2
-                            next_mino2 = randint(1, 11)
+                            next_mino2 = random.choice(single_mino)
                             dx, dy = 3, 0
                             rotation = 0
                             hold = False
@@ -1607,7 +1611,10 @@ while not done:
                         if is_stackable(next_mino1, matrix):
                             mino = next_mino1
                             next_mino1 = next_mino2
-                            next_mino2 = randint(1, 12)
+                            if time_attack:
+                                next_mino2 = random.choice(timeattack_mino)
+                            else:
+                                next_mino2 = random.choice(single_mino)
                             dx, dy = 3, 0
                             rotation = 0
                             hold = False
@@ -2080,7 +2087,7 @@ while not done:
                         if is_stackable(next_mino1, matrix):
                             mino = next_mino1
                             # next_mino1 = next_mino2
-                            next_mino1 = randint(1, 11)
+                            next_mino1 = random.choice(pvp_mino)
                             dx, dy = 3, 0
                             rotation = 0
                             hold = False
@@ -2144,7 +2151,7 @@ while not done:
 
                         if is_stackable(next_mino1_2P, matrix_2P):
                             mino_2P = next_mino1_2P
-                            next_mino1_2P = randint(1, 11)
+                            next_mino1_2P = random.choice(pvp_mino)
                             dx_2P, dy_2P = 3, 0
                             rotation_2P = 0
                             hold_2P = False
@@ -2253,20 +2260,20 @@ while not done:
                             for i in range(f_item+1):
                                 if game_speed <= max_speed: # max speed
                                     game_speed = max_speed
-                                    pygame.time.set_timer(USEREVENT, game_speed)
+                                    pygame.time.set_timer(pygame.USEREVENT, game_speed)
                                 else:
                                     game_speed=int(game_speed-speed_change)
-                                    pygame.time.set_timer(USEREVENT, game_speed)
+                                    pygame.time.set_timer(pygame.USEREVENT, game_speed)
                             f_item = 0
 
                         if s_item != 0:
                             for i in range(s_item+1):
                                 if game_speed >= min_speed: # minimun speed
                                     game_speed = min_speed
-                                    pygame.time.set_timer(USEREVENT, game_speed)
+                                    pygame.time.set_timer(pygame.USEREVENT, game_speed)
                                 else:
                                     game_speed=int(game_speed+speed_change)
-                                    pygame.time.set_timer(USEREVENT, game_speed)
+                                    pygame.time.set_timer(pygame.USEREVENT, game_speed)
                             s_item = 0
 
                         while k > 0: #y좌표가 matrix 안에 있는 동안
@@ -2323,19 +2330,19 @@ while not done:
                             for i in range(f_item+1):
                                 if game_speed_2P <= max_speed: # max speed
                                     game_speed_2P = max_speed
-                                    pygame.time.set_timer(USEREVENT, game_speed_2P)
+                                    pygame.time.set_timer(pygame.USEREVENT, game_speed_2P)
                                 else:
                                     game_speed_2P=int(game_speed-speed_change)
-                                    pygame.time.set_timer(USEREVENT, game_speed_2P)
+                                    pygame.time.set_timer(pygame.USEREVENT, game_speed_2P)
                             f_item_2P = 0
 
                         if s_item_2P != 0:
                             for i in range(s_item+1):
                                 if game_speed_2P >= min_speed: # minimun speed
-                                    pygame.time.set_timer(USEREVENT, game_speed_2P)
+                                    pygame.time.set_timer(pygame.USEREVENT, game_speed_2P)
                                 else:
                                     game_speed_2P=int(game_speed+speed_change)
-                                    pygame.time.set_timer(USEREVENT, game_speed_2P)
+                                    pygame.time.set_timer(pygame.USEREVENT, game_speed_2P)
                             s_item_2P = 0
                         while k > 0:  #y좌표가 matrix 안에 있는 동안
                             for i in range(board_x): #해당 줄의 x좌표들 모두
@@ -2519,7 +2526,7 @@ while not done:
                         if hold_mino == -1:
                             hold_mino = mino
                             mino = next_mino1
-                            next_mino1 = randint(1, 11)
+                            next_mino1 = random.choice(pvp_mino)
                         else:
                             hold_mino, mino = mino, hold_mino
                         dx, dy = 3, 0
@@ -2534,7 +2541,7 @@ while not done:
                         if hold_mino_2P == -1:
                             hold_mino_2P = mino_2P
                             mino_2P = next_mino1_2P
-                            next_mino1_2P = randint(1, 11)
+                            next_mino1_2P = random.choice(pvp_mino)
                         else:
                             hold_mino_2P, mino_2P = mino_2P, hold_mino_2P
                         dx_2P, dy_2P = 3, 0
