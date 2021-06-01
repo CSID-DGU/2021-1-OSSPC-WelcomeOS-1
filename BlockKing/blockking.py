@@ -31,8 +31,11 @@ min_width = 400
 min_height = 225
 mid_width = 1200
 
-total_time = 60 # 타임 어택 시간
+
 waiting_time= 1 # 블록이 바닥에 닿은 후 다음 블록 생성까지 기다리는 시간
+
+# block
+time_block = 14
 
 # 기본 볼륨
 music_volume = 5
@@ -102,6 +105,8 @@ class ui_variables:
     horizontal_item = pygame.image.load('assets/item_images/horizontal_item.png')
     fast_item = pygame.image.load('assets/item_images/fast_item.png')
     slow_item = pygame.image.load('assets/item_images/slow_item.png')
+    time_item = pygame.image.load('assets/item_images/time_item.png')
+
 
     # Background colors. RGB 값에 해당함
     black = (10, 10, 10)  # rgb(10, 10, 10)
@@ -139,8 +144,9 @@ class ui_variables:
     delete_horizontal_image = 'assets/block_images/delete_horizontal.png' # 11
     fast_image = 'assets/block_images/fast.png' # 12    
     slow_image = 'assets/block_images/slow.png' # 13
+    time_image = 'assets/block_images/time.png' # 14
     t_block = [table_image, cyan_image, blue_image, orange_image, yellow_image, green_image, pink_image, red_image,
-               ghost_image, linessent_image, delete_vertical_image, delete_horizontal_image, fast_image, slow_image]
+               ghost_image, linessent_image, delete_vertical_image, delete_horizontal_image, fast_image, slow_image, time_image]
 
 #각 이미지 주소
 background_image = 'assets/vector/kingdom.jpg' #홈 배경화면
@@ -807,7 +813,7 @@ def draw_item_pvp():
 
 
 def set_initial_values():
-    global max_speed, min_speed, f_item_2P, s_item_2P, s_item, f_item, h_item_2P, v_item_2P, h_item, v_item, time_attack_time_setting, combo_count, combo_count_2P, score, level, goal, score_2P, level_2P, goal_2P, bottom_count, bottom_count_2P, hard_drop, hard_drop_2P, attack_point, attack_point_2P, dx, dy, dx_2P, dy_2P, rotation, rotation_2P, mino, mino_2P, next_mino1, next_mino2, next_mino1_2P, hold, hold_2P, hold_mino, hold_mino_2P, framerate, framerate_2P, matrix, matrix_2P, Change_RATE, blink, start, pause, done, game_over, leader_board, setting, volume_setting, screen_setting, pvp, help, gravity_mode, debug, d, e, b, u, g, time_attack, start_ticks, textsize, CHANNELS, swidth, name_location, name, previous_time, current_time, previous_time_2P, current_time_2P,pause_time, lines, leaders, volume, game_status, framerate_blockmove, framerate_2P_blockmove, game_speed, game_speed_2P
+    global total_time, max_speed, min_speed, f_item_2P, s_item_2P, s_item, f_item, h_item_2P, v_item_2P, h_item, v_item, time_attack_time_setting, combo_count, combo_count_2P, score, level, goal, score_2P, level_2P, goal_2P, bottom_count, bottom_count_2P, hard_drop, hard_drop_2P, attack_point, attack_point_2P, dx, dy, dx_2P, dy_2P, rotation, rotation_2P, mino, mino_2P, next_mino1, next_mino2, next_mino1_2P, hold, hold_2P, hold_mino, hold_mino_2P, framerate, framerate_2P, matrix, matrix_2P, Change_RATE, blink, start, pause, done, game_over, leader_board, setting, volume_setting, screen_setting, pvp, help, gravity_mode, debug, d, e, b, u, g, time_attack, start_ticks, textsize, CHANNELS, swidth, name_location, name, previous_time, current_time, previous_time_2P, current_time_2P,pause_time, lines, leaders, volume, game_status, framerate_blockmove, framerate_2P_blockmove, game_speed, game_speed_2P
 
     framerate = 30 # Bigger -> Slower  기본 블록 하강 속도, 2도 할만 함, 0 또는 음수 이상이어야 함
     framerate_blockmove = framerate * 3 # 블록 이동 시 속도
@@ -815,6 +821,7 @@ def set_initial_values():
     framerate_2P = 30 # 2P
     framerate_2P_blockmove = framerate_2P * 3 # 블록 이동 시 속도
     game_speed_2P = framerate_2P * 20 # 2P 게임 기본 속도
+    total_time = 60 # 타임 어택 시간
 
     # Initial values
     blink = False
@@ -865,11 +872,11 @@ def set_initial_values():
     dx_2P, dy_2P = 3, 0
     rotation = 0  # Minos rotation status
     rotation_2P = 0
-    mino = randint(1, 11)  # Current mino #테트리스 블록 7가지 중 하나
-    mino_2P = randint(1, 11)
-    next_mino1 = randint(1, 11)  # Next mino1 # 다음 테트리스 블록 7가지 중 하나
-    next_mino2 = randint(1,11)  # Next mino2 # 다음 테트리스 블록 7가지 중 하나
-    next_mino1_2P = randint(1, 11)
+    mino = randint(1, 12)  # Current mino #테트리스 블록 7가지 중 하나
+    mino_2P = randint(1, 12)
+    next_mino1 = randint(1, 12)  # Next mino1 # 다음 테트리스 블록 7가지 중 하나
+    next_mino2 = randint(1,12)  # Next mino2 # 다음 테트리스 블록 7가지 중 하나
+    next_mino1_2P = randint(1, 12)
     hold = False  # Hold status
     hold_2P = False
     hold_mino = -1  # Holded mino #현재 hold하는 것 없는 상태
@@ -1600,7 +1607,7 @@ while not done:
                         if is_stackable(next_mino1, matrix):
                             mino = next_mino1
                             next_mino1 = next_mino2
-                            next_mino2 = randint(1, 11)
+                            next_mino2 = randint(1, 12)
                             dx, dy = 3, 0
                             rotation = 0
                             hold = False
@@ -1659,6 +1666,11 @@ while not done:
                                 s_item += 1
                                 screen.blit(ui_variables.slow_item, (board_width * 0.30, board_height * 0.35)) #blit(이미지, 위치)
                                 draw_item()
+                            if matrix[i][j] == time_block : # 시간 증가 아이템이면
+                                total_time += 5
+                                screen.blit(ui_variables.time_item, (board_width * 0.30, board_height * 0.35)) #blit(이미지, 위치)
+                                draw_item()
+
                         if len(v_item) != 0:
                             for i in range(len(v_item)):
                                 for j in range(board_y+1):
