@@ -812,7 +812,7 @@ def set_initial_values():
     combo_count_2P = 0
     score = 0
     level = 1
-    goal = level * 5
+    goal = level * 1
     score_2P = 0
     level_2P = 1
     goal_2P = level_2P * 5
@@ -1634,6 +1634,11 @@ while not done:
                             draw_image(screen, "assets/Combo/" + str(i) + "combo.png", board_width * 0.36, board_height * 0.5, int(board_width * 0.18), int(board_height * 0.44)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                             pygame.display.update()
                             pygame.time.delay(500)
+                            screen.fill(ui_variables.real_white)
+                            draw_image(screen, gamebackground_image , board_width * 0.5, board_height * 0.5, board_width, board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
+                            draw_board(next_mino1, next_mino2, hold_mino, score, level, goal)
+                            pygame.display.update()
+
                         elif combo_count > 10:  # 11 이상 콤보 이미지
                             pygame.display.update()
                             pygame.time.delay(300)
@@ -1641,6 +1646,7 @@ while not done:
                     for i in range(1, 9): # 1~8의 콤보 사운드
                         if combo_count == i + 2:  # 3 ~ 11 콤보 사운드
                             ui_variables.combos_sound[i - 1].play()
+                            pygame.time.delay(800)
                         if combo_count > 11:
                             ui_variables.combos_sound[8].play()
                 if current_time - previous_time > 10000: #10초가 지나면
@@ -1653,11 +1659,18 @@ while not done:
                 if goal < 1 and level < 15:
                     level += 1
                     ui_variables.LevelUp_sound.play()
-                    goal += level * 5
+                    for i in range(2,10):
+                        if level == i:
+                            draw_image(screen, "assets/levelup/" + str(i) + "level.png", board_width * 0.36, board_height * 0.5, int(board_width * 0.3), int(board_height * 0.5)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
+                            pygame.display.update()
+                    pygame.time.delay(1000)
+                    goal += level * 1
                     game_speed = int(game_speed-speed_change)
                     pygame.time.set_timer(pygame.USEREVENT, game_speed)
                     Change_RATE += 1
                     set_music_playing_speed(CHANNELS, swidth, Change_RATE)
+
+
 
             elif event.type == KEYDOWN:
                 erase_mino(dx, dy, mino, rotation, matrix)
@@ -1689,7 +1702,7 @@ while not done:
                             hold_mino = mino
                             mino = next_mino1
                             next_mino1 = next_mino2
-                            next_mino2 = randint(1, 1)
+                            next_mino2 = randint(1, 7)
                         else:
                             hold_mino, mino = mino, hold_mino
                         dx, dy = 3, 0
@@ -1963,7 +1976,7 @@ while not done:
                         if is_stackable(next_mino1, matrix):
                             mino = next_mino1
                             # next_mino1 = next_mino2
-                            next_mino1 = randint(1, 1)
+                            next_mino1 = randint(1, 7)
                             dx, dy = 3, 0
                             rotation = 0
                             hold = False
@@ -2027,7 +2040,7 @@ while not done:
 
                         if is_stackable(next_mino1_2P, matrix_2P):
                             mino_2P = next_mino1_2P
-                            next_mino1_2P = randint(1, 1)
+                            next_mino1_2P = randint(1, 7)
                             dx_2P, dy_2P = 3, 0
                             rotation_2P = 0
                             hold_2P = False
@@ -2294,7 +2307,7 @@ while not done:
                         if hold_mino == -1:
                             hold_mino = mino
                             mino = next_mino1
-                            next_mino1 = randint(1, 1)
+                            next_mino1 = randint(1, 7)
                         else:
                             hold_mino, mino = mino, hold_mino
                         dx, dy = 3, 0
@@ -2309,7 +2322,7 @@ while not done:
                         if hold_mino_2P == -1:
                             hold_mino_2P = mino_2P
                             mino_2P = next_mino1_2P
-                            next_mino1_2P = randint(1, 1)
+                            next_mino1_2P = randint(1, 7)
                         else:
                             hold_mino_2P, mino_2P = mino_2P, hold_mino_2P
                         dx_2P, dy_2P = 3, 0
