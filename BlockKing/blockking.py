@@ -827,11 +827,11 @@ def set_initial_values():
     dx_2P, dy_2P = 3, 0
     rotation = 0  # Minos rotation status
     rotation_2P = 0
-    mino = randint(1, 7)  # Current mino #테트리스 블록 7가지 중 하나
-    mino_2P = randint(1, 7)
-    next_mino1 = randint(1, 7)  # Next mino1 # 다음 테트리스 블록 7가지 중 하나
-    next_mino2 = randint(1, 7)  # Next mino2 # 다음 테트리스 블록 7가지 중 하나
-    next_mino1_2P = randint(1, 7)
+    mino = randint(1, 1)  # Current mino #테트리스 블록 7가지 중 하나
+    mino_2P = randint(1, 1)
+    next_mino1 = randint(1, 1)  # Next mino1 # 다음 테트리스 블록 7가지 중 하나
+    next_mino2 = randint(1, 1)  # Next mino2 # 다음 테트리스 블록 7가지 중 하나
+    next_mino1_2P = randint(1, 1)
     hold = False  # Hold status
     hold_2P = False
     hold_mino = -1  # Holded mino #현재 hold하는 것 없는 상태
@@ -1689,7 +1689,7 @@ while not done:
                             hold_mino = mino
                             mino = next_mino1
                             next_mino1 = next_mino2
-                            next_mino2 = randint(1, 7)
+                            next_mino2 = randint(1, 1)
                         else:
                             hold_mino, mino = mino, hold_mino
                         dx, dy = 3, 0
@@ -1963,7 +1963,7 @@ while not done:
                         if is_stackable(next_mino1, matrix):
                             mino = next_mino1
                             # next_mino1 = next_mino2
-                            next_mino1 = randint(1, 7)
+                            next_mino1 = randint(1, 1)
                             dx, dy = 3, 0
                             rotation = 0
                             hold = False
@@ -2027,7 +2027,7 @@ while not done:
 
                         if is_stackable(next_mino1_2P, matrix_2P):
                             mino_2P = next_mino1_2P
-                            next_mino1_2P = randint(1, 7)
+                            next_mino1_2P = randint(1, 1)
                             dx_2P, dy_2P = 3, 0
                             rotation_2P = 0
                             hold_2P = False
@@ -2162,13 +2162,12 @@ while not done:
                         ui_variables.tetris_sound.play()
                         ui_variables.tetris_sound.play()
                         score += 1000 * level * erase_count + 4 * combo_count
-
-                        screen.blit(ui_variables.combo_4ring, (250, 160)) #blit(이미지, 위치)
+                        draw_image(screen, "assets/Combo/4combo ring.png", board_width * 0.25, board_height * 0.4, int(board_width * 0.25), int(board_height * 0.22)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
 
 
                     for i in range(1, 11):
                         if combo_count == i:  # 1 ~ 10 콤보 이미지
-                            screen.blit(ui_variables.large_combos[i - 1], (board_width * 0.07, board_height * 0.35)) # single combo image 코드에서 이미지의 x축 위치만 바꿈
+                            draw_image(screen, "assets/Combo/" + str(i) + "combo.png", board_width * 0.15, board_height * 0.5, int(board_width * 0.18), int(board_height * 0.44)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                             pygame.display.update()
                             pygame.time.delay(500)
                         elif combo_count > 10:  # 11 이상 콤보 이미지
@@ -2225,12 +2224,12 @@ while not done:
                         ui_variables.tetris_sound.play()
                         ui_variables.tetris_sound.play()
                         score_2P += 1000 * level_2P * erase_count_2P + 4 * combo_count_2P
+                        draw_image(screen, "assets/Combo/4combo ring.png", board_width * 0.75, board_height * 0.4, int(board_width * 0.25), int(board_height * 0.22)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
 
-                        screen.blit(ui_variables.combo_4ring, (250, 160)) #blit(이미지, 위치)
 
                     for i in range(1, 11):
                         if combo_count_2P == i:  # 1 ~ 10 콤보 이미지
-                            screen.blit(ui_variables.large_combos[i - 1], (board_width * 0.55, board_height * 0.35)) # single combo image 코드에서 이미지의 x축 위치만 바꿈
+                            draw_image(screen, "assets/Combo/" + str(i) + "combo.png", board_width * 0.65, board_height * 0.5, int(board_width * 0.18), int(board_height * 0.44)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                             pygame.display.update()
                             pygame.time.delay(500)
                         elif combo_count_2P > 10:  # 11 이상 콤보 이미지
@@ -2295,7 +2294,7 @@ while not done:
                         if hold_mino == -1:
                             hold_mino = mino
                             mino = next_mino1
-                            next_mino1 = randint(1, 7)
+                            next_mino1 = randint(1, 1)
                         else:
                             hold_mino, mino = mino, hold_mino
                         dx, dy = 3, 0
@@ -2310,7 +2309,7 @@ while not done:
                         if hold_mino_2P == -1:
                             hold_mino_2P = mino_2P
                             mino_2P = next_mino1_2P
-                            next_mino1_2P = randint(1, 7)
+                            next_mino1_2P = randint(1, 1)
                         else:
                             hold_mino_2P, mino_2P = mino_2P, hold_mino_2P
                         dx_2P, dy_2P = 3, 0
