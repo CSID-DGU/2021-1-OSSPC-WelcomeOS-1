@@ -812,7 +812,7 @@ def set_initial_values():
     combo_count_2P = 0
     score = 0
     level = 1
-    goal = level * 1
+    goal = level * 5
     score_2P = 0
     level_2P = 1
     goal_2P = level_2P * 5
@@ -827,11 +827,11 @@ def set_initial_values():
     dx_2P, dy_2P = 3, 0
     rotation = 0  # Minos rotation status
     rotation_2P = 0
-    mino = randint(1, 1)  # Current mino #테트리스 블록 7가지 중 하나
-    mino_2P = randint(1, 1)
-    next_mino1 = randint(1, 1)  # Next mino1 # 다음 테트리스 블록 7가지 중 하나
-    next_mino2 = randint(1, 1)  # Next mino2 # 다음 테트리스 블록 7가지 중 하나
-    next_mino1_2P = randint(1, 1)
+    mino = randint(1, 7)  # Current mino #테트리스 블록 7가지 중 하나
+    mino_2P = randint(1, 7)
+    next_mino1 = randint(1, 7)  # Next mino1 # 다음 테트리스 블록 7가지 중 하나
+    next_mino2 = randint(1, 7)  # Next mino2 # 다음 테트리스 블록 7가지 중 하나
+    next_mino1_2P = randint(1, 7)
     hold = False  # Hold status
     hold_2P = False
     hold_mino = -1  # Holded mino #현재 hold하는 것 없는 상태
@@ -1664,7 +1664,7 @@ while not done:
                             draw_image(screen, "assets/levelup/" + str(i) + "level.png", board_width * 0.36, board_height * 0.5, int(board_width * 0.3), int(board_height * 0.5)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                             pygame.display.update()
                     pygame.time.delay(1000)
-                    goal += level * 1
+                    goal += level * 5
                     game_speed = int(game_speed-speed_change)
                     pygame.time.set_timer(pygame.USEREVENT, game_speed)
                     Change_RATE += 1
@@ -2182,17 +2182,23 @@ while not done:
                         if combo_count == i:  # 1 ~ 10 콤보 이미지
                             draw_image(screen, "assets/Combo/" + str(i) + "combo.png", board_width * 0.15, board_height * 0.5, int(board_width * 0.18), int(board_height * 0.44)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                             pygame.display.update()
-                            pygame.time.delay(500)
+                            pygame.time.delay(300)
+                            screen.fill(ui_variables.real_white)
+                            draw_image(screen, gamebackground_image , board_width * 0.5, board_height * 0.5, board_width, board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
+                            draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, score_2P, level, level_2P, goal, goal_2P)
+                            pygame.display.update()
                         elif combo_count > 10:  # 11 이상 콤보 이미지
                             pygame.display.update()
                             pygame.time.delay(300)
-    
+   
                     
                     for i in range(1, 9): # 1~8의 콤보 사운드
                         if combo_count == i + 2:  # 3 ~ 11 콤보 사운드
                             ui_variables.combos_sound[i - 1].play()
+                            pygame.time.delay(800)
                         if combo_count > 11:
                             ui_variables.combos_sound[8].play()
+                            pygame.time.delay(800)
                 if current_time - previous_time > 10000: #10초가 지나면
                     previous_time = current_time #현재 시간을 과거시간으로 하고
                     combo_count = 0 #콤보 수 초기화
@@ -2202,6 +2208,11 @@ while not done:
                 if goal < 1 and level < 15:
                     level += 1
                     ui_variables.LevelUp_sound.play()
+                    for i in range(2,10):
+                        if level == i:
+                            draw_image(screen, "assets/levelup/" + str(i) + "level.png", board_width * 0.15, board_height * 0.5, int(board_width * 0.3), int(board_height * 0.5)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
+                            pygame.display.update()
+                    pygame.time.delay(1000)
                     goal += level * 5
                     game_speed = int(game_speed - speed_change)
                 if level > level_2P and Change_RATE < level + 1:
@@ -2244,7 +2255,11 @@ while not done:
                         if combo_count_2P == i:  # 1 ~ 10 콤보 이미지
                             draw_image(screen, "assets/Combo/" + str(i) + "combo.png", board_width * 0.65, board_height * 0.5, int(board_width * 0.18), int(board_height * 0.44)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                             pygame.display.update()
-                            pygame.time.delay(500)
+                            pygame.time.delay(300)
+                            screen.fill(ui_variables.real_white)
+                            draw_image(screen, gamebackground_image , board_width * 0.5, board_height * 0.5, board_width, board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
+                            draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, score_2P, level, level_2P, goal, goal_2P)
+                            pygame.display.update()
                         elif combo_count_2P > 10:  # 11 이상 콤보 이미지
                             pygame.display.update()
                             pygame.time.delay(300)
@@ -2252,6 +2267,7 @@ while not done:
                     for i in range(1, 9): # 1~8의 콤보 사운드
                         if combo_count_2P == i + 2:  # 3 ~ 11 콤보 사운드
                             ui_variables.combos_sound[i - 1].play()
+                            pygame.time.delay(800)
                         if combo_count_2P > 11:
                             ui_variables.combos_sound[8].play()
                 if current_time_2P - previous_time_2P > 10000: #10초가 지나면
@@ -2263,6 +2279,11 @@ while not done:
                 if goal_2P < 1 and level_2P < 15:
                     level_2P += 1
                     ui_variables.LevelUp_sound.play()
+                    for i in range(2,10):
+                        if level_2P == i:
+                            draw_image(screen, "assets/levelup/" + str(i) + "level.png", board_width * 0.65, board_height * 0.5, int(board_width * 0.3), int(board_height * 0.5)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
+                            pygame.display.update()
+                    pygame.time.delay(1000)
                     goal_2P += level_2P * 5
                     game_speed_2P = int(game_speed_2P - speed_change)
                 if level < level_2P and Change_RATE < level_2P + 1:
