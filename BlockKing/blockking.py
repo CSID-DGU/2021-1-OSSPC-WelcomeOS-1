@@ -80,15 +80,6 @@ class ui_variables:
     LevelUp_sound = pygame.mixer.Sound("assets/sounds/SFX_LevelUp.wav")
     GameOver_sound = pygame.mixer.Sound("assets/sounds/SFX_GameOver.wav")
 
-    # Combo graphic
-    combos = []
-    large_combos = []
-    combo_ring = pygame.image.load("assets/Combo/4combo ring.png")  # 4블록 동시제거 그래픽
-    combo_4ring = pygame.transform.smoothscale(combo_ring, (200, 100)) #이미지를 특정 크기로 불러옴, 200=가로크기, 100=세로크기#
-    for i in range(1, 11): #10가지의 콤보 이미지 존재. 각 숫자에 해당하는 이미지 불러옴
-        combos.append(pygame.image.load("assets/Combo/" + str(i) + "combo.png"))
-        large_combos.append(pygame.transform.smoothscale(combos[i - 1], (150, 200))) #콤보이미지를 특정 크기로 불러옴, 150=가로크기, 200=세로크기#
-
     combos_sound = []
     for i in range(1, 10): #1-9까지 콤보사운드 존재. 각 숫자에 해당하는 음악 불러옴
         combos_sound.append(pygame.mixer.Sound("assets/sounds/SFX_" + str(i + 2) + "Combo.wav"))
@@ -1635,7 +1626,8 @@ while not done:
                         ui_variables.tetris_sound.play()
                         ui_variables.tetris_sound.play()
                         score += 1000 * level * erase_count + 4 * combo_count
-                        screen.blit(ui_variables.combo_4ring, (250, 160)) #blit(이미지, 위치)
+                        draw_image(screen, "assets/Combo/4combo ring.png", board_width * 0.5, board_height * 0.35, int(board_width * 0.25), int(board_height * 0.22)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
+
 
                     for i in range(1, 11):
                         if combo_count == i:  # 1 ~ 10 콤보 이미지
