@@ -7,7 +7,7 @@ def rotate_clockwise(shape):
         for x in range(len(shape[0]) - 1, -1, -1) ]
 
 
-class Ai:
+class AUTO:
 
     @staticmethod
     def best(field, workingPieces, workingPieceIndex, weights, level):
@@ -29,7 +29,7 @@ class Ai:
                         heuristics = field.heuristics()
                         score = sum([a*b for a,b in zip(heuristics, weights)])
                     else:
-                        _, _, score = Ai.best(field, workingPieces, workingPieceIndex + 1, weights, 2)
+                        _, _, score = AUTO.best(field, workingPieces, workingPieceIndex + 1, weights, 2)
 
                     if score > bestScore :
                         bestScore = score
@@ -42,17 +42,12 @@ class Ai:
     
     @staticmethod
     def choose(initialField, piece, next_piece, offsetX, weights, parent):
-        #print(initialField)
         print(piece)
-
         print(next_piece)
-        #print(offsetX)
-        #print(weights)
-        #print(parent)
         field = Field(len(initialField[0]), len(initialField))
         field.updateField(copy.deepcopy(initialField))
 
-        offset, rotation, _ = Ai.best(field, [piece, next_piece], 0, weights, 1)
+        offset, rotation, _ = AUTO.best(field, [piece, next_piece], 0, weights, 1)
         moves = []
 
         offset = offset - offsetX
@@ -64,23 +59,17 @@ class Ai:
             else:
                 moves.append("LEFT")
         print(moves)
-        #moves.append('RETURN')
         parent.executes_moves(moves) #moves에 움직임을 저장해서 블록 이동시킴
         #return moves
     
     @staticmethod
     def choose(initialField, piece, next_piece, offsetX, weights):
-        #print(initialField)
         print(piece)
-
         print(next_piece)
-        #print(offsetX)
-        #print(weights)
-        #print(parent)
         field = Field(len(initialField[0]), len(initialField))
         field.updateField(copy.deepcopy(initialField))
 
-        offset, rotation, _ = Ai.best(field, [piece, next_piece], 0, weights, 1)
+        offset, rotation, _ = AUTO.best(field, [piece, next_piece], 0, weights, 1)
         moves = []
 
         offset = offset - offsetX
@@ -91,8 +80,6 @@ class Ai:
                 moves.append("RIGHT")
             else:
                 moves.append("LEFT")
-        #moves.append('RETURN')
-        #parent.executes_moves(moves) #moves에 움직임을 저장해서 블록 이동시킴
         print(moves)
         return moves
     

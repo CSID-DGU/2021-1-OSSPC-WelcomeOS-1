@@ -8,15 +8,16 @@ from mino import *
 from random import *
 from pygame.locals import *
 import os
-from ai import Ai
+from auto import AUTO
 
 # Unchanged values Define 변하지 않는 변수 선언
-computed = 5 # 5 이하 이면 자동으로 블록 쌓아줌 
-hint_item_num = 0 #자동 추천 기능 쓸 수 있는 횟수 
+computed = 9999 # 5 이하 이면 자동으로 블록 쌓아줌 
+hint_item_num = 3 #자동 추천 기능 쓸 수 있는 횟수 
 weights = [0.39357083734159515, -1.8961941343266449, -5.107694873375318, -3.6314963941589093, -2.9262681134021786, -2.146136640641482, -7.204192964669836, -3.476853402227247, -6.813002842291903, 4.152001386170861, -21.131715861293525, -10.181622180279133, -5.351108175564556, -2.6888972099986956, -2.684925769670947, -4.504495386829769, -7.4527302422826, -6.3489634714511505, -4.701455626343827, -10.502314845278828, 0.6969259450910086, -4.483319180395864, -2.471375907554622, -6.245643268054767, -1.899364785170105, -5.3416512085013395, -4.072687054171711, -5.936652569831475, -2.3140398163110643, -4.842883337741306, 17.677262456993276, -4.42668539845469, -6.8954976464473585, 4.481308299774875] 
-
-
-
+hint_block_num = 5 #자동으로 쌓아줄 블록 갯수
+push_hint_time = 0 #키 누른 시간, 이미지 팝업 되어 있는동안 블록 못 움직이게 하기 위함 
+in_time = 0 #
+excute_time = 0
 block_size = 17  # Height, width of single block
 width = 10
 height = 20
@@ -1608,34 +1609,41 @@ while not done:
                         bottom_count += 1
 
                         
-                if computed < 5: #h버튼 누르는 순간의 블록부터 자동으로 쌓아줘서 5미만으로 해야 5블록 쌓아줌
-                    moves_list = []  #최적의 움직임을 저장하는 리스트                                
-                    moves_list = Ai.choose(matrix_changer(matrix), mino_converter(mino), mino_converter(next_mino1), stone_x(mino), weights) 
-                    for_onetime = 0 #일자 블록 위치 맞춰주는 변수, 한번만 왼쪽으로 이동 해주기 위함
-                    for i in range(len(moves_list)):                        
-                        if moves_list[i] == 'UP': #회전하도록
-                            if mino_converter(mino)==[[ 6, 6, 6, 6]]: #블록 모양 정의가 달라서 위치 맞춰주는 것
-                                if for_onetime == 0:
-                                    dx -= 1
-                                    for_onetime = 1
-                                    
-                            if rotation != 3:
-                                rotation += 1
-                            else:
-                                rotation = 0                                                                    
-                        elif moves_list[i] == 'LEFT': #왼쪽으로 한칸                            
-                            if not is_leftedge(dx, dy, mino, rotation, matrix):
-                                ui_variables.move_sound.play()
-                                dx -= 1                                               
-                        elif moves_list[i ]== 'RIGHT': #오른쪽으로 한칸                            
-                            if not is_rightedge(dx, dy, mino, rotation, matrix):
-                                ui_variables.move_sound.play()
-                                dx += 1
-                    ui_variables.fall_sound.play()
-                    ui_variables.drop_sound.play()
-                    while not is_bottom(dx, dy, mino, rotation, matrix):
-                        dy += 1
-                    hard_drop = True #hard drop 형식으로 블록 떨어짐게 구현함
+                if computed < hint_block_num  : #h버튼 누르는 순간의 블록부터 자동으로 쌓아줘서 5미만으로 해야 5블록 쌓아줌                     
+                    in_time = pygame.time.get_ticks() #블럭 쌓기 시작한 시간 저장
+                    moves_list = []  #최적의 움직임을 저장하는 리스트 
+                    if in_time>=excute_time:              
+                        moves_list = AUTO.choose(matrix_changer(matrix), mino_converter(mino), mino_converter(next_mino1), stone_x(mino), weights) 
+                        print("computed")
+                        for_onetime = True #일자 블록 위치 맞춰주는 변수, 한번만 왼쪽으로 이동 해주기 위함
+                        for i in range(len(moves_list)):                        
+                            if moves_list[i] == 'UP': #회전하도록
+                                if mino_converter(mino)==[[ 6, 6, 6, 6]]: #블록 모양 정의가 달라서 위치 맞춰주는 것
+                                    if for_onetime == True:
+                                        dx -= 1
+                                        for_onetime = False
+                                        
+                                if rotation != 3:
+                                    rotation += 1
+                                else:
+                                    rotation = 0                                                                    
+                            elif moves_list[i] == 'LEFT': #왼쪽으로 한칸                            
+                                if not is_leftedge(dx, dy, mino, rotation, matrix):
+                                    ui_variables.move_sound.play()
+                                    dx -= 1                                               
+                            elif moves_list[i ]== 'RIGHT': #오른쪽으로 한칸                            
+                                if not is_rightedge(dx, dy, mino, rotation, matrix):
+                                    ui_variables.move_sound.play()
+                                    dx += 1
+                        ui_variables.fall_sound.play()
+                        ui_variables.drop_sound.play()
+                        while not is_bottom(dx, dy, mino, rotation, matrix):
+                            dy += 1
+                        hard_drop = True #hard drop 형식으로 블록 떨어짐게 구현함
+                        push_hint_time = pygame.time.get_ticks()
+                        excute_time = push_hint_time + 1500 #1.5초 후에 다음 블럭 쌓아주도록 설정, delay(1500)로 하면 안됨
+                    
+                    
                     
                 # Erase line
                 erase_count = 0
@@ -1676,6 +1684,7 @@ while not done:
                         screen.blit(ui_variables.rainbow_vector, (board_width * 0.28, board_height * 0.1)) #blit(이미지, 위치)
                         pygame.display.update()
                         pygame.time.delay(400) #0.4초
+                        
 
                     previous_time = current_time
                     
@@ -1706,7 +1715,7 @@ while not done:
 
                     for i in range(1, 11):
                         if combo_count == i:  # 1 ~ 10 콤보 이미지
-                            screen.blit(ui_variables.large_combos[i - 1], (board_width * 0.27, board_height * 0.35)) #각 콤보 이미지에 대해 blit(이미지, 위치)
+                            screen.blit(ui_variables.large_combos[i - 1], (board_width * 0.27, board_height * 0.35)) #각 콤보 이미지에 대해 blit(이미지, 위치)                                                       
                             pygame.display.update()
                             pygame.time.delay(500)
                         elif combo_count > 10:  # 11 이상 콤보 이미지
