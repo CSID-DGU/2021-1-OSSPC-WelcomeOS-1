@@ -50,7 +50,7 @@ pygame.init()
 
 clock = pygame.time.Clock() #창, 화면을 초당 몇번 출력하는가(FPS) clock.tick 높을수록 cpu많이 사용
 screen = pygame.display.set_mode((board_width, board_height), pygame.RESIZABLE) #GUI창 설정하는 변수
-pygame.display.set_caption("BLOCK KING") #GUI 창의 이름
+pygame.display.set_caption("TETRIS KINGDOM 2") #GUI 창의 이름
 
 class ui_variables:
     font_path = "./assets/fonts/OpenSans-Light.ttf"
