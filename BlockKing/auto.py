@@ -41,28 +41,6 @@ class AUTO:
         return bestOffset, bestRotation, bestScore
     
     @staticmethod
-    def choose(initialField, piece, next_piece, offsetX, weights, parent):
-        print(piece)
-        print(next_piece)
-        field = Field(len(initialField[0]), len(initialField))
-        field.updateField(copy.deepcopy(initialField))
-
-        offset, rotation, _ = AUTO.best(field, [piece, next_piece], 0, weights, 1)
-        moves = []
-
-        offset = offset - offsetX
-        for _ in range(0, rotation):
-            moves.append("UP")
-        for _ in range(0, abs(offset)):
-            if offset > 0:
-                moves.append("RIGHT")
-            else:
-                moves.append("LEFT")
-        print(moves)
-        parent.executes_moves(moves) #moves에 움직임을 저장해서 블록 이동시킴
-        #return moves
-    
-    @staticmethod
     def choose(initialField, piece, next_piece, offsetX, weights):
         print(piece)
         print(next_piece)
