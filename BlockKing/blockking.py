@@ -95,14 +95,6 @@ class ui_variables:
     #rainbow 보너스점수 graphic
     rainbow_vector = pygame.image.load('assets/vector/rainbow.png')
 
-    # 아이템 graphic
-    vertical_item = pygame.image.load('assets/item_images/vertical_item.png')
-    horizontal_item = pygame.image.load('assets/item_images/horizontal_item.png')
-    fast_item = pygame.image.load('assets/item_images/fast_item.png')
-    slow_item = pygame.image.load('assets/item_images/slow_item.png')
-    time_item = pygame.image.load('assets/item_images/time_item.png')
-
-
     # Background colors. RGB 값에 해당함
     black = (10, 10, 10)  # rgb(10, 10, 10)
     black_pause = (0, 0, 0, 127)
@@ -1646,27 +1638,27 @@ while not done:
 
                         for i in range(board_x):
                             if matrix[i][j] == 10 : # 세로줄 삭제 아이템이면
-                                v_item.append(i)    
-                                screen.blit(ui_variables.vertical_item, (board_width * 0.30, board_height * 0.35)) #blit(이미지, 위치)
+                                v_item.append(i)
+                                draw_image(screen, "assets/item_images/vertical_item.png", board_width * 0.36, board_height * 0.5, int(board_width * 0.17), int(board_height * 0.45)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item()
 
                             if matrix[i][j] == 11 : # 가로줄 삭제 아이템이면
                                 h_item += 1
-                                screen.blit(ui_variables.horizontal_item, (board_width * 0.25, board_height * 0.35)) #blit(이미지, 위치)
+                                draw_image(screen, "assets/item_images/horizontal_item.png", board_width * 0.36, board_height * 0.5, int(board_width * 0.3), int(board_height * 0.25)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item()
 
                             if matrix[i][j] == 12 : # 속도 증가 아이템이면
                                 f_item += 1
-                                screen.blit(ui_variables.fast_item, (board_width * 0.30, board_height * 0.35)) #blit(이미지, 위치)
+                                draw_image(screen, "assets/item_images/fast_item.png", board_width * 0.36, board_height * 0.5, int(board_width * 0.2), int(board_height * 0.4)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item()
                                 
                             if matrix[i][j] == 13 : # 속도 감소 아이템이면
                                 s_item += 1
-                                screen.blit(ui_variables.slow_item, (board_width * 0.30, board_height * 0.35)) #blit(이미지, 위치)
+                                draw_image(screen, "assets/item_images/slow_item.png", board_width * 0.36, board_height * 0.5, int(board_width * 0.2), int(board_height * 0.4)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item()
                             if matrix[i][j] == time_block : # 시간 증가 아이템이면
                                 total_time += 5
-                                screen.blit(ui_variables.time_item, (board_width * 0.30, board_height * 0.35)) #blit(이미지, 위치)
+                                draw_image(screen, "assets/item_images/time_item.png", board_width * 0.36, board_height * 0.5, int(board_width * 0.2), int(board_height * 0.4)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item()
 
                         if len(v_item) != 0:
@@ -1713,7 +1705,7 @@ while not done:
                     if rainbow_count >= 1:
                         score += 500 * rainbow_count #임의로 rainbow는 한 줄당 500점으로 잡음
                         rainbow_count = 0 #다시 초기화
-                        screen.blit(ui_variables.rainbow_vector, (board_width * 0.28, board_height * 0.1)) #blit(이미지, 위치)
+                        draw_image(screen, "assets/vector/rainbow.png", board_width * 0.28, board_height * 0.1, int(board_width * 0.2), int(board_height * 0.4)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                         pygame.display.update()
                         pygame.time.delay(400) #0.4초
 
@@ -2223,23 +2215,23 @@ while not done:
                         combo_count += 1  # 콤보 버그 수정. 가로줄 꽉 찼는지 확일할 때마다 1P의 combo count를 늘린다.
                         for i in range(board_x):
                             if matrix[i][j] == 10 : # 세로줄 삭제 아이템이면
-                                v_item.append(i)    
-                                screen.blit(ui_variables.vertical_item, (board_width * 0.10, board_height * 0.35)) #blit(이미지, 위치)
+                                v_item.append(i)
+                                draw_image(screen, "assets/item_images/vertical_item.png", board_width * 0.15, board_height * 0.5, int(board_width * 0.17), int(board_height * 0.45)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item_pvp()
 
                             if matrix[i][j] == 11 : # 가로줄 삭제 아이템이면
                                 h_item += 1
-                                screen.blit(ui_variables.horizontal_item, (board_width * 0.10, board_height * 0.35)) #blit(이미지, 위치)
+                                draw_image(screen, "assets/item_images/horizontal_item.png", board_width * 0.15, board_height * 0.5, int(board_width * 0.3), int(board_height * 0.25)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item_pvp()
 
                             if matrix[i][j] == 12 : # 속도 증가 아이템이면
                                 f_item += 1
-                                screen.blit(ui_variables.fast_item, (board_width * 0.10, board_height * 0.35)) #blit(이미지, 위치)
+                                draw_image(screen, "assets/item_images/fast_item.png", board_width * 0.15, board_height * 0.5, int(board_width * 0.2), int(board_height * 0.4)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item_pvp()
                                 
                             if matrix[i][j] == 13 : # 속도 감소 아이템이면
                                 s_item += 1
-                                screen.blit(ui_variables.fast_item, (board_width * 0.10, board_height * 0.35)) #blit(이미지, 위치)
+                                draw_image(screen, "assets/item_images/slow_item.png", board_width * 0.15, board_height * 0.5, int(board_width * 0.2), int(board_height * 0.4)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item_pvp()
                         if len(v_item) != 0:
                             for i in range(len(v_item)):
@@ -2295,21 +2287,21 @@ while not done:
                         for i in range(board_x):
                             if matrix_2P[i][j] == 10 : # 세로줄 삭제 아이템이면
                                 v_item_2P.append(i)    
-                                screen.blit(ui_variables.vertical_item, (board_width * 0.60, board_height * 0.35)) #blit(이미지, 위치)
+                                draw_image(screen, "assets/item_images/vertical_item.png", board_width * 0.65, board_height * 0.5, int(board_width * 0.17), int(board_height * 0.45)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item_pvp()
                             if matrix_2P[i][j] == 11 : # 가로줄 삭제 아이템이면
                                 h_item_2P += 1
-                                screen.blit(ui_variables.horizontal_item, (board_width * 0.55, board_height * 0.45)) #blit(이미지, 위치)
+                                draw_image(screen, "assets/item_images/horizontal_item.png", board_width * 0.65, board_height * 0.5, int(board_width * 0.3), int(board_height * 0.25)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item_pvp()
 
                             if matrix_2P[i][j] == 12 : # 속도 증가 아이템이면
                                 f_item += 1
-                                screen.blit(ui_variables.fast_item, (board_width * 0.55, board_height * 0.35)) #blit(이미지, 위치)
+                                draw_image(screen, "assets/item_images/fast_item.png", board_width * 0.65, board_height * 0.5, int(board_width * 0.2), int(board_height * 0.4)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item_pvp()
                                 
                             if matrix_2P[i][j] == 13 : # 속도 감소 아이템이면
                                 s_item += 1
-                                screen.blit(ui_variables.fast_item, (board_width * 0.55, board_height * 0.35)) #blit(이미지, 위치)
+                                draw_image(screen, "assets/item_images/slow_item.png", board_width * 0.65, board_height * 0.5, int(board_width * 0.2), int(board_height * 0.4)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item_pvp()
                         if len(v_item_2P) != 0:
                             for i in range(len(v_item_2P)):
