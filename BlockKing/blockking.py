@@ -1748,12 +1748,7 @@ while not done:
                     for i in range(1, 11):
                         if combo_count == i:  # 1 ~ 10 콤보 이미지
                             draw_image(screen, "assets/Combo/" + str(i) + "combo.png", board_width * 0.36, board_height * 0.5, int(board_width * 0.18), int(board_height * 0.44)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
-                            pygame.display.update()
-                            pygame.time.delay(500)
-                            screen.fill(ui_variables.real_white)
-                            draw_image(screen, gamebackground_image , board_width * 0.5, board_height * 0.5, board_width, board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
-                            draw_board(next_mino1, next_mino2, hold_mino, score, level, goal)
-                            pygame.display.update()
+                            draw_item()
 
                         elif combo_count > 10:  # 11 이상 콤보 이미지
                             pygame.display.update()
@@ -2404,12 +2399,7 @@ while not done:
                     for i in range(1, 11):
                         if combo_count == i:  # 1 ~ 10 콤보 이미지
                             draw_image(screen, "assets/Combo/" + str(i) + "combo.png", board_width * 0.15, board_height * 0.5, int(board_width * 0.18), int(board_height * 0.44)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
-                            pygame.display.update()
-                            pygame.time.delay(300)
-                            screen.fill(ui_variables.real_white)
-                            draw_image(screen, gamebackground_image , board_width * 0.5, board_height * 0.5, board_width, board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
-                            draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, score_2P, level, level_2P, goal, goal_2P)
-                            pygame.display.update()
+                            draw_item_pvp()
                         elif combo_count > 10:  # 11 이상 콤보 이미지
                             pygame.display.update()
                             pygame.time.delay(300)
@@ -2477,12 +2467,7 @@ while not done:
                     for i in range(1, 11):
                         if combo_count_2P == i:  # 1 ~ 10 콤보 이미지
                             draw_image(screen, "assets/Combo/" + str(i) + "combo.png", board_width * 0.65, board_height * 0.5, int(board_width * 0.18), int(board_height * 0.44)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
-                            pygame.display.update()
-                            pygame.time.delay(300)
-                            screen.fill(ui_variables.real_white)
-                            draw_image(screen, gamebackground_image , board_width * 0.5, board_height * 0.5, board_width, board_height) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
-                            draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, score_2P, level, level_2P, goal, goal_2P)
-                            pygame.display.update()
+                            draw_item_pvp()
                         elif combo_count_2P > 10:  # 11 이상 콤보 이미지
                             pygame.display.update()
                             pygame.time.delay(300)
