@@ -76,6 +76,6 @@ $ pip3 install pygame==2.0.0
 ```
 ### 6. 코드 실행
 ```
-$ cd Blocking
-$ python blocking.py
+$ cd BlockKing
+$ python blockking.py
 ```
