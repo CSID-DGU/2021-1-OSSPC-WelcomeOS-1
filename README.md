@@ -10,3 +10,6 @@ pygame 활용 테트리스 게임 **"Block King"**
 **1조 어서오소**  
 **Team Leader**: [주현이](https://github.com/hyeoneedyou)  
 **Team Member**: [김현하](https://github.com/kimhyeonhaa), [이채림](https://github.com/leechaelim)
+
+< Tetris Kingdom 2 >
+![image](https://user-images.githubusercontent.com/58203135/121075993-d1cf7c80-c810-11eb-8ba6-3a9fe5c4f1e5.png)
