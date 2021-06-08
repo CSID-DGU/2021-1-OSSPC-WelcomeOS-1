@@ -49,7 +49,7 @@ waiting_time = 1  # 블록이 바닥에 닿은 후 다음 블록 생성까지 �
 
 single_mino = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]  # 싱글모드에서는 시간증가 아이템 블록을 제외
 timeattack_mino = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-pvp_mino = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+pvp_mino = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14]
 
 # block
 time_block = 14
@@ -109,6 +109,8 @@ class ui_variables:
     # rainbow 보너스점수 graphic
     rainbow_vector = pygame.image.load('assets/vector/rainbow.png')
 
+    # item graphic
+    blind_white_item = pygame.image.load('assets/item_images/blind_white_item.png')
     # Background colors. RGB 값에 해당함
     black = (10, 10, 10)  # rgb(10, 10, 10)
     black_pause = (0, 0, 0, 127)
@@ -507,7 +509,6 @@ def draw_board(next1, next2, hold, score, level, goal):
     if blind_time - blind_elapsed_time > 0:
         screen.blit(ui_variables.blind_white_item, (board_width * 0.54, board_height * 0.33))  # blit(이미지, 위치)
         screen.blit(ui_variables.blind_white_item, (board_width * 0.655, board_height * 0.33))  # blit(이미지, 위치)
-
 
 def draw_1Pboard(next, hold, score, level, goal):
     sidebar_width = int(board_width * 0.31)  # 위치비율 고정, board 가로길이에 원하는 비율을 곱해줌#
@@ -2474,12 +2475,14 @@ while not done:
                                 s_item += 1
                                 draw_image(screen, "assets/item_images/slow_item.png", board_width * 0.15, board_height * 0.5, int(board_width * 0.2), int(board_height * 0.4)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item_pvp()
+
+                            if matrix[i][j] == 15: # 블라인드 아이템이면
+                                draw_image(screen, "assets/item_images/blind_item.png", board_width * 0.15, board_height * 0.5, int(board_width * 0.2), int(board_height * 0.4)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 blind_start_time_2P = pygame.time.get_ticks()  # 현재 시간
                                 blind_time_2P = + 10  # 블라인드 타임 10초로 설정
 
                             if matrix[i][j] == 16:  # 키보드 반전 아이템이면
-                                screen.blit(ui_variables.switch_item,
-                                            (board_width * 0.06, board_height * 0.35))  # blit(이미지, 위치)
+                                draw_image(screen, "assets/item_images/switch_item.png", board_width * 0.15, board_height * 0.5, int(board_width * 0.2), int(board_height * 0.4)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item_pvp()
                                 switch_start_time_2P = pygame.time.get_ticks()  # 현재 시간
                                 switch_time_2P = + 10  # 블라인드 타임 10초로 설정
@@ -2556,15 +2559,13 @@ while not done:
                                 draw_item_pvp()
 
                             if matrix_2P[i][j] == 15:  # 블라인드 아이템이면
-                                screen.blit(ui_variables.blind_item,
-                                            (board_width * 0.55, board_height * 0.35))  # blit(이미지, 위치)
+                                draw_image(screen, "assets/item_images/blind_item.png", board_width * 0.65, board_height * 0.5, int(board_width * 0.2), int(board_height * 0.4)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item_pvp()
                                 blind_start_time = pygame.time.get_ticks()  # 현재 시간
                                 blind_time = + 10  # 블라인드 타임 10초로 설정
 
                             if matrix_2P[i][j] == 16:  # 키보드 반전  아이템이면
-                                screen.blit(ui_variables.switch_item,
-                                            (board_width * 0.55, board_height * 0.35))  # blit(이미지, 위치)
+                                draw_image(screen, "assets/item_images/blind_item.png", board_width * 0.65, board_height * 0.5, int(board_width * 0.2), int(board_height * 0.4)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item_pvp()
                                 switch_start_time = pygame.time.get_ticks()  # 현재 시간
                                 switch_time = + 10  # 블라인드 타임 10초로 설정
