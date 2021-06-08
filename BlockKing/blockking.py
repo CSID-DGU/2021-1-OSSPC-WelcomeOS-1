@@ -95,29 +95,12 @@ class ui_variables:
     LevelUp_sound = pygame.mixer.Sound("assets/sounds/SFX_LevelUp.wav")
     GameOver_sound = pygame.mixer.Sound("assets/sounds/SFX_GameOver.wav")
 
-    # Combo graphic
-    combos = []
-    large_combos = []
-    combo_ring = pygame.image.load("assets/Combo/4combo ring.png")  # 4블록 동시제거 그래픽
-    combo_4ring = pygame.transform.smoothscale(combo_ring, (200, 100)) #이미지를 특정 크기로 불러옴, 200=가로크기, 100=세로크기#
-    for i in range(1, 11): #10가지의 콤보 이미지 존재. 각 숫자에 해당하는 이미지 불러옴
-        combos.append(pygame.image.load("assets/Combo/" + str(i) + "combo.png"))
-        large_combos.append(pygame.transform.smoothscale(combos[i - 1], (150, 200))) #콤보이미지를 특정 크기로 불러옴, 150=가로크기, 200=세로크기#
-
     combos_sound = []
     for i in range(1, 10): #1-9까지 콤보사운드 존재. 각 숫자에 해당하는 음악 불러옴
         combos_sound.append(pygame.mixer.Sound("assets/sounds/SFX_" + str(i + 2) + "Combo.wav"))
 
     #rainbow 보너스점수 graphic
     rainbow_vector = pygame.image.load('assets/vector/rainbow.png')
-
-    # 아이템 graphic
-    vertical_item = pygame.image.load('assets/item_images/vertical_item.png')
-    horizontal_item = pygame.image.load('assets/item_images/horizontal_item.png')
-    fast_item = pygame.image.load('assets/item_images/fast_item.png')
-    slow_item = pygame.image.load('assets/item_images/slow_item.png')
-    time_item = pygame.image.load('assets/item_images/time_item.png')
-
 
     # Background colors. RGB 값에 해당함
     black = (10, 10, 10)  # rgb(10, 10, 10)
@@ -1747,27 +1730,27 @@ while not done:
 
                         for i in range(board_x):
                             if matrix[i][j] == 10 : # 세로줄 삭제 아이템이면
-                                v_item.append(i)    
-                                screen.blit(ui_variables.vertical_item, (board_width * 0.30, board_height * 0.35)) #blit(이미지, 위치)
+                                v_item.append(i)
+                                draw_image(screen, "assets/item_images/vertical_item.png", board_width * 0.36, board_height * 0.5, int(board_width * 0.17), int(board_height * 0.45)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item()
 
                             if matrix[i][j] == 11 : # 가로줄 삭제 아이템이면
                                 h_item += 1
-                                screen.blit(ui_variables.horizontal_item, (board_width * 0.25, board_height * 0.35)) #blit(이미지, 위치)
+                                draw_image(screen, "assets/item_images/horizontal_item.png", board_width * 0.36, board_height * 0.5, int(board_width * 0.3), int(board_height * 0.25)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item()
 
                             if matrix[i][j] == 12 : # 속도 증가 아이템이면
                                 f_item += 1
-                                screen.blit(ui_variables.fast_item, (board_width * 0.30, board_height * 0.35)) #blit(이미지, 위치)
+                                draw_image(screen, "assets/item_images/fast_item.png", board_width * 0.36, board_height * 0.5, int(board_width * 0.2), int(board_height * 0.4)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item()
                                 
                             if matrix[i][j] == 13 : # 속도 감소 아이템이면
                                 s_item += 1
-                                screen.blit(ui_variables.slow_item, (board_width * 0.30, board_height * 0.35)) #blit(이미지, 위치)
+                                draw_image(screen, "assets/item_images/slow_item.png", board_width * 0.36, board_height * 0.5, int(board_width * 0.2), int(board_height * 0.4)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item()
                             if matrix[i][j] == time_block : # 시간 증가 아이템이면
                                 total_time += 5
-                                screen.blit(ui_variables.time_item, (board_width * 0.30, board_height * 0.35)) #blit(이미지, 위치)
+                                draw_image(screen, "assets/item_images/time_item.png", board_width * 0.36, board_height * 0.5, int(board_width * 0.2), int(board_height * 0.4)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item()
 
                         if len(v_item) != 0:
@@ -1814,7 +1797,7 @@ while not done:
                     if rainbow_count >= 1:
                         score += 500 * rainbow_count #임의로 rainbow는 한 줄당 500점으로 잡음
                         rainbow_count = 0 #다시 초기화
-                        screen.blit(ui_variables.rainbow_vector, (board_width * 0.28, board_height * 0.1)) #blit(이미지, 위치)
+                        draw_image(screen, "assets/vector/rainbow.png", board_width * 0.28, board_height * 0.1, int(board_width * 0.2), int(board_height * 0.4)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                         pygame.display.update()
                         pygame.time.delay(400) #0.4초
                         
@@ -1844,13 +1827,14 @@ while not done:
                         ui_variables.tetris_sound.play()
                         ui_variables.tetris_sound.play()
                         score += 1000 * level * erase_count + 4 * combo_count
-                        screen.blit(ui_variables.combo_4ring, (250, 160)) #blit(이미지, 위치)
+                        draw_image(screen, "assets/Combo/4combo ring.png", board_width * 0.5, board_height * 0.35, int(board_width * 0.25), int(board_height * 0.22)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
+
 
                     for i in range(1, 11):
                         if combo_count == i:  # 1 ~ 10 콤보 이미지
-                            screen.blit(ui_variables.large_combos[i - 1], (board_width * 0.27, board_height * 0.35)) #각 콤보 이미지에 대해 blit(이미지, 위치)                                                       
-                            pygame.display.update()
-                            pygame.time.delay(500)
+                            draw_image(screen, "assets/Combo/" + str(i) + "combo.png", board_width * 0.36, board_height * 0.5, int(board_width * 0.18), int(board_height * 0.44)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
+                            draw_item()
+
                         elif combo_count > 10:  # 11 이상 콤보 이미지
                             pygame.display.update()
                             pygame.time.delay(300)
@@ -1858,6 +1842,7 @@ while not done:
                     for i in range(1, 9): # 1~8의 콤보 사운드
                         if combo_count == i + 2:  # 3 ~ 11 콤보 사운드
                             ui_variables.combos_sound[i - 1].play()
+                            pygame.time.delay(800)
                         if combo_count > 11:
                             ui_variables.combos_sound[8].play()
                 if current_time - previous_time > 10000: #10초가 지나면
@@ -1870,11 +1855,18 @@ while not done:
                 if goal < 1 and level < 15:
                     level += 1
                     ui_variables.LevelUp_sound.play()
+                    for i in range(2,10):
+                        if level == i:
+                            draw_image(screen, "assets/levelup/" + str(i) + "level.png", board_width * 0.36, board_height * 0.5, int(board_width * 0.3), int(board_height * 0.5)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
+                            pygame.display.update()
+                    pygame.time.delay(1000)
                     goal += level * 5
                     game_speed = int(game_speed-speed_change)
                     pygame.time.set_timer(pygame.USEREVENT, game_speed)
                     Change_RATE += 1
                     set_music_playing_speed(CHANNELS, swidth, Change_RATE)
+
+
 
             elif event.type == KEYDOWN:
                 erase_mino(dx, dy, mino, rotation, matrix)
@@ -2323,23 +2315,23 @@ while not done:
                         combo_count += 1  # 콤보 버그 수정. 가로줄 꽉 찼는지 확일할 때마다 1P의 combo count를 늘린다.
                         for i in range(board_x):
                             if matrix[i][j] == 10 : # 세로줄 삭제 아이템이면
-                                v_item.append(i)    
-                                screen.blit(ui_variables.vertical_item, (board_width * 0.10, board_height * 0.35)) #blit(이미지, 위치)
+                                v_item.append(i)
+                                draw_image(screen, "assets/item_images/vertical_item.png", board_width * 0.15, board_height * 0.5, int(board_width * 0.17), int(board_height * 0.45)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item_pvp()
 
                             if matrix[i][j] == 11 : # 가로줄 삭제 아이템이면
                                 h_item += 1
-                                screen.blit(ui_variables.horizontal_item, (board_width * 0.10, board_height * 0.35)) #blit(이미지, 위치)
+                                draw_image(screen, "assets/item_images/horizontal_item.png", board_width * 0.15, board_height * 0.5, int(board_width * 0.3), int(board_height * 0.25)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item_pvp()
 
                             if matrix[i][j] == 12 : # 속도 증가 아이템이면
                                 f_item += 1
-                                screen.blit(ui_variables.fast_item, (board_width * 0.10, board_height * 0.35)) #blit(이미지, 위치)
+                                draw_image(screen, "assets/item_images/fast_item.png", board_width * 0.15, board_height * 0.5, int(board_width * 0.2), int(board_height * 0.4)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item_pvp()
                                 
                             if matrix[i][j] == 13 : # 속도 감소 아이템이면
                                 s_item += 1
-                                screen.blit(ui_variables.fast_item, (board_width * 0.10, board_height * 0.35)) #blit(이미지, 위치)
+                                draw_image(screen, "assets/item_images/slow_item.png", board_width * 0.15, board_height * 0.5, int(board_width * 0.2), int(board_height * 0.4)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item_pvp()
                         if len(v_item) != 0:
                             for i in range(len(v_item)):
@@ -2395,21 +2387,21 @@ while not done:
                         for i in range(board_x):
                             if matrix_2P[i][j] == 10 : # 세로줄 삭제 아이템이면
                                 v_item_2P.append(i)    
-                                screen.blit(ui_variables.vertical_item, (board_width * 0.60, board_height * 0.35)) #blit(이미지, 위치)
+                                draw_image(screen, "assets/item_images/vertical_item.png", board_width * 0.65, board_height * 0.5, int(board_width * 0.17), int(board_height * 0.45)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item_pvp()
                             if matrix_2P[i][j] == 11 : # 가로줄 삭제 아이템이면
                                 h_item_2P += 1
-                                screen.blit(ui_variables.horizontal_item, (board_width * 0.55, board_height * 0.45)) #blit(이미지, 위치)
+                                draw_image(screen, "assets/item_images/horizontal_item.png", board_width * 0.65, board_height * 0.5, int(board_width * 0.3), int(board_height * 0.25)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item_pvp()
 
                             if matrix_2P[i][j] == 12 : # 속도 증가 아이템이면
                                 f_item += 1
-                                screen.blit(ui_variables.fast_item, (board_width * 0.55, board_height * 0.35)) #blit(이미지, 위치)
+                                draw_image(screen, "assets/item_images/fast_item.png", board_width * 0.65, board_height * 0.5, int(board_width * 0.2), int(board_height * 0.4)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item_pvp()
                                 
                             if matrix_2P[i][j] == 13 : # 속도 감소 아이템이면
                                 s_item += 1
-                                screen.blit(ui_variables.fast_item, (board_width * 0.55, board_height * 0.35)) #blit(이미지, 위치)
+                                draw_image(screen, "assets/item_images/slow_item.png", board_width * 0.65, board_height * 0.5, int(board_width * 0.2), int(board_height * 0.4)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
                                 draw_item_pvp()
                         if len(v_item_2P) != 0:
                             for i in range(len(v_item_2P)):
@@ -2493,25 +2485,25 @@ while not done:
                         ui_variables.tetris_sound.play()
                         ui_variables.tetris_sound.play()
                         score += 1000 * level * erase_count + 4 * combo_count
-
-                        screen.blit(ui_variables.combo_4ring, (250, 160)) #blit(이미지, 위치)
+                        draw_image(screen, "assets/Combo/4combo ring.png", board_width * 0.25, board_height * 0.4, int(board_width * 0.25), int(board_height * 0.22)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
 
 
                     for i in range(1, 11):
                         if combo_count == i:  # 1 ~ 10 콤보 이미지
-                            screen.blit(ui_variables.large_combos[i - 1], (board_width * 0.07, board_height * 0.35)) # single combo image 코드에서 이미지의 x축 위치만 바꿈
-                            pygame.display.update()
-                            pygame.time.delay(500)
+                            draw_image(screen, "assets/Combo/" + str(i) + "combo.png", board_width * 0.15, board_height * 0.5, int(board_width * 0.18), int(board_height * 0.44)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
+                            draw_item_pvp()
                         elif combo_count > 10:  # 11 이상 콤보 이미지
                             pygame.display.update()
                             pygame.time.delay(300)
-    
+   
                     
                     for i in range(1, 9): # 1~8의 콤보 사운드
                         if combo_count == i + 2:  # 3 ~ 11 콤보 사운드
                             ui_variables.combos_sound[i - 1].play()
+                            pygame.time.delay(800)
                         if combo_count > 11:
                             ui_variables.combos_sound[8].play()
+                            pygame.time.delay(800)
                 if current_time - previous_time > 10000: #10초가 지나면
                     previous_time = current_time #현재 시간을 과거시간으로 하고
                     combo_count = 0 #콤보 수 초기화
@@ -2521,6 +2513,11 @@ while not done:
                 if goal < 1 and level < 15:
                     level += 1
                     ui_variables.LevelUp_sound.play()
+                    for i in range(2,10):
+                        if level == i:
+                            draw_image(screen, "assets/levelup/" + str(i) + "level.png", board_width * 0.15, board_height * 0.5, int(board_width * 0.3), int(board_height * 0.5)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
+                            pygame.display.update()
+                    pygame.time.delay(1000)
                     goal += level * 5
                     game_speed = int(game_speed - speed_change)
                 if level > level_2P and Change_RATE < level + 1:
@@ -2556,14 +2553,13 @@ while not done:
                         ui_variables.tetris_sound.play()
                         ui_variables.tetris_sound.play()
                         score_2P += 1000 * level_2P * erase_count_2P + 4 * combo_count_2P
+                        draw_image(screen, "assets/Combo/4combo ring.png", board_width * 0.75, board_height * 0.4, int(board_width * 0.25), int(board_height * 0.22)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
 
-                        screen.blit(ui_variables.combo_4ring, (250, 160)) #blit(이미지, 위치)
 
                     for i in range(1, 11):
                         if combo_count_2P == i:  # 1 ~ 10 콤보 이미지
-                            screen.blit(ui_variables.large_combos[i - 1], (board_width * 0.55, board_height * 0.35)) # single combo image 코드에서 이미지의 x축 위치만 바꿈
-                            pygame.display.update()
-                            pygame.time.delay(500)
+                            draw_image(screen, "assets/Combo/" + str(i) + "combo.png", board_width * 0.65, board_height * 0.5, int(board_width * 0.18), int(board_height * 0.44)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
+                            draw_item_pvp()
                         elif combo_count_2P > 10:  # 11 이상 콤보 이미지
                             pygame.display.update()
                             pygame.time.delay(300)
@@ -2571,6 +2567,7 @@ while not done:
                     for i in range(1, 9): # 1~8의 콤보 사운드
                         if combo_count_2P == i + 2:  # 3 ~ 11 콤보 사운드
                             ui_variables.combos_sound[i - 1].play()
+                            pygame.time.delay(800)
                         if combo_count_2P > 11:
                             ui_variables.combos_sound[8].play()
                 if current_time_2P - previous_time_2P > 10000: #10초가 지나면
@@ -2582,6 +2579,11 @@ while not done:
                 if goal_2P < 1 and level_2P < 15:
                     level_2P += 1
                     ui_variables.LevelUp_sound.play()
+                    for i in range(2,10):
+                        if level_2P == i:
+                            draw_image(screen, "assets/levelup/" + str(i) + "level.png", board_width * 0.65, board_height * 0.5, int(board_width * 0.3), int(board_height * 0.5)) #(window, 이미지주소, x좌표, y좌표, 너비, 높이)
+                            pygame.display.update()
+                    pygame.time.delay(1000)
                     goal_2P += level_2P * 5
                     game_speed_2P = int(game_speed_2P - speed_change)
                 if level < level_2P and Change_RATE < level_2P + 1:
