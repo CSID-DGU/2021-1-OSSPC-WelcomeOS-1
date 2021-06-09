@@ -25,6 +25,7 @@ hint_block_num = 5  # 자동으로 쌓아줄 블록 갯수
 push_hint_time = 0  # 키 누른 시간, 이미지 팝업 되어 있는동안 블록 못 움직이게 하기 위함
 in_time = 0  #
 excute_time = 0
+auto_check = True #이미지 팝업 동안 auto 계산 못하게 함
 block_size = 17  # Height, width of single block
 width = 10
 height = 20
@@ -865,6 +866,7 @@ def set_music_playing_speed(CHANNELS, swidth, Change_RATE):
 
 
 def draw_item():
+    auto_check = False
     pygame.display.update()
     pygame.time.delay(300)  # 0.3초
     screen.fill(ui_variables.real_white)
@@ -872,7 +874,7 @@ def draw_item():
                board_height)  # (window, 이미지주소, x좌표, y좌표, 너비, 높이)
     draw_board(next_mino1, next_mino2, hold_mino, score, level, goal)
     pygame.display.update()
-
+    auto_check = True
 
 def draw_item_pvp():
     pygame.display.update()
@@ -884,7 +886,7 @@ def draw_item_pvp():
 
 
 def set_initial_values():
-    global switch_time, switch_elapsed_time, switch_start_time, switch_time_2P, switch_elapsed_time_2P, switch_start_time_2P, blind_time, blind_elapsed_time, blind_start_time, blind_time_2P, blind_elapsed_time_2P, blind_start_time_2P, max_speed, min_speed, f_item_2P, s_item_2P, s_item, f_item, h_item_2P, v_item_2P, h_item, v_item, time_attack_time_setting, combo_count, combo_count_2P, score, level, goal, score_2P, level_2P, goal_2P, bottom_count, bottom_count_2P, hard_drop, hard_drop_2P, attack_point, attack_point_2P, dx, dy, dx_2P, dy_2P, rotation, rotation_2P, mino, mino_1P, mino_2P, next_mino1, next_mino2, next_mino1_1P, next_mino1_2P, hold, hold_2P, hold_mino, hold_mino_2P, framerate, framerate_2P, matrix, matrix_2P, Change_RATE, blink, start, pause, done, game_over, leader_board, setting, volume_setting, screen_setting, pvp, help, gravity_mode, debug, d, e, b, u, g, time_attack, start_ticks, textsize, CHANNELS, swidth, name_location, name, previous_time, current_time, previous_time_2P, current_time_2P, pause_time, lines, leaders, volume, game_status, framerate_blockmove, framerate_2P_blockmove, game_speed, game_speed_2P
+    global switch_time, switch_elapsed_time, switch_start_time, switch_time_2P, switch_elapsed_time_2P, switch_start_time_2P, blind_time, blind_elapsed_time, blind_start_time, blind_time_2P, blind_elapsed_time_2P, blind_start_time_2P, total_time, max_speed, min_speed, f_item_2P, s_item_2P, s_item, f_item, h_item_2P, v_item_2P, h_item, v_item, time_attack_time_setting, combo_count, combo_count_2P, score, level, goal, score_2P, level_2P, goal_2P, bottom_count, bottom_count_2P, hard_drop, hard_drop_2P, attack_point, attack_point_2P, dx, dy, dx_2P, dy_2P, rotation, rotation_2P, mino, mino_1P, mino_2P, next_mino1, next_mino2, next_mino1_1P, next_mino1_2P, hold, hold_2P, hold_mino, hold_mino_2P, framerate, framerate_2P, matrix, matrix_2P, Change_RATE, blink, start, pause, done, game_over, leader_board, setting, volume_setting, screen_setting, pvp, help, gravity_mode, debug, d, e, b, u, g, time_attack, start_ticks, textsize, CHANNELS, swidth, name_location, name, previous_time, current_time, previous_time_2P, current_time_2P, pause_time, lines, leaders, volume, game_status, framerate_blockmove, framerate_2P_blockmove, game_speed, game_speed_2P
 
     framerate = 30  # Bigger -> Slower  기본 블록 하강 속도, 2도 할만 함, 0 또는 음수 이상이어야 함
     framerate_blockmove = framerate * 3  # 블록 이동 시 속도
@@ -1038,6 +1040,21 @@ def mino_converter(next):  # 블록 모양 변환
         return [[0, 1, 0, 0], [1, 1, 1, 0]]
     if grid_n1 == tetrimino.mino_map[6][0]:
         return [[3, 3, 0, 0], [0, 3, 3, 0]]
+   
+    if grid_n1==tetrimino.mino_map[7][0] : # 8 delete vertical item        
+        return [[0, 2, 2, 0], [2, 2, 0, 0]]        
+    if grid_n1==tetrimino.mino_map[8][0] : # 9 delete horizontal item
+        return [[0, 0, 5, 0], [5, 5, 5, 0]]       
+    if grid_n1==tetrimino.mino_map[9][0] : # 10 fast item
+        return [[3, 3, 0, 0], [0, 3, 3, 0]]
+    if grid_n1==tetrimino.mino_map[10][0] : # 11 slow item
+        return [[0, 7, 7, 0], [0, 7, 7, 0]]
+    if grid_n1==tetrimino.mino_map[11][0] : # 12 time item
+        return [[0, 1, 0, 0], [1, 1, 1, 0]]
+    if grid_n1==tetrimino.mino_map[12][0] : #13 blind item
+        return [[6, 6, 6, 6]]
+    if grid_n1==tetrimino.mino_map[13][0] : #14 keyboard item
+        return [[4, 0, 0, 0], [4, 4, 4, 0]]
 
 
 def stone_x(next):  # AI의 choose함수 파라미터 넣어줄 OFFSET 계산 함수
@@ -1781,13 +1798,13 @@ while not done:
                     else:
                         bottom_count += 1
 
-                if computed < hint_block_num:  # h버튼 누르는 순간의 블록부터 자동으로 쌓아줘서 5미만으로 해야 5블록 쌓아줌
+                if (computed < hint_block_num) and (auto_check==True) :  # h버튼 누르는 순간의 블록부터 자동으로 쌓아줘서 5미만으로 해야 5블록 쌓아줌
                     in_time = pygame.time.get_ticks()  # 블럭 쌓기 시작한 시간 저장
                     moves_list = []  # 최적의 움직임을 저장하는 리스트
                     if in_time >= excute_time:
                         moves_list = AUTO.choose(matrix_changer(matrix), mino_converter(mino),
                                                  mino_converter(next_mino1), stone_x(mino), weights)
-                        #print("computed")
+                        
                         for_onetime = True  # 일자 블록 위치 맞춰주는 변수, 한번만 왼쪽으로 이동 해주기 위함
                         for i in range(len(moves_list)):
                             if moves_list[i] == 'UP':  # 회전하도록
@@ -1840,8 +1857,7 @@ while not done:
                         rainbow = [1, 2, 3, 4, 5, 6, 7]  # 각 mino에 해당하는 숫자
                         for i in range(board_x):
                             matrix_contents.append(matrix[i][j])  # 현재 클리어된 줄에 있는 mino 종류들 저장
-                        rainbow_check = list(
-                            set(matrix_contents).intersection(rainbow))  # 현재 클리어된 줄에 있는 mino와 mino의 종류중 겹치는 것 저장
+                        rainbow_check = list(set(matrix_contents).intersection(rainbow))  # 현재 클리어된 줄에 있는 mino와 mino의 종류중 겹치는 것 저장
                         if rainbow == rainbow_check:  # 현재 클리어된 줄에 모든 종류 mino 있다면
                             rainbow_count += 1
 
