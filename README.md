@@ -4,7 +4,7 @@
 ![badges](https://img.shields.io/badge/python-3.8-blue)
 ![badges](https://img.shields.io/badge/pygame-2.0.0-orange)
 
-pygame 활용 테트리스 게임 **"Block King"**  
+pygame 활용 테트리스 게임 **"Tetris kingdom 2"**  
 (original source: [Tetris Kingdom](https://github.com/CSID-DGU/2020-2-OSSP-CP-17woljang-9))
 
 **1조 어서오소**  
