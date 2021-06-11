@@ -1514,12 +1514,25 @@ while not done:
                     setting = True
                 if restart_button.isOver_2(pos):
                     ui_variables.click_sound.play()
-
+                    if gravity_mode:
+                        print("aaa")
+                        set_initial_values()
+                        start = True
+                        gravity_mode = True
+                    elif time_attack:
+                        set_initial_values()
+                        start = True
+                        time_attack = True
+                    elif start:
+                        set_initial_values()
+                        start = True
+                    elif pvp:
+                        set_initial_values()
+                        pvp = True
+                        stack = True
+                        stack_2P = True
+                    pygame.mixer.music.play(-1)  # play(-1) = 노래 반복재생
                     pause = False
-                    start = False
-
-                    if pvp:
-                        pvp = False
 
                 if resume_button.isOver_2(pos):
                     pygame.mixer.music.unpause()
