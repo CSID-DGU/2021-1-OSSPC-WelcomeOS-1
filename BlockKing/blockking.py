@@ -886,7 +886,7 @@ def draw_item_pvp():
 
 
 def set_initial_values():
-    global switch_time, switch_elapsed_time, switch_start_time, switch_time_2P, switch_elapsed_time_2P, switch_start_time_2P, blind_time, blind_elapsed_time, blind_start_time, blind_time_2P, blind_elapsed_time_2P, blind_start_time_2P, total_time, max_speed, min_speed, f_item_2P, s_item_2P, s_item, f_item, h_item_2P, v_item_2P, h_item, v_item, time_attack_time_setting, combo_count, combo_count_2P, score, level, goal, score_2P, level_2P, goal_2P, bottom_count, bottom_count_2P, hard_drop, hard_drop_2P, attack_point, attack_point_2P, dx, dy, dx_2P, dy_2P, rotation, rotation_2P, mino, mino_1P, mino_2P, next_mino1, next_mino2, next_mino1_1P, next_mino1_2P, hold, hold_2P, hold_mino, hold_mino_2P, framerate, framerate_2P, matrix, matrix_2P, Change_RATE, blink, start, pause, done, game_over, leader_board, setting, volume_setting, screen_setting, pvp, help, gravity_mode, debug, d, e, b, u, g, time_attack, start_ticks, textsize, CHANNELS, swidth, name_location, name, previous_time, current_time, previous_time_2P, current_time_2P, pause_time, lines, leaders, volume, game_status, framerate_blockmove, framerate_2P_blockmove, game_speed, game_speed_2P
+    global hint_item_num, switch_time, switch_elapsed_time, switch_start_time, switch_time_2P, switch_elapsed_time_2P, switch_start_time_2P, blind_time, blind_elapsed_time, blind_start_time, blind_time_2P, blind_elapsed_time_2P, blind_start_time_2P, total_time, max_speed, min_speed, f_item_2P, s_item_2P, s_item, f_item, h_item_2P, v_item_2P, h_item, v_item, time_attack_time_setting, combo_count, combo_count_2P, score, level, goal, score_2P, level_2P, goal_2P, bottom_count, bottom_count_2P, hard_drop, hard_drop_2P, attack_point, attack_point_2P, dx, dy, dx_2P, dy_2P, rotation, rotation_2P, mino, mino_1P, mino_2P, next_mino1, next_mino2, next_mino1_1P, next_mino1_2P, hold, hold_2P, hold_mino, hold_mino_2P, framerate, framerate_2P, matrix, matrix_2P, Change_RATE, blink, start, pause, done, game_over, leader_board, setting, volume_setting, screen_setting, pvp, help, gravity_mode, debug, d, e, b, u, g, time_attack, start_ticks, textsize, CHANNELS, swidth, name_location, name, previous_time, current_time, previous_time_2P, current_time_2P, pause_time, lines, leaders, volume, game_status, framerate_blockmove, framerate_2P_blockmove, game_speed, game_speed_2P
 
     framerate = 30  # Bigger -> Slower  기본 블록 하강 속도, 2도 할만 함, 0 또는 음수 이상이어야 함
     framerate_blockmove = framerate * 3  # 블록 이동 시 속도
@@ -909,7 +909,7 @@ def set_initial_values():
     pvp = False
     help = False
     gravity_mode = False  # 이 코드가 없으면 중력모드 게임을 했다가 Restart해서 일반모드로 갈때 중력모드로 게임이 진행됨#
-    debug = True  # False
+    debug = False  # False
     d = False
     e = False
     b = False
@@ -990,6 +990,7 @@ def set_initial_values():
     switch_time_2P = 0
     switch_elapsed_time_2P = 0
     switch_start_time_2P = 0
+    hint_item_num = 0
 
     with open('leaderboard.txt') as f:
         lines = f.readlines()
@@ -1513,12 +1514,25 @@ while not done:
                     setting = True
                 if restart_button.isOver_2(pos):
                     ui_variables.click_sound.play()
-
+                    if gravity_mode:
+                        print("aaa")
+                        set_initial_values()
+                        start = True
+                        gravity_mode = True
+                    elif time_attack:
+                        set_initial_values()
+                        start = True
+                        time_attack = True
+                    elif start:
+                        set_initial_values()
+                        start = True
+                    elif pvp:
+                        set_initial_values()
+                        pvp = True
+                        stack = True
+                        stack_2P = True
+                    pygame.mixer.music.play(-1)  # play(-1) = 노래 반복재생
                     pause = False
-                    start = False
-
-                    if pvp:
-                        pvp = False
 
                 if resume_button.isOver_2(pos):
                     pygame.mixer.music.unpause()
@@ -1568,8 +1582,12 @@ while not done:
 
         draw_image(screen, 'assets/vector/help_board.png', board_width * 0.5, board_height * 0.5,
                    int(board_width * 0.8), int(board_height * 0.9))  # (window, 이미지주소, x좌표, y좌표, 너비, 높이)
-        draw_image(screen, 'assets/vector/help_image.png', board_width * 0.5, board_height * 0.5,
-                   int(board_width * 0.7), int(board_height * 0.55))  # (window, 이미지주소, x좌표, y좌표, 너비, 높이)
+        draw_image(screen, 'assets/vector/help_image.png', board_width * 0.5, board_height * 0.38,
+                   int(board_width * 0.7), int(board_height * 0.4))  # (window, 이미지주소, x좌표, y좌표, 너비, 높이)
+        draw_image(screen, 'assets/vector/help_item_image.png', board_width * 0.5, board_height * 0.73,
+                   int(board_width * 0.7), int(board_height * 0.3))  # (window, 이미지주소, x좌표, y좌표, 너비, 높이)
+        draw_image(screen, 'assets/vector/help_ai_image.png', board_width * 0.64, board_height * 0.6,
+                   int(board_width * 0.2), int(board_height * 0.07))  # (window, 이미지주소, x좌표, y좌표, 너비, 높이)
 
         back_button.draw(screen, (0, 0, 0))
 
